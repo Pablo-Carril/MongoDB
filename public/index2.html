@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Bienvenido</title>
+</head>
+<body>
+    <main class="container">
+        <h1>Bienvenido a mi primer servidor Web!!</h1>
+        <form action="/api/users" method="post">
+          <input type="text" name="nombre" placeholder="nombre" required />  <!--el atributo name se refiere al tipo de dato a enviar en el post. no puede ser cualquier tipo. ver los existentes-->
+          <input type="text" name="apellido" placeholder="apellido"  required />
+          <button type="submit" value="enviar"> Enviar </button>
+        </form>
+    </main> 
+</body>
+</html>
