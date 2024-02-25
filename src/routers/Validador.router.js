@@ -9,6 +9,8 @@ let fechaActual = ahora.toFormat('dd/MM/yyyy')
 const validadorRouter = Router()
 //realmente es necesario acceder a '/validadores' ? creo que no, por ahí en un futuro mostrar los ULTIMOS.
 
+//este COMENTARIO es para probar git y github en dos PCs
+
 //CONSULTAR POR ID:
 validadorRouter.get('/validadores/:serie', async (req,res)=> {     //api/validadores/numero
   const serie = req.params.serie      //obtenemos el serie pedido
