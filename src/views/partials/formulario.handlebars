@@ -1,0 +1,32 @@
+<form id="formEntrada" action="/api/validadores" method="post">  <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).-->
+  <div class="form-group">
+    <label for="serie">Numero de serie:</label>
+    <input type="number" name="serie" id="serie" class="form-control" min="1" max="999999999" title="Numero de serie" required=""
+      autofocus>
+    <label for="fecha">Fecha:</label>          <!--Los label for = deben apuntar al id no al name -->
+    <input type="date" value='{{fechaHoy}}' name="fecha" id="fecha" class="form-control">
+    <label for="linea">Linea:</label>
+    <select name="linea" class="custom-select form-control" id="linea" required="">
+      <option selected></option>
+      <option value="85">85</option>
+      <option value="98">98</option>     <!--Los VALUE de los INPUTS también pueden ser modificados con {{variable}} -->
+      <option value="307">307</option>   <!-- PERO NO SE PUEDEN LEER sin una petición Http, handlebars SOLO trabaja del lado del server   -->
+      <option value="275">275</option>
+    </select>
+    <label for="coche">Coche:</label>
+    <input type="number" name="coche" id="coche" class="form-control">
+    <label for="problema">Problema:</label>
+    <div class="form-group">
+      <textarea type="number" name="problema" id="problema" cols="30" rows="2" minlength="3" maxlength="100" required=""
+        class="form-control"></textarea>
+    </div>
+    <label for="caso">Caso:</label>
+    <div class="form-group">
+      <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
+        class="form-control mb-3"></textarea>
+    </div>
+    <button id="guardar" class="btn btn-primary text-white">Guardar</button>
+    <button hidden id="eliminar" class="btn btn-danger text-white ms-4">Eliminar</button>
+  </div>
+</form>
+

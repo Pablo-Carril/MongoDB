@@ -1,0 +1,49 @@
+<div class="container-fluid ">
+  <div class="row">
+    <div class="col-3">
+
+      <label>Equipo:</label>
+      <select class="custom-select form-control" id="equipoSelect" required="">
+        <!-- ESTO debería ser parte del FORMULARIO -->
+        <option selected value="Validador">Validador</option>
+        <option value="Teclado">Teclado</option>
+        <option value="MountinKit">Mountin Kit</option>
+        <option value="Otros">Otros</option>
+      </select>
+
+      {{>formulario}}    <!--todos los que se llamen de este modo deben encontrarse en partials-->
+
+    </div>
+
+    <div id="menu" class="col-8 border">  <!--Al presionar Consultar debo leer el input serie del formulario y generar el URI -->
+      <a href="#" id="consultar" class="btn btn-primary text-white mt-3 mb-2">Consultar</a>
+      <button id="ultimos" class="btn btn-primary text-white mt-3 mb-2 ms-3">Ultimos</button>
+      <button id="laplata" class="btn btn-primary text-white mt-3 mb-2 ms-3">La Plata</button>
+      <button id="sonda" class="btn btn-primary text-white mt-3 mb-2 ms-3">Sonda</button>
+      <button id="notasBtn" class="btn btn-primary text-white mt-3 mb-2 ms-3">Notas</button>
+
+      <h5 id="historialText">historial</h5>
+      <p id="historialSerie">Serie: {{serie}} </p>
+
+       <!--todos los que se llamen de este modo deben encontrarse en partials
+         y para actualizarce debe actualizarce toda la página   -->
+       {{>tabla}}
+
+    </div>         
+    <div id="nota"></div> 
+  </div>
+</div>
+
+<script>
+  //Al consultar leemos el numero de serie ingresado por el usuario    FUNCIONA!!!   aunque esté en otro handlebars!!
+  const consultarBtn = document.getElementById('consultar')
+  consultarBtn.addEventListener('click', () => {
+    const serieInput = document.getElementById('serie')     //leemos el serie ingresado. no se puede desde el servidor. 
+    const serieNum = serieInput.value                     // SALVO que hagamos un formulario normal y nos evitamos todo este Javascript. HACERLO EN EL FUTURO
+    if (serieNum) {
+      var url = '/api/validadores/' + encodeURIComponent(serieNum);
+    } else { url = '#'}
+    //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
+    window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
+  })
+</script>

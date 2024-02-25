@@ -1,0 +1,19 @@
+
+body { 
+    min-width: 720px;   
+}
+
+.ancho-fijo {
+  width: 30%;
+}
+
+#logo {
+  width: 30px;
+  height: 30px;
+}
+
+/*
+input:invalid {
+    box-shadow: 0 0 5px 1px red;
+  }
+  */

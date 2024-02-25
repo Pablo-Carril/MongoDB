@@ -1,0 +1,46 @@
+<table id="historial" class="table table-bordered lh1" style="font-size: 0.95rem;">
+  <thead>
+    <tr>
+      <th>Serie</th>
+    </tr>
+    <tr>
+      <th>Fecha</th>
+      <th class="col-1">Linea</th>
+      <th class="col-1">Coche</th>
+      <th class="col-7">Problema</th>
+      <th class="col-1">Caso</th>
+      <th class="col-1 text-muted">Edit</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#each validadores}}
+        <tr>
+          <td>{{this.fecha}}</td>
+          <td>{{this.linea}}</td>
+          <td>{{this.coche}}</td>
+          <td>{{this.problema}}</td>
+          <td>{{this.caso}}</td>
+          <td>
+           <a href="/edit/{{_id}}">Editar</a>   <!--  _id es del documento FUNCIONA! -->
+             <i class="fas fa-pencil"></i>   <!-- traté de poner un ícono pero falta FONT AWESOME -->
+          </td> 
+        </tr>
+      {{/each}}
+
+
+  <!--  <div class="row bg-warning p-3">
+      {{#each validadores}}
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h4>{{serie}}</h4>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>      -->
+
+  </tbody>
+</table>
+
+<!-- <input type="hidden" id="filaSeleccionada">  -->
