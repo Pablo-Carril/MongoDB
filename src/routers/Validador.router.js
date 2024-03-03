@@ -17,7 +17,7 @@ validadorRouter.get('/validadores/:serie', async (req,res)=> {     //api/validad
   const validadores = [];
   try {
    const resultados = await Validadormodel.find({serie})    //consultamos el modelo y por tanto la base de datos.
-      //antes de llenar la tabla hay que procesar las fechas y actualizar los datos
+      if (resultados.length == 0) { console.log("No se encontró ningún dato ☹")}    
      //Procesamos los datos de la DB:
      resultados.forEach((datos) => {
       let fecha = datos.fecha
@@ -27,7 +27,6 @@ validadorRouter.get('/validadores/:serie', async (req,res)=> {     //api/validad
         ...datos.toObject(),   //convertimos el documento a objeto normal con todos sus datos
         fecha: nuevaFecha      //pero la fecha ahora será la modificada
       });
-     // console.log(validadores);
     })
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
@@ -35,7 +34,7 @@ validadorRouter.get('/validadores/:serie', async (req,res)=> {     //api/validad
     res.status(200)  
   }
   catch (err) {
-    console.log("Error en la búsqueda por serie:  ", err)
+    console.log("Error en la búsqueda por número de serie:  ", err)
   }
 
 })
