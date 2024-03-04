@@ -5,6 +5,7 @@ import validadorRouter from './routers/Validador.router.js'
 import handlebars from 'express-handlebars'
 import {__dirname} from './utils.js'
 import path from 'path'
+
 //import { log } from 'console'
 import morgan from 'morgan'
 
