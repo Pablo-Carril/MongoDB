@@ -4,7 +4,7 @@ import {Validadormodel} from '../models/validador.model.js'
 import {DateTime} from 'luxon'
 
 const ahora = DateTime.now()
-let fechaActual = ahora.toFormat('dd/MM/yyyy')
+let fechaActual = ahora //.toFormat('dd/MM/yyyy')
 
 const validadorRouter = Router()
 //realmente es necesario acceder a '/validadores' ? creo que no, por ahí en un futuro mostrar los ULTIMOS.
@@ -14,12 +14,25 @@ const validadorRouter = Router()
 //CONSULTAR POR ID:
 validadorRouter.get('/validadores/:serie', async (req,res)=> {     //api/validadores/numero
   const serie = req.params.serie      //obtenemos el serie pedido
-  const validadores = [];
   try {
    const resultados = await Validadormodel.find({serie})    //consultamos el modelo y por tanto la base de datos.
-      if (resultados.length == 0) { console.log("No se encontró ningún dato ☹")}    
-     //Procesamos los datos de la DB:
-     resultados.forEach((datos) => {
+    if (resultados.length == 0) { console.log("No se encontró ningún dato ☹")}    
+    const validadores = llenarTabla(resultados)
+    //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
+    //actualizamos la página y llenamos la tabla
+    res.render('index', {validadores, serie, fechaActual})  //estas son variables de Handlebars
+    res.status(200)  
+  }
+  catch (err) {
+    console.log("Error en la búsqueda por número de serie:  ", err)
+  }
+})
+
+function llenarTabla(resultados) {
+  const validadores = [];
+  //Procesamos los datos de la DB:
+  if (Array.isArray(resultados)) {
+    resultados.forEach((datos) => {
       let fecha = datos.fecha
       let fechaLuxon = DateTime.fromISO(fecha)
       let nuevaFecha = fechaLuxon.toFormat('dd/MM/yyyy')
@@ -28,28 +41,39 @@ validadorRouter.get('/validadores/:serie', async (req,res)=> {     //api/validad
         fecha: nuevaFecha      //pero la fecha ahora será la modificada
       });
     })
-    //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
-    //actualizamos la página y llenamos la tabla
-    res.render('index', { validadores, serie, fechaActual })
-    res.status(200)  
+    return validadores
+  } else {
+    let fecha = resultados.fecha
+    let fechaLuxon = DateTime.fromISO(fecha)
+    let nuevaFecha = fechaLuxon.toFormat('dd/MM/yyyy')
+    validadores.push({
+       fecha: nuevaFecha,
+       linea: resultados.linea,
+       coche: resultados.coche,
+       problema: resultados.problema,
+       caso: resultados.caso
+    })
+    return validadores
   }
-  catch (err) {
-    console.log("Error en la búsqueda por número de serie:  ", err)
-  }
-
-})
+}
 
 //CREAR NUEVO
 validadorRouter.post('/validadores', async (req, res) => {              
   const { body } = req                                         //obtengo sólo el body
-  console.log("Post hacia /validadores: ")
+  console.log("Post hacia /validadores: " + body.serie)
   try {
-    const nuevo = await Validadormodel.create(body)      //creamos el nuevo equipo. sólo si cumple los requerimientos del esquema.   
-    res.status(201).json(nuevo)     //funciona ok. si no respondemos con 201 el navegador se queda pensando...
-  }
+    const nuevo = await Validadormodel.create(body)      //creamos un nuevo registro. sólo si cumple los requerimientos del esquema.   
+    //console.log(nuevo)
+    const serie = body.serie
+    const validadores = llenarTabla(nuevo)
+    res.render('index', {validadores, serie, fechaActual})
+    res.status(201)  //funciona ok. si no respondemos con 201 el navegador se queda pensando...
+  }                 
   catch (err) {
     console.log("Error creando equipo. faltan datos: ", err.message)
-    res.status(400).json({message:'No se pudo crear. faltan datos o son incorrectos'})
+    const serie = 'ERROR faltan datos: '+ err.message //uso serie sólo para informar un error
+    res.render('index', {serie})   // y si HAY UN ERROR hay que responder con algo. si no se queda PENSANDO.
+    res.status(400)       // NO ALCANZA con responder un status.
   }
 })  
 
