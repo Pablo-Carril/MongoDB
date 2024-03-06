@@ -5,7 +5,7 @@ const indexRouter = Router()
 import {DateTime} from 'luxon'
 
 const ahora = DateTime.now()
-let fecha = ahora.toISODate() 
+let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 
 //por algún motivo desaparece el calendario YA no hace falta. ahora funciona todo.
 //handlebars.registerHelper('formatFecha', function (fechaLuxon) {   //el helper funciona pero fechaluxon es undefined cuando uso fecha.
@@ -17,7 +17,7 @@ let fecha = ahora.toISODate()
 indexRouter.get('/', (req, res)=>{   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.render('index',  {             //respondemos con un index.handlebars, no hace falta la extención porque ya la seteamos antes
     title: 'Control de Equipos',
-    fechaHoy: fecha,
+    fechaActual: fecha,
   })
     res.status(200)           
    // res.json({ message: 'Bienvenido al Servidor'})

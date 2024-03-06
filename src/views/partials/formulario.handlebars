@@ -4,7 +4,7 @@
     <input type="number" name="serie" id="serie" class="form-control" min="1" max="999999999" title="Numero de serie" required=""
       autofocus>
     <label for="fecha">Fecha:</label>          <!--Los label for = deben apuntar al id no al name -->
-    <input type="date" value='{{fechaHoy}}' name="fecha" id="fecha" class="form-control">
+    <input type="date" value={{fechaActual}} name="fecha" id="fecha" class="form-control">
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" required="">
       <option selected></option>
