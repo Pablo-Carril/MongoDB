@@ -1,8 +1,52 @@
-<h1>Editar equipo: </h1>
+<div class="Editor">
 
-{{>formulario}}
+  <h1>Editar equipo: </h1>
+  <pre>
+    {{serie}}
+    {{id}}
+  </pre>
+
+  <div>                    
+    {{>formulario}}
+  </div>
+<button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
+
+</div>
+
+<script>
+  borrar = document.getElementById('borrar')
+  borrar.addEventListener('click', () => {
+    fetch('http://localhost:8091/api/validadores/123', { 
+       method: 'DELETE',
+       headers: {
+         'Content-Type': 'application/json',
+         // Puedes agregar más encabezados si es necesario
+        },
+       // Puedes incluir un cuerpo (body) si necesitas enviar datos en la petición DELETE
+       body: JSON.stringify({ key: 'value' }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error de red - ${response.status}`);
+        }
+        return response.json(); // Si esperas una respuesta JSON el return es necesario para procesar el siguiente then
+      })
+      .then (msg => {console.log('Delete de: {{id}}', msg)})  //muestro el mensaje en la consola del cliente
+      .catch (err => {console.log('Error no se: ', err)})
+  })
+</script>
 
 <style>
+  .Editor {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #formEntrada {
+    min-width: 500px;
+  }
   #eliminar {
     display: block; /* o cualquier estilo para hacer visible el botón */
   }

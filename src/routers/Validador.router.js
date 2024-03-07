@@ -80,9 +80,26 @@ validadorRouter.post('/validadores', async (req, res) => {
 //validadores/edit/:id (put)
 //Una vez llenada la tabla PODREMOS EDITAR una fila con un formulario handlebars. mediante un botón llamaremos a un fetch mediante JS
 validadorRouter.get('/validadores/edit/:serie', async (req, res) => {
-  const numero = req.params.serie
-  const serie = 'EDITAR: ' + numero
-  res.render('formEdit', {serie})  // aquí hay que renderizar un nuevo VIEW con formulario de EDICION
+  const id = req.params.serie
+  const serie = 'catpturar el serie con un hidden o algo'
+  //traer los datos de la tabla? o traer los de la base de datos
+
+  //conpletar el formulario
+  //fechaActual = fechaEdit
+
+  //equipo.findByIdAndUpdate( )
+  res.render('formEdit', {serie, id, fechaActual})  // aquí hay que renderizar un nuevo VIEW con formulario de EDICION
+  res.status(200)
+})
+
+validadorRouter.delete('/validadores/:serie', async (req, res) => {
+  const id = req.params.serie
+  const serie = 'catpturar el serie con un hidden o algo'
+  console.log('Delete recibido')
+  
+  //equipo.findByIdAndDelete(  )
+  res.json({borrando: id})
+  //res.render('formEdit', {serie, id, fechaActual}) 
   res.status(200)
 })
 

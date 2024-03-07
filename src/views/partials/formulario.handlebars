@@ -4,7 +4,7 @@
     <input type="number" name="serie" id="serie" class="form-control" min="1" max="999999999" title="Numero de serie" required=""
       autofocus>
     <label for="fecha">Fecha:</label>          <!--Los label for = deben apuntar al id no al name -->
-    <input type="date" value={{fechaActual}} name="fecha" id="fecha" class="form-control">
+    <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control">
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" required="">
       <option selected></option>
@@ -26,7 +26,7 @@
         class="form-control mb-3"></textarea>
     </div>
     <button id="guardar" class="btn btn-primary text-white">Guardar</button>
-    <button hidden id="eliminar" class="btn btn-danger text-white ms-4">Eliminar</button>
+   <!-- <button hidden id="eliminar" class="btn btn-danger text-white ms-4">Eliminar</button>  -->
   </div>
 </form>
 
