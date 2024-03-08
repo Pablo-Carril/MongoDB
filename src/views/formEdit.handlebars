@@ -1,11 +1,5 @@
 <div class="Editor">
-
-  <h1>Editar equipo: </h1>
-  <pre>
-    {{serie}}
-    {{id}}
-  </pre>
-
+  <h3>Editar registro: </h3>
   <div>                    
     {{>formulario}}
   </div>
@@ -16,7 +10,7 @@
 <script>
   borrar = document.getElementById('borrar')
   borrar.addEventListener('click', () => {
-    fetch('http://localhost:8091/api/validadores/{{id}}', { 
+    fetch('/validadores/delete/{{id}}', {    //antes: 'http://localhost:8091/api/validadores/{{id}}' PORQUE NO ANDA? con botones no quiere?
        method: 'DELETE',
        headers: {
          'Content-Type': 'application/json',
@@ -41,7 +35,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+  
   }
   #formEntrada {
     min-width: 500px;

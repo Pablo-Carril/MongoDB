@@ -55,6 +55,9 @@ function formateaResultados(resultados) {
   }
 }
 
+//Los VALUE de los INPUTS también pueden ser modificados con {{variable}}
+//PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
+
 //CREAR NUEVO
 validadorRouter.post('/validadores', async (req, res) => {              
   const { body } = req                                         //obtengo sólo el body
@@ -74,39 +77,49 @@ validadorRouter.post('/validadores', async (req, res) => {
   }
 })  
 
-//EDITAR: (put)
-//Los VALUE de los INPUTS también pueden ser modificados con {{variable}}
-//PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
-//validadores/edit/:id (put)
+//Formulario para Editar: 
 //Una vez llenada la tabla PODREMOS EDITAR una fila con un formulario handlebars. mediante un botón llamaremos a un fetch mediante JS
 validadorRouter.get('/validadores/edit/:id', async (req, res) => {
   const id = req.params.id
   console.log('Editar recibido: ' + id)  
-  
+
   // traer los de la base de datos
   const datos = await Validadormodel.findById(id)
-
-  console.log(datos)
+  //console.log(datos)
   //completar el formulario
   const serie = datos.serie
   fechaActual = datos.fecha
+  const linea = datos.linea
   const coche = datos.coche
   const problema = datos.problema
   const caso = datos.caso
   //fechaActual = fechaEdit
 
-  //equipo.findByIdAndUpdate( )   ESTO devería estar luego del submitt guardar, en otra función
+  //equipo.findByIdAndUpdate( )   ESTO devería estar luego del submitt guardar, con PUT, en otra función
 
   // aquí renderizamos un nuevo VIEW con formulario de EDICION:
   res.render('formEdit', {  
     serie, id, fechaActual,
-    coche, caso, problema,
+    linea, coche, caso, problema,
     })  
   //res.json({Editando: id, serie: serie})
   res.status(200)
 })
 
-validadorRouter.delete('/validadores/:id', async (req, res) => {
+
+validadorRouter.put('/validadores/actualiza/:id', async (req, res) => {
+  const id = req.params.id
+  const { body } = req
+  console.log("actualizando: ", id)
+
+  console.log(body)
+  
+  res.json({msg: 'se actualizó :', id: id})
+  res.status(200)
+})
+
+
+validadorRouter.delete('/validadores/delete/:id', async (req, res) => {   //'/validadores/:id'
   const id = req.params.id
   const { body } = req
   const serie = body.serie   //para que quiero el serie aquí??? será en edit?
@@ -114,7 +127,7 @@ validadorRouter.delete('/validadores/:id', async (req, res) => {
   
   //equipo.findByIdAndDelete(  )
 
-  res.json({msg: 'se eliminó :', borrado: id})       //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
+  res.json({msg: 'se eliminó :', id: id})       //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
   //res.render('formEdit', {serie, id, fechaActual}) 
   res.status(200)
 })

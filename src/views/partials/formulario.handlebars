@@ -6,12 +6,13 @@
       title="Numero de serie" required="" autofocus>
     <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name -->
     <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control">
+
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" required="">
-      <option value="85" {{#if (eq linea 85)}}selected{{/if}}>85</option>
-      <option value="98" {{#if (eq linea 98)}}selected{{/if}}>98</option>
-      <option value="307" {{#if (eq linea 307)}}selected{{/if}}>307</option>
-      <option value="275" {{#if (eq linea 275)}}selected{{/if}}>275</option>
+      <option value="85" {{isSelected linea '85'}}>85</option>
+      <option value="98" {{isSelected linea '98'}}>98</option>
+      <option value="307" {{isSelected linea '307'}}>307</option>
+      <option value="275" {{isSelected linea '275'}}>275</option>
     </select>
     <label for="coche">Coche:</label>
     <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control">
@@ -28,6 +29,7 @@
     <button id="guardar" class="btn btn-primary text-white">Guardar</button>
     <!-- <button hidden id="eliminar" class="btn btn-danger text-white ms-4">Eliminar</button> -->
   </div>
+
 </form>
 
 <script>

@@ -2,7 +2,15 @@ import express from 'express'
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import validadorRouter from './routers/Validador.router.js'
-import handlebars from 'express-handlebars'
+//import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres no usarlo
+import handlebars from 'express-handlebars'  //es es el extendido para integración con express
+
+const helpers = handlebars.create()
+// Definir un helper llamado "isSelected"
+helpers.handlebars.registerHelper('isSelected', function(value, expectedValue) {
+  return value === expectedValue ? 'selected' : '';
+});
+
 import {__dirname} from './utils.js'
 import path from 'path'
 
