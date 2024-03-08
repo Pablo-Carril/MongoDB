@@ -16,23 +16,22 @@
 <script>
   borrar = document.getElementById('borrar')
   borrar.addEventListener('click', () => {
-    fetch('http://localhost:8091/api/validadores/123', { 
+    fetch('http://localhost:8091/api/validadores/{{id}}', { 
        method: 'DELETE',
        headers: {
          'Content-Type': 'application/json',
          // Puedes agregar más encabezados si es necesario
         },
-       // Puedes incluir un cuerpo (body) si necesitas enviar datos en la petición DELETE
-       body: JSON.stringify({ key: 'value' }),
+       body: JSON.stringify({ id:'{{id}}'}),
       })
       .then(response => {
         if (!response.ok) {
           throw new Error(`Error de red - ${response.status}`);
         }
-        return response.json(); // Si esperas una respuesta JSON el return es necesario para procesar el siguiente then
+        return response.json();  // Si esperas una respuesta JSON el return es necesario para procesar el siguiente then
       })
-      .then (msg => {console.log('Delete de: {{id}}', msg)})  //muestro el mensaje en la consola del cliente
-      .catch (err => {console.log('Error no se: ', err)})
+      .then (msg => {console.log('Se eliminó el ID: {{id}}', msg)})  //muestro el mensaje en la consola del cliente
+      .catch (err => {console.log('Ocurrió un error: ', err)})
   })
 </script>
 
@@ -48,6 +47,6 @@
     min-width: 500px;
   }
   #eliminar {
-    display: block; /* o cualquier estilo para hacer visible el botón */
+      display: block; !important  /*NO puedo desocultar algo que no existe. ya no usaré mas el botón oculto*/
   }
 </style>

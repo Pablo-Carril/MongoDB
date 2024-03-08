@@ -68,8 +68,8 @@ validadorRouter.post('/validadores', async (req, res) => {
   }                 
   catch (err) {
     console.log("Error creando equipo. faltan datos: ", err.message)
-    const serie = 'ERROR faltan datos: '+ err.message //uso serie sólo para informar un error
     res.render('index', {serie})   // y si HAY UN ERROR hay que responder con algo. si no se queda PENSANDO.
+    //res.json({Error: id, mensage: err.message})
     res.status(400)       // NO ALCANZA con responder un status.
   }
 })  
@@ -79,26 +79,42 @@ validadorRouter.post('/validadores', async (req, res) => {
 //PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
 //validadores/edit/:id (put)
 //Una vez llenada la tabla PODREMOS EDITAR una fila con un formulario handlebars. mediante un botón llamaremos a un fetch mediante JS
-validadorRouter.get('/validadores/edit/:serie', async (req, res) => {
-  const id = req.params.serie
-  const serie = 'catpturar el serie con un hidden o algo'
-  //traer los datos de la tabla? o traer los de la base de datos
+validadorRouter.get('/validadores/edit/:id', async (req, res) => {
+  const id = req.params.id
+  console.log('Editar recibido: ' + id)  
+  
+  // traer los de la base de datos
+  const datos = await Validadormodel.findById(id)
 
-  //conpletar el formulario
+  console.log(datos)
+  //completar el formulario
+  const serie = datos.serie
+  fechaActual = datos.fecha
+  const coche = datos.coche
+  const problema = datos.problema
+  const caso = datos.caso
   //fechaActual = fechaEdit
 
-  //equipo.findByIdAndUpdate( )
-  res.render('formEdit', {serie, id, fechaActual})  // aquí hay que renderizar un nuevo VIEW con formulario de EDICION
+  //equipo.findByIdAndUpdate( )   ESTO devería estar luego del submitt guardar, en otra función
+
+  // aquí renderizamos un nuevo VIEW con formulario de EDICION:
+  res.render('formEdit', {  
+    serie, id, fechaActual,
+    coche, caso, problema,
+    })  
+  //res.json({Editando: id, serie: serie})
   res.status(200)
 })
 
-validadorRouter.delete('/validadores/:serie', async (req, res) => {
-  const id = req.params.serie
-  const serie = 'catpturar el serie con un hidden o algo'
-  console.log('Delete recibido')
+validadorRouter.delete('/validadores/:id', async (req, res) => {
+  const id = req.params.id
+  const { body } = req
+  const serie = body.serie   //para que quiero el serie aquí??? será en edit?
+  console.log('Delete recibido: ' + id)
   
   //equipo.findByIdAndDelete(  )
-  res.json({borrando: id})
+
+  res.json({msg: 'se eliminó :', borrado: id})       //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
   //res.render('formEdit', {serie, id, fechaActual}) 
   res.status(200)
 })

@@ -1,32 +1,43 @@
-<form id="formEntrada" action="/api/validadores" method="post">  <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).-->
+<form id="formEntrada" action="/api/validadores" method="post">
+  <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).-->
   <div class="form-group">
     <label for="serie">Numero de serie:</label>
-    <input type="number" name="serie" id="serie" class="form-control" min="1" max="999999999" title="Numero de serie" required=""
-      autofocus>
-    <label for="fecha">Fecha:</label>          <!--Los label for = deben apuntar al id no al name -->
+    <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control" min="1" max="999999999"
+      title="Numero de serie" required="" autofocus>
+    <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name -->
     <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control">
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" required="">
-      <option selected></option>
-      <option value="85">85</option>
-      <option value="98">98</option>     <!--Los VALUE de los INPUTS también pueden ser modificados con {{variable}} -->
-      <option value="307">307</option>   <!-- PERO NO SE PUEDEN LEER sin una petición Http, handlebars SOLO trabaja del lado del server   -->
-      <option value="275">275</option>
+      <option value="85" {{#if (eq linea 85)}}selected{{/if}}>85</option>
+      <option value="98" {{#if (eq linea 98)}}selected{{/if}}>98</option>
+      <option value="307" {{#if (eq linea 307)}}selected{{/if}}>307</option>
+      <option value="275" {{#if (eq linea 275)}}selected{{/if}}>275</option>
     </select>
     <label for="coche">Coche:</label>
-    <input type="number" name="coche" id="coche" class="form-control">
+    <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control">
     <label for="problema">Problema:</label>
     <div class="form-group">
       <textarea type="number" name="problema" id="problema" cols="30" rows="2" minlength="3" maxlength="100" required=""
-        class="form-control"></textarea>
+        class="form-control">{{problema}}</textarea>
     </div>
     <label for="caso">Caso:</label>
     <div class="form-group">
       <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
-        class="form-control mb-3"></textarea>
+        class="form-control mb-3">{{caso}}</textarea>
     </div>
     <button id="guardar" class="btn btn-primary text-white">Guardar</button>
-   <!-- <button hidden id="eliminar" class="btn btn-danger text-white ms-4">Eliminar</button>  -->
+    <!-- <button hidden id="eliminar" class="btn btn-danger text-white ms-4">Eliminar</button> -->
   </div>
 </form>
 
+<script>
+  const serieInput = document.getElementById("serie")
+  serieInput.addEventListener('keypress', e => {       //al apretar enter CONSULTAR 
+    if (e.key == "Enter") {         // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA
+
+      //botonConsultar.click() // hacer un GET de ese serie
+
+      e.preventDefault()
+    }
+  })
+</script>
