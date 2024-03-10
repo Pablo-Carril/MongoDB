@@ -53,8 +53,8 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
 
 app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
-app.use('/api', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
-app.use('/api', validadorRouter)
+app.use('/api/users', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
+app.use('/api/validadores', validadorRouter)
 
 app.use( (error, req, res, next) => {
   const mensaje = 'ha ocurrido un error desconocido'

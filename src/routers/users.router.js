@@ -4,7 +4,7 @@ import {Usermodel} from '../models/user.model.js'     //Los usuarios los traerem
 const userRouter = Router()
 
 
-userRouter.get('/users', async (req,res)=> {          //queda api/users
+userRouter.get('/', async (req,res)=> {          //queda api/users
  //  res.render('index',  {             //esto es de handlebars. NO lo vamos a usar. vamos a leer desde MongoDB
  //     title: 'titulo de la pagina',
  //     fullname: users.name,
@@ -16,7 +16,7 @@ userRouter.get('/users', async (req,res)=> {          //queda api/users
   res.json(users)     
 })
 
-userRouter.get('/users/:uid', async (req,res)=> {       // para pedir un usuario por id   
+userRouter.get('/:uid', async (req,res)=> {       // para pedir un usuario por id   
    const{uid} = req.params
   //const user = await Usermodel.findOne({_id: uid})     //mongoose permite usar un string aquí sin el ObjetID
    const user = await Usermodel.findById(uid)               //Pero esta función es mejor.
@@ -28,7 +28,7 @@ userRouter.get('/users/:uid', async (req,res)=> {       // para pedir un usuario
  })
 
 // Al crear un usuario:
-userRouter.post('/users', async (req, res) => {              //cuando llegue un Post sobre users..
+userRouter.post('/', async (req, res) => {              //cuando llegue un Post sobre users..
   const {body} = req
   try {
     const newUser = await Usermodel.create(body)    //newUser es un documento de mongoose. no un objeto. si hay errores al crear hay que manejarlos.
@@ -41,7 +41,7 @@ userRouter.post('/users', async (req, res) => {              //cuando llegue un 
 })
 
 // Al actualizar un usuario:
-userRouter.put ('/users/:uid', async (req, res) => {            //el id viene como parámetro
+userRouter.put ('/:uid', async (req, res) => {            //el id viene como parámetro
   const {uid} = req.params
   const {body} = req
   await Usermodel.updateOne({_id: uid}, {$set: body})     //actualizamos ese id con lo que traiga body mediante el operador $set, en la db.
@@ -50,7 +50,7 @@ userRouter.put ('/users/:uid', async (req, res) => {            //el id viene co
 })
 
 // Al borrar un usuario:
-userRouter.delete ('/users/:uid', async (req, res) => {            //el id viene como parámetro
+userRouter.delete ('/:uid', async (req, res) => {            //el id viene como parámetro
   const {uid} = req.params
   await Usermodel.deleteOne({_id: uid})     //borramos uno por id
   res.status(204).end() 

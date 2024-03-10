@@ -1,17 +1,46 @@
 <div class="Editor">
+  
   <h3>Editar registro: </h3>
   <div>                    
-    {{>formulario}}
+    {{>formulario ocultar=true}}    <!--podemos enviar datos al llamar a parciales-->
   </div>
-<button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
+
+  <div class="botones">
+    <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
+    <button id="actualizar" class="btn btn-primary text-white ms-4">Actualizar</button>
+  </div>
 
 </div>
+
 
 <script>
   borrar = document.getElementById('borrar')
   borrar.addEventListener('click', () => {
-    fetch('/validadores/delete/{{id}}', {    //antes: 'http://localhost:8091/api/validadores/{{id}}' PORQUE NO ANDA? con botones no quiere?
-       method: 'DELETE',
+    fetch('/api/validadores/delete/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
+       method: 'DELETE',                         //porque estamos del lado del cliente
+       headers: {
+         'Content-Type': 'application/json',
+         // Puedes agregar más encabezados si es necesario
+        },
+       body: JSON.stringify({ id:'{{id}}', serie: {{serie}} }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error de red - ${response.status}`);
+        }
+        return response.json();  // Si esperas una respuesta JSON el return es necesario para procesar el siguiente then
+      })
+      .then (msg => {
+         console.log('Se eliminó el ID: {{id}}', msg)
+         window.location.href = `/api/validadores/{{serie}}`;    // volvemos a ese serie
+        })  //muestro el mensaje en la consola del cliente
+      .catch (err => {console.log('Ocurrió un error: ', err)})
+  })
+
+  actualizar = document.getElementById('actualizar')
+  actualizar.addEventListener('click', () => {
+    fetch('/api/validadores/actualizar/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
+       method: 'PUT',                         //porque estamos del lado del cliente
        headers: {
          'Content-Type': 'application/json',
          // Puedes agregar más encabezados si es necesario
@@ -22,25 +51,27 @@
         if (!response.ok) {
           throw new Error(`Error de red - ${response.status}`);
         }
-        return response.json();  // Si esperas una respuesta JSON el return es necesario para procesar el siguiente then
+        return response.json();  // Si esperas una respuesta JSON. el return es necesario para procesar el siguiente then
       })
-      .then (msg => {console.log('Se eliminó el ID: {{id}}', msg)})  //muestro el mensaje en la consola del cliente
+      .then (msg => {console.log('Se actualizó el ID: {{id}}', msg)})  //muestro el mensaje en la consola del cliente
       .catch (err => {console.log('Ocurrió un error: ', err)})
   })
 </script>
 
 <style>
   .Editor {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-  
   }
   #formEntrada {
     min-width: 500px;
   }
-  #eliminar {
-      display: block; !important  /*NO puedo desocultar algo que no existe. ya no usaré mas el botón oculto*/
+  .botones {
+    min-width: 500px;
+    display: flex;
+    justify-content: space-around;
   }
+
 </style>
