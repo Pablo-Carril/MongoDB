@@ -2,7 +2,7 @@
   
   <h3>Editar registro: </h3>
   <div>                    
-    {{>formulario ocultar=true}}    <!--podemos enviar datos al llamar a parciales-->
+    {{>formulario ocultar=true}}    <!--podemos enviar datos al llamar a parciales (oculta es para el boton)-->
   </div>
 
   <div class="botones">
@@ -14,6 +14,8 @@
 
 
 <script>
+  const formulario = document.getElementById('formEntrada')
+
   borrar = document.getElementById('borrar')
   borrar.addEventListener('click', () => {
     fetch('/api/validadores/delete/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
@@ -39,20 +41,23 @@
 
   actualizar = document.getElementById('actualizar')
   actualizar.addEventListener('click', () => {
+    //Leer Los datos actualizados:
+    const datosForm = new FormData('formulario')
     fetch('/api/validadores/actualizar/{{id}}', {   
        method: 'PUT',                         
        headers: {
          'Content-Type': 'application/json',
         },
-        //Enviamos los DATOS por el BODY. lo bueno es que lee los datos ACTUALIZADOS en este paso:
-       body: JSON.stringify({ 
-        id:'{{id}}',
-        serie: '{{serie}}',    //o sea que mediante estas variables se puede ESCRIBIR Y LEER
-        linea: '{{linea}}',
-        coche: '{{coche}}',
-        problema: '{{problema}}',
-        caso: '{{caso}}'
-         }),
+        //Enviamos los DATOS por el BODY
+        body: FormData,
+       //body: JSON.stringify({ 
+       // id:'{{id}}',
+        //serie: '{{serie}}',    
+        //linea: '{{linea}}',
+        //coche: '{{coche}}',
+        //problema: '{{problema}}',
+        //caso: '{{caso}}'
+        // }),
       })
       .then(response => {
         if (!response.ok) {
