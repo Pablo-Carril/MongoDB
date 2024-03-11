@@ -56,6 +56,11 @@ app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handl
 app.use('/api/users', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
 app.use('/api/validadores', validadorRouter)
 
+app.use( (req,res) => {
+  res.send('No se encontró la página')
+  res.status(404)
+})
+
 app.use( (error, req, res, next) => {
   const mensaje = 'ha ocurrido un error desconocido'
   console.log(mensaje, error)
