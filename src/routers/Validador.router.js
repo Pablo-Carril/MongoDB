@@ -80,26 +80,32 @@ validadorRouter.post('/', async (req, res) => {
 //Formulario para Editar: 
 validadorRouter.get('/edit/:id', async (req, res) => {
   const id = req.params.id
-  console.log('Editar recibido: ' + id)
+  //console.log('Editar recibido: ' + id)
+  try {
 
-  // traer los datos de la base de datos
-  const datos = await Validadormodel.findById(id)
-  //console.log(datos)
-  //completar el formulario
-  const serie = datos.serie
-  fechaActual = datos.fecha
-  const linea = datos.linea
-  const coche = datos.coche
-  const problema = datos.problema
-  const caso = datos.caso
-
-  // aquí renderizamos un VIEW con formulario de EDICION:
-  res.render('formEdit', {
-    serie, id, fechaActual,
-    linea, coche, caso, problema,
-  })
-  //res.json({Editando: id, serie: serie})
-  res.status(200)
+    // traer los datos de la base de datos
+    const datos = await Validadormodel.findById(id)
+    //console.log(datos)
+    //completar el formulario
+    const serie = datos.serie
+    fechaActual = datos.fecha
+    const linea = datos.linea
+    const coche = datos.coche
+    const problema = datos.problema
+    const caso = datos.caso
+    
+    // aquí renderizamos un VIEW con formulario de EDICION:
+    res.render('formEdit', {
+      serie, id, fechaActual,
+      linea, coche, caso, problema,
+    })
+    //res.json({Editando: id, serie: serie})
+    res.status(200)
+  }
+ catch (error) {
+  console.error(error);
+  res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
+  }
 })
 
 
@@ -107,9 +113,13 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
   const id = req.params.id
   const { body } = req
   console.log("actualizando: ", id)
+  
+  //el form ya está lleno y se puede editar. ahora necesito hacer el submit hasta aquí y leer los datos nuevos.
+  
+  console.log(body)
+  
   //await equipo.findByIdAndUpdate( )
 
-  console.log(body)
 
   res.json({ msg: 'se actualizó :', id: id })
   //res.redirect('validadores/' + serie) 

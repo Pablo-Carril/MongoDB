@@ -39,13 +39,20 @@
 
   actualizar = document.getElementById('actualizar')
   actualizar.addEventListener('click', () => {
-    fetch('/api/validadores/actualizar/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
-       method: 'PUT',                         //porque estamos del lado del cliente
+    fetch('/api/validadores/actualizar/{{id}}', {   
+       method: 'PUT',                         
        headers: {
          'Content-Type': 'application/json',
-         // Puedes agregar más encabezados si es necesario
         },
-       body: JSON.stringify({ id:'{{id}}'}),
+        //Enviamos los DATOS por el BODY. lo bueno es que lee los datos ACTUALIZADOS en este paso:
+       body: JSON.stringify({ 
+        id:'{{id}}',
+        serie: '{{serie}}',    //o sea que mediante estas variables se puede ESCRIBIR Y LEER
+        linea: '{{linea}}',
+        coche: '{{coche}}',
+        problema: '{{problema}}',
+        caso: '{{caso}}'
+         }),
       })
       .then(response => {
         if (!response.ok) {
