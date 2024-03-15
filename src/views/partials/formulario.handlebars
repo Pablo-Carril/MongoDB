@@ -39,15 +39,17 @@
 </style>
 
 <script>
+  let numSerie = ""
   const serieInput = document.getElementById("serie")
-  serieInput.addEventListener('keypress', e => {       //al apretar enter CONSULTAR 
+  serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
+    numSerie = serieInput.value
+    //console.log(numSerie)
+  })
+  serieInput.addEventListener('keypress', e => {       //al apretar enter CONSULTAMOS mediante redirección url a ese serie.
     if (e.key == "Enter") {         // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA
-
-      //botonConsultar.click() // hacer un GET de ese serie
-      console.log('Enter')
-      window.location.href = `/api/validadores/{{serie}}`     //funcionara? si pero no obtiene el primer serie que se escribe, al cargar la pagina desde cero.
-
-      e.preventDefault()
+      var url = '/api/validadores/' + numSerie    //+ encodeURIComponent({{serie}});
+      window.location.href = url    
+      //e.preventDefault()
     }
   })
 </script>

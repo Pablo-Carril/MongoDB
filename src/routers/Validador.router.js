@@ -114,12 +114,12 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
   const { body } = req
   console.log("actualizando: ", id)
   
-  //el form ya está lleno y se puede editar. ahora necesito hacer el submit hasta aquí y leer los datos nuevos.
-  
-  console.log(body)
-  
-  //await equipo.findByIdAndUpdate( )
-
+  const datosFormulario = req.body
+  console.log(datosFormulario)
+  //for (let entrada of body.entries()) {
+  //  console.log(entrada[0] + ': ' + entrada[1]);
+ // }
+  //await equipo.findByIdAndUpdate(id)
 
   res.json({ msg: 'se actualizó :', id: id })
   //res.redirect('validadores/' + serie) 
