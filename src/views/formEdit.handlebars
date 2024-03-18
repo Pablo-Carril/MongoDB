@@ -12,7 +12,6 @@
 
 </div>
 
-
 <script>
   const formulario = document.getElementById('formEntrada')
 
@@ -44,14 +43,14 @@
     //Leer Los datos actualizados:
     const datosForm = new FormData(formulario)         //se pasa el OBJETO formulario
     const datosJSON = JSON.stringify(Object.fromEntries(datosForm.entries()));   // PRUEBO mejor como JSON
-    fetch('/api/validadores/actualizar/{{id}}', {   
-       method: 'PUT',                         
+    fetch('/api/validadores/actualizar/{{id}}', {     
+       method: 'PUT',          //exite otra forma de enviar el formulario datosForm sin pasar a Json, pero no pude hacer que el servidor lo lea.
        headers: {
-         'Content-Type': 'application/json',
+         'Content-Type': 'application/json',   //sin esto no anda.
         },
-        //Enviamos los DATOS por el BODY
+        //Enviamos los DATOS por el BODY para probar. funciona bien como Json.
         body: datosJSON,
-       //body: JSON.stringify({ 
+       //body: JSON.stringify({      //esta es otra forma que funciona muy bien. de forma individual.
        // id:'{{id}}',
         //serie: '{{serie}}',    
         //linea: '{{linea}}',
@@ -66,7 +65,11 @@
         }
         return response.json();  
       })
-      .then (msg => {console.log('Se actualizó el ID: {{id}}', msg)})  //muestro el mensaje en la consola del cliente
+      .then (msg => {
+        console.log('Se actualizó el ID: {{id}}', msg)
+        window.location.href = `/api/validadores/{{serie}}`;    // volvemos a ese serie
+        })  //muestro el mensaje en la consola del cliente
+      
       .catch (err => {console.log('Ocurrió un error: ', err)})
   })
 </script>

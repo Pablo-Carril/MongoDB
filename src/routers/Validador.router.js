@@ -111,27 +111,39 @@ validadorRouter.get('/edit/:id', async (req, res) => {
 
 validadorRouter.put('/actualizar/:id', async (req, res) => {
   const id = req.params.id
-  const { body } = req
-  console.log("actualizando: ", id)
-  
-  const datosFormulario = req.body
-  console.log(datosFormulario)
-  //for (let entrada of body.entries()) {
-  //  console.log(entrada[0] + ': ' + entrada[1]);
- // }
-  //await equipo.findByIdAndUpdate(id)
-
-  res.json({ msg: 'se actualizó :', id: id })
-  //res.redirect('validadores/' + serie) 
-  res.status(200)
+  const serie = req.body.serie
+  console.log("Actualizando: ", id)
+  try {
+    const datosFormulario = req.body
+    console.log(datosFormulario)
+    
+    const resultado = await Validadormodel.findByIdAndUpdate(id, datosFormulario, {new:true})
+    if (!resultado) {
+      console.log('No se encontró el ID')
+      return res.status(404).json({ msg: 'No se encontró el equipo para actualizar.' });
+    } 
+    res.json({ msg: 'se actualizó :', id: id })
+    //res.redirect('validadores/' + serie) 
+    res.status(200)
+  }
+  catch (error) {
+    console.log('Error al actualizar el equipo: ', error);
+    res.status(500).json({ error: 'Hubo un error al actualizar el equipo.' })
+  }
 })
+//.then(response => {   //ESTA SERÍA LA FORMA de REDIRIGIR desde el SERVIDOR sin que lo haga el FETCH del cliente.
+//  if (response.ok) {  
+//    // Si la actualización se realiza correctamente, verificar si hay redirección
+//    if (response.redirected) {
+//      // Realizar la acción adecuada, como cargar la nueva página
+//      window.location.href = response.url;
 
 
 validadorRouter.delete('/delete/:id', async (req, res) => {   //'/validadores/:id'
   try {
     const id = req.params.id
     const { body } = req
-    console.log('DELETE recibido: ' + id)
+    console.log('Borrando: ' + id)
 
     console.log(body)
     const result = await Validadormodel.findByIdAndDelete(id)
