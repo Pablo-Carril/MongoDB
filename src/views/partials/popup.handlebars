@@ -62,6 +62,35 @@
       document.getElementById('popup').style.display = 'block';
     }
 
+let popupPromiseResolve;     //REEMPLAZAR mostrarPopup por esta
+  
+  function showPopup() {
+    const popup = document.getElementById('popup');
+    popup.style.display = 'block';
+    
+    // Crear una nueva promesa
+    const promise = new Promise((resolve) => {
+      popupPromiseResolve = resolve;
+    });
+    
+    // Esperar hasta que el usuario pulse un botón
+    promise.then((result) => {
+      // Ocultar el popup después de que el usuario haya pulsado un botón
+      popup.style.display = 'none';
+      if (result) {
+        console.log('Borrado confirmado');
+        // Aquí puedes agregar la lógica para borrar
+      } else {
+        console.log('Borrado cancelado');
+      }
+    });
+  }
+  
+  function resolvePromise(result) {
+    popupPromiseResolve(result);
+  }
+
+
     // Función para cerrar el cuadro de diálogo
     function cerrarPopup() {
       document.getElementById('popup').style.display = 'none';
