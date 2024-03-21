@@ -140,11 +140,11 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
 
 
 validadorRouter.delete('/delete/:id', async (req, res) => {   //'/validadores/:id'
+  //res.render('popup')
   try {
     const id = req.params.id
     const { body } = req
     console.log('Borrando: ' + id)
-
     console.log(body)
     const result = await Validadormodel.findByIdAndDelete(id)
     if (!result) {
