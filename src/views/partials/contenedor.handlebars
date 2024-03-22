@@ -1,21 +1,20 @@
 <div class="container-fluid ">
   <div class="row">
-    <div class="col-3">
+    <div class="col-2">
 
       <label>Equipo:</label>
-      <select class="custom-select form-control" id="equipoSelect" required="">
-        <!-- ESTO debería ser parte del FORMULARIO -->
+      <select class="custom-select form-control" id="equipoSelect" required=""> <!-- ESTO debería ser parte del FORMULARIO -->
         <option selected value="Validador">Validador</option>
         <option value="Teclado">Teclado</option>
         <option value="MountinKit">Mountin Kit</option>
         <option value="Otros">Otros</option>
       </select>
 
-      {{>formulario}}    <!--todos los que se llamen de este modo deben encontrarse en partials-->
+      {{>formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
 
     </div>
 
-    <div id="menu" class="col-8 border">  <!--Al presionar Consultar debo leer el input serie del formulario y generar el URI -->
+    <div id="menu" class="col-8 border">
       <a href="#" id="consultar" class="btn btn-primary text-white mt-3 mb-2">Consultar</a>
       <button id="ultimos" class="btn btn-primary text-white mt-3 mb-2 ms-3">Ultimos</button>
       <button id="laplata" class="btn btn-primary text-white mt-3 mb-2 ms-3">La Plata</button>
@@ -25,12 +24,19 @@
       <h5 id="historialText">historial</h5>
       <p id="historialSerie">Serie: {{serie}} </p>
 
-       <!--todos los que se llamen de este modo deben encontrarse en partials
+      <!--todos los que se llamen de este modo deben encontrarse en partials
          y para actualizarce debe actualizarce toda la página   -->
-       {{>tabla}}
+      
+      {{#if mostrarTabla}}
+        {{> tabla}} 
+      {{/if}}
 
-    </div>         
-    <div id="nota"></div> 
+      {{#if mostrarUltimos}}
+        {{> ultimos}} 
+      {{/if}}
+
+    </div>
+    <div id="nota"></div>
   </div>
 </div>
 
@@ -42,7 +48,7 @@
     const serieNum = serieInput.value                     // SALVO que hagamos un formulario normal y nos evitamos todo este Javascript. HACERLO EN EL FUTURO
     if (serieNum) {
       var url = '/api/validadores/' + encodeURIComponent(serieNum);
-    } else { url = '#'}
+    } else { url = '#' }
     //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
     window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
   })

@@ -18,7 +18,7 @@ validadorRouter.get('/:serie', async (req, res) => {     //api/validadores/numer
     const validadores = formateaResultados(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
-    res.render('index', { validadores, serie, fechaActual })  //estas son variables de Handlebars para la TABLA
+    res.render('index', { validadores, serie, fechaActual, mostrarTabla: true, })  //estas son variables de Handlebars para la TABLA
     res.status(200)
   }
   catch (err) {

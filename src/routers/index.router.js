@@ -18,6 +18,8 @@ indexRouter.get('/', (req, res)=>{   //router del raíz. aquí especificamos el 
   res.render('index',  {             //respondemos con un index.handlebars, no hace falta la extención porque ya la seteamos antes
     title: 'Control de Equipos',
     fechaActual: fecha,
+    mostrarTabla: false, 
+    mostrarUltimos: true,
   })
     res.status(200)           
    // res.json({ message: 'Bienvenido al Servidor'})

@@ -1,5 +1,52 @@
-
 <title>Confirme la operación: </title>
+
+<body>
+  <!-- Contenedor del cuadro de diálogo -->
+  <div id="popup" class="popup">
+    <div class="popup-contenido">
+     <!-- <span class="cerrar" onclick="cerrarPopup()">&times;</span> -->
+      <h2>Confirmar operación:</h2>
+      <p>¿Estás seguro de que deseas borrar este documento?</p>
+      <button onclick="confirmarBorrado()" class="btn btn-danger text-white me-4">Borrar</button>
+      <button onclick="cerrarPopup()" class="btn btn-primary text-white ms-4">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    let popupPromiseResolve;
+    function mostrarPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'block';
+      // Crear una nueva promesa
+      const promise = new Promise((resolve) => {
+        popupPromiseResolve = resolve;
+      });
+      // Esperar hasta que el usuario pulse un botón
+      promise.then((result) => {
+        // Ocultar el popup después de que el usuario haya pulsado un botón
+        popup.style.display = 'none';
+        if (result) {
+          console.log('Borrado confirmado');
+          // Aquí puedes agregar la lógica para borrar
+        } else {
+          console.log('Borrado cancelado');
+        }
+      });
+    }
+    function resolvePromise(result) {
+      popupPromiseResolve(result);
+    }
+
+    // Función para cerrar el cuadro de diálogo
+    function cerrarPopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    // Función para confirmar el borrado
+    // function confirmarBorrado() {    //LA MANEJAMOS ahora DESDE formEdit
+  </script>
+
+</body>
 <style>
   /* Estilos del cuadro de diálogo */
   .popup {
@@ -23,8 +70,10 @@
     border: 1px solid #888;
     width: 80%;
     max-width: 400px;
+    text-align: center;
   }
 
+ 
   .cerrar {
     color: #aaa;
     float: right;
@@ -39,76 +88,5 @@
     cursor: pointer;
   }
 </style>
-</head>
-
-<body>
-
-  <!--<button id="botonBorrar">Borrar documento</button>-->
-
-  <!-- Contenedor del cuadro de diálogo -->
-  <div id="popup" class="popup">
-    <div class="popup-contenido">
-      <span class="cerrar" onclick="cerrarPopup()">&times;</span>
-      <h2>¿Estás seguro?</h2>
-      <p>¿Estás seguro de que deseas borrar este documento?</p>
-      <button onclick="confirmarBorrado()" class="btn btn-danger text-white ms-4">Sí, borrar</button>
-      <button onclick="cerrarPopup()" class="btn btn-primary text-white ms-4">Cancelar</button>
-    </div>
-  </div>
-
-  <script>
-    // Función para mostrar el cuadro de diálogo
-    function mostrarPopup() {
-      document.getElementById('popup').style.display = 'block';
-    }
-
-let popupPromiseResolve;     //REEMPLAZAR mostrarPopup por esta
-  
-  function showPopup() {
-    const popup = document.getElementById('popup');
-    popup.style.display = 'block';
-    
-    // Crear una nueva promesa
-    const promise = new Promise((resolve) => {
-      popupPromiseResolve = resolve;
-    });
-    
-    // Esperar hasta que el usuario pulse un botón
-    promise.then((result) => {
-      // Ocultar el popup después de que el usuario haya pulsado un botón
-      popup.style.display = 'none';
-      if (result) {
-        console.log('Borrado confirmado');
-        // Aquí puedes agregar la lógica para borrar
-      } else {
-        console.log('Borrado cancelado');
-      }
-    });
-  }
-  
-  function resolvePromise(result) {
-    popupPromiseResolve(result);
-  }
-
-
-    // Función para cerrar el cuadro de diálogo
-    function cerrarPopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
-
-    // Función para confirmar el borrado
-    function confirmarBorrado() {
-      
-      // Aquí puedes realizar el borrado
-
-      console.log('Documento borrado');
-      cerrarPopup();
-    }
-
-    // Event listener para el botón de borrar
-    document.getElementById('botonBorrar').addEventListener('click', mostrarPopup);
-  </script>
-
-</body>
 
 </html>
