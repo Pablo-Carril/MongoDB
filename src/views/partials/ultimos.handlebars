@@ -1,7 +1,7 @@
 <div class="row">
 
   <div id="lista" class="col-6">
-    <h5>Ultimos Validadores:  <span id="titulo" class="fw-bold text-danger"> </span> </h5>
+    <h5>Ultimos Validadores: <span id="titulo" class="fw-bold text-danger"> </span> </h5>
     <!--<button id="consultar" class="btn btn-primary text-white mb-3">Consultar</button> -->
     <table id="tablaValidador" class="table table-bordered lh-1" style="font-size: 0.95rem;">
       <thead>
@@ -16,13 +16,27 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Las filas se agregarán aquí mediante JavaScript -->
+        {{#each validadores}}
+        <tr>
+          <td>{{this.serie}}</td>
+          <td>{{this.fecha}}</td>
+          <td>{{this.linea}}</td>
+          <td>{{this.coche}}</td>
+          <td>{{this.problema}}</td>
+          <td>{{this.caso}}</td>
+         <!-- <td>
+            <a href="edit/{{_id}}">Editar</a> 
+            <i class="fas fa-pencil"></i> 
+          </td> 
+          -->
+        </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
 
   <div id="lista" class="col-6">
-    <h5>Ultimos Teclados:  <span id="titulo" class="fw-bold text-danger"> </span> </h5>
+    <h5>Ultimos Teclados: <span id="titulo" class="fw-bold text-danger"> </span> </h5>
     <!--<button id="consultar" class="btn btn-primary text-white mb-3">Consultar</button> -->
     <table id="tablaTeclado" class="table table-bordered lh-1" style="font-size: 0.95rem;">
       <thead>
@@ -37,9 +51,19 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Las filas se agregarán aquí mediante JavaScript -->
+      
+      
       </tbody>
     </table>
   </div>
-  
+
 </div>
+
+<style>
+  td {
+    white-space: nowrap;  /* evita el salto de línea */
+    overflow: hidden;
+    text-overflow: ellipsis;   
+  }
+ 
+</style>

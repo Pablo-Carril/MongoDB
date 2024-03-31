@@ -7,7 +7,6 @@ const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 
 const validadorRouter = Router()
-//realmente es necesario acceder a '/validadores' ? creo que no, por ahí en un futuro mostrar los ULTIMOS.
 
 //CONSULTAR POR ID:
 validadorRouter.get('/:serie', async (req, res) => {     //api/validadores/numero
@@ -108,7 +107,7 @@ validadorRouter.get('/edit/:id', async (req, res) => {
   }
 })
 
-
+//ACTUALIZAR
 validadorRouter.put('/actualizar/:id', async (req, res) => {
   const id = req.params.id
   const serie = req.body.serie
@@ -138,7 +137,7 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
 //      // Realizar la acción adecuada, como cargar la nueva página
 //      window.location.href = response.url;
 
-
+//BORRAR
 validadorRouter.delete('/delete/:id', async (req, res) => {   //'/validadores/:id'
   //res.render('popup')
   try {
