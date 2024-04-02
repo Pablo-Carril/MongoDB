@@ -1,6 +1,13 @@
 <form id="formEntrada" action="/api/validadores" method="post">
   <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).-->
   <div class="form-group">
+    <label>Equipo:</label>
+      <select class="custom-select form-control" id="equipoSelect" required=""> 
+        <option selected value="Validador">Validador</option>
+        <option value="Teclado">Teclado</option>
+        <option value="MountinKit">Mountin Kit</option>
+        <option value="Otros">Otros</option>
+      </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control" min="1" max="999999999"
       title="Numero de serie" required="" autofocus>

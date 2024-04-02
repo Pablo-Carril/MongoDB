@@ -16,7 +16,8 @@ let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla 
 
 indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   try {
-    const resultados = await Validadormodel.find({}).limit(50)  //ULTIMOS DIEZ con LIMIT  
+    const resultados = await Validadormodel.find().sort({ _id: -1 }).limit(15) //ULTIMOS DIEZ
+    // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const validadores = resultados    //formateaResultados(resultados)
     res.render('index', { validadores, mostrarTabla: false, mostrarUltimos: true })  //estas son variables de Handlebars para la TABLA
@@ -28,6 +29,7 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
   }
   //res.render('index', {             //respondemos con un index.handlebars, no hace falta la extención porque ya la seteamos antes
   //title: 'Control de Equipos',
+  //     style: 'estilos.css',             // podemos aplicar ESTILOS individuales a cada PLANTILLA  
   //fechaActual: fecha,
   //mostrarTabla: false,
   //mostrarUltimos: true,

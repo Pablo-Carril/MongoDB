@@ -7,6 +7,8 @@ const userRouter = Router()
 userRouter.get('/', async (req,res)=> {          //queda api/users
  //  res.render('index',  {             //esto es de handlebars. NO lo vamos a usar. vamos a leer desde MongoDB
  //     title: 'titulo de la pagina',
+ //     style: 'estilos.css',             // podemos aplicar ESTILOS individuales a cada PLANTILLA
+ //       LUEGO en cada link AGREGAMOS rel=stylesheet href=css/{{style}}  para que lo tome.
  //     fullname: users.name,
  //     // aquí todos los datos de las variables y condicionales
  //     isAdmin: users.role === 'admin',

@@ -1,34 +1,18 @@
 <div class="container-fluid ">
-  <div class="row">
-    <div class="col-2">
+  <div class="row" style="flex-wrap: nowrap;">
 
-      <label>Equipo:</label>
-      <select class="custom-select form-control" id="equipoSelect" required=""> <!-- ESTO debería ser parte del FORMULARIO -->
-        <option selected value="Validador">Validador</option>
-        <option value="Teclado">Teclado</option>
-        <option value="MountinKit">Mountin Kit</option>
-        <option value="Otros">Otros</option>
-      </select>
+    <div class="col-2" style="min-width: 200px;">  <!-- este maneja el ancho del formulario. y también ancho mínimo-->
 
       {{>formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
-
+                      <!-- y para actualizarce debe actualizarce toda la página   -->
     </div>
 
-    <div id="menu" class="col-8 border">
-      <a href="#" id="consultar" class="btn btn-primary text-white mt-3 mb-2">Consultar</a>
-      <button id="ultimos" class="btn btn-primary text-white mt-3 mb-2 ms-3">Ultimos</button>
-      <button id="laplata" class="btn btn-primary text-white mt-3 mb-2 ms-3">La Plata</button>
-      <button id="sonda" class="btn btn-primary text-white mt-3 mb-2 ms-3">Sonda</button>
-      <button id="notasBtn" class="btn btn-primary text-white mt-3 mb-2 ms-3">Notas</button>
-
-      <h5 id="historialText">historial</h5>
-      <p id="historialSerie">Serie: {{serie}} </p>
-
-      <!--todos los que se llamen de este modo deben encontrarse en partials
-         y para actualizarce debe actualizarce toda la página   -->
+    <div class="col-10 border" style="min-width: 500px;">
       
-      {{#if mostrarTabla}}
-        {{> tabla}} 
+      {{#if mostrarTabla}}  
+        <h5>historial</h5>
+        <p>Serie: {{serie}} </p>
+        {{> tabla}}        
       {{/if}}
 
       {{#if mostrarUltimos}}
@@ -36,7 +20,9 @@
       {{/if}}
 
     </div>
+
     <div id="nota"></div>
+
   </div>
 </div>
 
