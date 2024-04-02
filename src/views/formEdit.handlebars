@@ -1,13 +1,14 @@
 <div class="Editor">
 
-  <h3>Editar registro: </h3>
+  <h4>Editar registro: </h4>
   <div>
-    {{>formulario ocultar=true}} <!--podemos enviar datos al llamar a parciales (oculta es para el boton)-->
+    {{>formulario ocultar=true}} <!--podemos enviar datos al llamar a parciales (oculta es para el boton guardar)-->
   </div>
 
   <div class="botones">
     <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
-    <button id="actualizar" class="btn btn-primary text-white ms-4">Actualizar</button>
+    <button id="actualizar" class="btn btn-info text-white ms-4">Guardar</button>
+    <a id="cancelar" href="/" class="btn btn-primary text-white ms-4">Cancelar</a>
   </div>
 
   {{>popup}}

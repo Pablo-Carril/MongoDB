@@ -114,7 +114,7 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
   console.log("Actualizando: ", id)
   try {
     const datosFormulario = req.body
-    console.log(datosFormulario)
+   // console.log(datosFormulario)
     
     const resultado = await Validadormodel.findByIdAndUpdate(id, datosFormulario, {new:true})
     if (!resultado) {

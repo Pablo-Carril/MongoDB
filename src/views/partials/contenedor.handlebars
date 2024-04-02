@@ -1,17 +1,14 @@
 <div class="container-fluid ">
   <div class="row" style="flex-wrap: nowrap;">
 
-    <div class="col-2" style="min-width: 200px;">  <!-- este maneja el ancho del formulario. y también ancho mínimo-->
-
+    <div class="col-2" style="min-width: 240px;">  <!-- este maneja el ancho del formulario. y también ancho mínimo-->
       {{>formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
                       <!-- y para actualizarce debe actualizarce toda la página   -->
     </div>
 
-    <div class="col-10 border" style="min-width: 500px;">
-      
+    <div class="col-10 border" style="min-width: 200px;">    
       {{#if mostrarTabla}}  
-        <h5>historial</h5>
-        <p>Serie: {{serie}} </p>
+        <h6 class="mt-2">HISTORIAL -  Serie:    <b>{{serie}}</b></h6> 
         {{> tabla}}        
       {{/if}}
 
@@ -21,21 +18,7 @@
 
     </div>
 
-    <div id="nota"></div>
+  <!--  <div id="nota"></div> -->
 
   </div>
 </div>
-
-<script>
-  //Al consultar leemos el numero de serie ingresado por el usuario    FUNCIONA!!!   aunque esté en otro handlebars!!
-  const consultarBtn = document.getElementById('consultar')
-  consultarBtn.addEventListener('click', () => {
-    const serieInput = document.getElementById('serie')     //leemos el serie ingresado. no se puede desde el servidor. 
-    const serieNum = serieInput.value                     // SALVO que hagamos un formulario normal y nos evitamos todo este Javascript. HACERLO EN EL FUTURO
-    if (serieNum) {
-      var url = '/api/validadores/' + encodeURIComponent(serieNum);
-    } else { url = '#' }
-    //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
-    window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
-  })
-</script>

@@ -1,13 +1,13 @@
-<table id="historial" class="table table-bordered lh1" style="font-size: 0.95rem;">
+
+<div class="col-8">    <!-- con esto conseguí achicar la tabla -->
+
+<table id="historial" class="table table-bordered lh1" style="font-size: 0.90rem;">
   <thead>
     <tr>
-      <th>Serie</th>
-    </tr>
-    <tr>
-      <th>Fecha</th>
+      <th class="col-1">Fecha</th>
       <th class="col-1">Linea</th>
       <th class="col-1">Coche</th>
-      <th class="col-7">Problema</th>
+      <th class="col-4">Problema</th>
       <th class="col-1">Caso</th>
       <th class="col-1 text-muted">Edit</th>
     </tr>
@@ -17,12 +17,12 @@
         <tr>
           <td>{{this.fecha}}</td>
           <td>{{this.linea}}</td>
-          <td>{{this.coche}}</td>
-          <td>{{this.problema}}</td>
+          <td>{{this.coche}}</td>     <!-- el nowrap impide que se achique,así que no actúa el hidden. text-overflow: ellipsis; PERO parece que el problema es que no hay forma de achicar esa columna -->
+          <td style="white-space: nowrap; overflow-x: hidden;">{{this.problema}}</td>
           <td>{{this.caso}}</td>
           <td>
            <a href="edit/{{_id}}">Editar</a>        <!--  _id es el del documento FUNCIONA! -->
-             <i class="fas fa-pencil"></i>        <!-- traté de poner un ícono pero falta FONT AWESOME -->
+       <!--      <i class="fas fa-pencil"></i>         traté de poner un ícono pero falta FONT AWESOME -->
           </td> 
         </tr>
       {{/each}}
@@ -43,3 +43,4 @@
 </table>
 
 <!-- <input type="hidden" id="filaSeleccionada">  -->
+ </div>
