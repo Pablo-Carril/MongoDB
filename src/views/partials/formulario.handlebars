@@ -2,12 +2,12 @@
   <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).-->
   <div class="form-group">
     <label>Equipo:</label>
-      <select class="custom-select form-control" id="equipoSelect" required=""> 
-        <option selected value="Validador">Validador</option>
-        <option value="Teclado">Teclado</option>
-        <option value="MountinKit">Mountin Kit</option>
-        <option value="Otros">Otros</option>
-      </select>
+    <select class="custom-select form-control" id="equipoSelect" required="">
+      <option selected value="Validador">Validador</option>
+      <option value="Teclado">Teclado</option>
+      <option value="MountinKit">Mountin Kit</option>
+      <option value="Otros">Otros</option>
+    </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control" min="1" max="999999999"
       title="Numero de serie" required="" autofocus>
@@ -16,10 +16,10 @@
 
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" required="">
-      <option value="85" {{isSelected linea '85'}}>85</option>
-      <option value="98" {{isSelected linea '98'}}>98</option>
-      <option value="307" {{isSelected linea '307'}}>307</option>
-      <option value="275" {{isSelected linea '275'}}>275</option>
+      <option value="85" {{isSelected linea '85' }}>85</option>
+      <option value="98" {{isSelected linea '98' }}>98</option>
+      <option value="307" {{isSelected linea '307' }}>307</option>
+      <option value="275" {{isSelected linea '275' }}>275</option>
     </select>
     <label for="coche">Coche:</label>
     <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control">
@@ -39,10 +39,18 @@
 </form>
 
 <style>
-.oculto {
-  display: none;
-}
+  .oculto {
+    display: none;
+  }
 
+  #problema {
+    white-space: nowrap;
+    /* evita el salto de línea */
+    text-overflow: ellipsis;
+    /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;
+    /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
+  }
 </style>
 
 <script>
@@ -55,7 +63,7 @@
   serieInput.addEventListener('keypress', e => {       //al apretar enter CONSULTAMOS mediante redirección url a ese serie.
     if (e.key == "Enter") {         // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA
       var url = '/api/validadores/' + numSerie    //+ encodeURIComponent({{serie}});
-      window.location.href = url    
+      window.location.href = url
       //e.preventDefault()
     }
   })

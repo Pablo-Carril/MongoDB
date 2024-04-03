@@ -18,7 +18,7 @@
           <td>{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>     <!-- el nowrap impide que se achique,así que no actúa el hidden. text-overflow: ellipsis; PERO parece que el problema es que no hay forma de achicar esa columna -->
-          <td style="white-space: nowrap; overflow-x: hidden;">{{this.problema}}</td>
+          <td class="problema tooltip-show" >{{this.problema}}</td>
           <td>{{this.caso}}</td>
           <td>
            <a href="edit/{{_id}}">Editar</a>        <!--  _id es el del documento FUNCIONA! -->
@@ -44,3 +44,12 @@
 
 <!-- <input type="hidden" id="filaSeleccionada">  -->
  </div>
+
+ <style>
+  .problema {
+    white-space: nowrap;     /* evita el salto de línea */
+    text-overflow: ellipsis;  /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;      /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
+    max-width: 550px;
+  }
+ </style>

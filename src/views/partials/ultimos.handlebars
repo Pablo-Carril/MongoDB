@@ -22,7 +22,7 @@
           <td>{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>
-          <td>{{this.problema}}</td>
+          <td class="problema">{{this.problema}}</td>
           <td>{{this.caso}}</td>
          <!-- <td>
             <a href="edit/{{_id}}">Editar</a> 
@@ -59,10 +59,11 @@
 </div>
 
 <style>
-  td {
-    white-space: nowrap;  /* evita el salto de línea */
-    overflow: hidden;
-    text-overflow: ellipsis;   
+  .problema {
+    white-space: nowrap;     /* evita el salto de línea */
+    text-overflow: ellipsis;  /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;      /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
+    max-width: 550px;
   }
  
 </style>
