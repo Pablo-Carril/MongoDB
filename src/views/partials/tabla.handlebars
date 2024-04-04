@@ -4,6 +4,7 @@
 <table id="historial" class="table table-bordered lh1" style="font-size: 0.90rem;">
   <thead>
     <tr>
+      <th class="col-1">Equipo</th>
       <th class="col-1">Fecha</th>
       <th class="col-1">Linea</th>
       <th class="col-1">Coche</th>
@@ -15,6 +16,7 @@
   <tbody>
       {{#each validadores}}
         <tr>
+          <td>{{this.equipo}}</td>
           <td>{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>     <!-- el nowrap impide que se achique,así que no actúa el hidden. text-overflow: ellipsis; PERO parece que el problema es que no hay forma de achicar esa columna -->

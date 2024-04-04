@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const validadorSchema = new mongoose.Schema({           
+const validadorSchema = new mongoose.Schema({
+  equipo: {type: String, required: true},           
   serie: {type: String, required: true},   
   fecha: {type: String, required: true},                //podría ser tipo fecha
   linea: {type: String, required: true}, 

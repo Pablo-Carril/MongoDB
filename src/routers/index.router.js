@@ -3,6 +3,7 @@ import handlebars from 'handlebars'
 import { Validadormodel } from '../models/validador.model.js'
 const indexRouter = Router()
 import { DateTime } from 'luxon'
+import formateaResultados from '../utils.js'
 
 const ahora = DateTime.now()
 let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
@@ -19,12 +20,12 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
     const resultados = await Validadormodel.find().sort({ _id: -1 }).limit(15) //ULTIMOS DIEZ
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-    const validadores = resultados    //formateaResultados(resultados)
+    const validadores = formateaResultados(resultados)
     res.render('index', { 
       validadores, 
       fechaActual: fecha,
       title: 'Control de Equipos',
-      equipoElegido,
+      //equipoElegido,
       mostrarTabla: false,
       mostrarUltimos: true })  //estas son variables de Handlebars para la TABLA
     console.log('usuario conectado')

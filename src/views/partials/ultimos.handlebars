@@ -1,11 +1,12 @@
 <div class="row mt-3">
 
   <div id="ultimos" class="col-8" >
-    <h5>Ultimos Validadores: <span id="titulo" class="fw-bold text-danger"> </span> </h5>
+    <h5>Ultimos Anotados: <span id="titulo" class="fw-bold text-danger"> </span> </h5>
     <!--<button id="consultar" class="btn btn-primary text-white mb-3">Consultar</button> style="min-width: 200px;" -->
     <table id="tablaValidador" class="table table-bordered lh-1" style="font-size: 0.90rem;">
       <thead>
         <tr>
+          <th class="col-1">Equipo</th>
           <th class="col-1">Serie</th>
           <th class="col-1">Fecha</th>
           <th class="col-1">Linea</th>
@@ -18,43 +19,22 @@
       <tbody>
         {{#each validadores}}
         <tr>
+          <td>{{this.equipo}}</td>
           <td>{{this.serie}}</td>
-         <!-- <td>{{this.fecha}}</td> -->
+          <td style="white-space: nowrap;">{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>
           <td class="problema">{{this.problema}}</td>
           <td>{{this.caso}}</td>
-         <!-- <td>
-            <a href="edit/{{_id}}">Editar</a> 
-            <i class="fas fa-pencil"></i> 
-          </td> 
-          -->
+          <td>
+            <a href="entregado/{{_id}}">check</a> 
+          </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
-<!--
-  <div id="lista" class="col-6">
-    <h5>Ultimos Teclados: <span id="titulo" class="fw-bold text-danger"> </span> </h5>
-    <table id="tablaTeclado" class="table table-bordered lh-1" style="font-size: 0.95rem;">
-      <thead>
-        <tr>
-          <th class="col-1">Serie</th>
-          <th class="col-2">Fecha</th>
-          <th class="col-1">Linea</th>
-          <th class="col-1">Coche</th>
-          <th class="col-5">Problema</th>
-          <th class="col-2">Caso</th>
-          <th class="col-1">Entregado</th>
-        </tr>
-      </thead>
-      <tbody>
-      
--->      
-      </tbody>
-    </table>
-  </div>
+  
 
 </div>
 

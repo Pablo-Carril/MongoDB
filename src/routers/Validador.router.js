@@ -2,6 +2,7 @@ import { Router } from 'express'
 //import {v4 as uuidv4} from 'uuid'
 import { Validadormodel } from '../models/validador.model.js'
 import { DateTime } from 'luxon'
+import formateaResultados from '../utils.js'
 
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
@@ -25,34 +26,6 @@ validadorRouter.get('/:serie', async (req, res) => {     //api/validadores/numer
   }
 })
 
-function formateaResultados(resultados) {
-  const validadores = [];
-  //Procesamos los datos de la DB:
-  if (Array.isArray(resultados)) {
-    resultados.forEach((datos) => {
-      let fecha = datos.fecha
-      let fechaLuxon = DateTime.fromISO(fecha)
-      let nuevaFecha = fechaLuxon.toFormat('dd/MM/yyyy')
-      validadores.push({       //llenamos un nuevo array con un objeto
-        ...datos.toObject(),   //convertimos el documento a objeto normal con todos sus datos
-        fecha: nuevaFecha      //pero la fecha ahora será la modificada
-      });
-    })
-    return validadores
-  } else {
-    let fecha = resultados.fecha
-    let fechaLuxon = DateTime.fromISO(fecha)
-    let nuevaFecha = fechaLuxon.toFormat('dd/MM/yyyy')
-    validadores.push({
-      fecha: nuevaFecha,
-      linea: resultados.linea,
-      coche: resultados.coche,
-      problema: resultados.problema,
-      caso: resultados.caso
-    })
-    return validadores
-  }
-}
 
 //Los VALUE de los INPUTS también pueden ser modificados con {{variable}}
 //PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
@@ -86,6 +59,7 @@ validadorRouter.get('/edit/:id', async (req, res) => {
     const datos = await Validadormodel.findById(id)
     //console.log(datos)
     //completar el formulario
+    const equipo = datos.equipo
     const serie = datos.serie
     fechaActual = datos.fecha
     const linea = datos.linea
@@ -95,7 +69,7 @@ validadorRouter.get('/edit/:id', async (req, res) => {
     
     // aquí renderizamos un VIEW con formulario de EDICION:
     res.render('formEdit', {
-      serie, id, fechaActual,
+      equipo, serie, id, fechaActual,
       linea, coche, caso, problema,
     })
     //res.json({Editando: id, serie: serie})

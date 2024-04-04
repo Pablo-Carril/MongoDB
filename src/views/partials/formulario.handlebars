@@ -3,16 +3,16 @@
   <div class="form-group">
     <label for="equipoSelect">Equipo:</label>
     <select class="custom-select form-control" name='equipo' id="equipoSelect" required="">
-      <option selected value="Validador">Validador</option>
-      <option value="Teclado">Teclado</option>
-      <option value="MountinKit">Mountin Kit</option>
-      <option value="Concentrador">Concentrador</option>
-      <option value="Otros">Otros</option>
+      <option value="Validador" {{isSelected equipo 'Validador'}}>Validador</option> 
+      <option value="Teclado" {{isSelected equipo 'Teclado'}}>Teclado</option>
+      <option value="MountinKit" {{isSelected equipo 'MountinKit'}}>Mountin Kit</option>
+      <option value="Concentrador" {{isSelected equipo 'Concentrador'}}>Concentrador</option>
+      <option value="Otros" {{isSelected equipo 'Otros'}}>Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control" min="1" max="999999999"
       title="Numero de serie" required="" autofocus>
-    <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name -->
+    <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
     <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control">
 
     <label for="linea">Linea:</label>
@@ -51,6 +51,8 @@
     /* agrega puntos suspensivos... no funciona sin el nowrap */
     overflow-x: hidden;
     /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
+
+  color: {{colorOpcion equipoElegido}};   /* ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
   }
 </style>
 
@@ -83,11 +85,14 @@
 
   const serieHistorial = document.getElementById("serieHistorial")
   const equipoInput = document.getElementById("equipoSelect")
-  equipoInput.addEventListener('input', () => {
 
+  equipoInput.addEventListener('change', () => {
     equipoElegido = equipoInput.value
     console.log(equipoElegido)
-    console.log('{{colorOpcion equipoElegido}}')
+
+    const color = '{{colorOpcion equipoElegido}}'   //TODO ESTO FUNCIONA BIEN!!!  **NO LLEGA EL VALOR equipoElegido al HELPER !!! ***
+    console.log(color)
+   // document.body.style.backgroundColor = {{colorOpcion colorElegido}}
 
   /*  if (equipoInput.value == 'Validador') {
       equipoInput.style.border = "3px solid #0d6efd" //#86b7fe

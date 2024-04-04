@@ -16,8 +16,7 @@ helpers.handlebars.registerHelper('isSelected', function(value, expectedValue) {
   return value === expectedValue ? 'selected' : '';
 });
 
-
-helpers.handlebars.registerHelper('colorOpcion', function(equipo) {
+helpers.handlebars.registerHelper('colorOpcion', function(equipo) {  //NO me llegan datos a equipo
   const colores = {
     'Validador': '#0d6efd',    //validadores
     'Teclado': '#198754',      //teclados
@@ -25,7 +24,9 @@ helpers.handlebars.registerHelper('colorOpcion', function(equipo) {
     'Concentrador': '#fd7e14',   //Concentradores
     'Otros': '#666',             //otros
   };
-  return colores[equipo];
+  console.log(`Color para ${equipo}: ${colores}`)
+  return '#0d6efd'// si paso un valor a mano TODO FUNCIONA en la página.   //colores[equipo]
+  
 });
 
 //const PUERTO = 3040   ***** AHORA LO VAMOS A MANEJAR DESDE .ENV *********
