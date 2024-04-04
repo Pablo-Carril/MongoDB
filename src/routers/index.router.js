@@ -20,7 +20,14 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const validadores = resultados    //formateaResultados(resultados)
-    res.render('index', { validadores, mostrarTabla: false, mostrarUltimos: true })  //estas son variables de Handlebars para la TABLA
+    res.render('index', { 
+      validadores, 
+      fechaActual: fecha,
+      title: 'Control de Equipos',
+      equipoElegido,
+      mostrarTabla: false,
+      mostrarUltimos: true })  //estas son variables de Handlebars para la TABLA
+    console.log('usuario conectado')
     res.status(200)
   }
   catch (err) {
