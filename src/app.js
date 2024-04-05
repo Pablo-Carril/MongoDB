@@ -16,16 +16,16 @@ helpers.handlebars.registerHelper('isSelected', function(value, expectedValue) {
   return value === expectedValue ? 'selected' : '';
 });
 
-helpers.handlebars.registerHelper('colorOpcion', function(equipo) {  //NO me llegan datos a equipo
+helpers.handlebars.registerHelper('colorOpcion', function(equipo) {  //Este helper funciona perfecto. ver Ultimos.
   const colores = {
-    'Validador': '#0d6efd',    //validadores
-    'Teclado': '#198754',      //teclados
-    'Mountinkit': '#ffc107',    //MK
+    'Validador': '#0d6efd',    //validadores                  
+    'Teclado': '#198754',      //teclados                     
+    'MountinKit': '#AA2',    //MK
     'Concentrador': '#fd7e14',   //Concentradores
     'Otros': '#666',             //otros
   };
-  console.log(`Color para ${equipo}: ${colores}`)
-  return '#0d6efd'// si paso un valor a mano TODO FUNCIONA en la página.   //colores[equipo]
+  //console.log(`Color para ${equipo}: ${colores[equipo]}`)
+  return colores[equipo] || '#aaa'  //'#0d6efd'// si paso un valor a mano TODO FUNCIONA en la página.   
   
 });
 

@@ -5,7 +5,7 @@
     <select class="custom-select form-control" name='equipo' id="equipoSelect" required="">
       <option value="Validador" {{isSelected equipo 'Validador'}}>Validador</option> 
       <option value="Teclado" {{isSelected equipo 'Teclado'}}>Teclado</option>
-      <option value="MountinKit" {{isSelected equipo 'MountinKit'}}>Mountin Kit</option>
+      <option value="MountinKit" {{isSelected equipo 'MountinKit'}}>MountinKit</option>
       <option value="Concentrador" {{isSelected equipo 'Concentrador'}}>Concentrador</option>
       <option value="Otros" {{isSelected equipo 'Otros'}}>Otros</option>
     </select>
@@ -35,7 +35,7 @@
         class="form-control mb-3">{{caso}}</textarea>
     </div>
     <button id="guardar" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
-    <button id="consultar" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Consultar</button>
+    <button id="consultar" class="btn btn-primary text-white ms-3 {{#if ocultar}}oculto{{/if}} ">Consultar</button>
   </div>
 </form>
 
@@ -52,7 +52,7 @@
     overflow-x: hidden;
     /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
 
-  color: {{colorOpcion equipoElegido}};   /* ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
+  /*color: {{colorOpcion equipoElegido}};    ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
   }
 </style>
 
@@ -85,12 +85,11 @@
 
   const serieHistorial = document.getElementById("serieHistorial")
   const equipoInput = document.getElementById("equipoSelect")
-
+  //Al cambiar de equipo cambiamos los colores
   equipoInput.addEventListener('change', () => {
     equipoElegido = equipoInput.value
     console.log(equipoElegido)
-
-    const color = '{{colorOpcion equipoElegido}}'   //TODO ESTO FUNCIONA BIEN!!!  **NO LLEGA EL VALOR equipoElegido al HELPER !!! ***
+    const color = '{{colorOpcion equipoElegido}}'   //TODO ESTO FUNSIONA BIEN!!!  **NO LLEGA EL VALOR equipoElegido al HELPER !!! ***
     console.log(color)
    // document.body.style.backgroundColor = {{colorOpcion colorElegido}}
 

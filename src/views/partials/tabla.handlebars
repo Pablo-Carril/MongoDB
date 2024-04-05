@@ -16,7 +16,7 @@
   <tbody>
       {{#each validadores}}
         <tr>
-          <td>{{this.equipo}}</td>
+          <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.equipo}}</td>
           <td>{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>     <!-- el nowrap impide que se achique,así que no actúa el hidden. text-overflow: ellipsis; PERO parece que el problema es que no hay forma de achicar esa columna -->

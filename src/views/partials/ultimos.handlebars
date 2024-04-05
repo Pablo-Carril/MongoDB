@@ -19,8 +19,8 @@
       <tbody>
         {{#each validadores}}
         <tr>
-          <td>{{this.equipo}}</td>
-          <td>{{this.serie}}</td>
+          <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.equipo}}</td>
+          <td class="fw-bold">{{this.serie}}</td>
           <td style="white-space: nowrap;">{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>
@@ -43,7 +43,7 @@
     white-space: nowrap;     /* evita el salto de línea */
     text-overflow: ellipsis;  /* agrega puntos suspensivos... no funciona sin el nowrap */
     overflow-x: hidden;      /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
-    max-width: 550px;
+    max-width: 500px;
   }
  
 </style>
