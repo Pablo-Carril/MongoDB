@@ -1,7 +1,7 @@
 import express from 'express'
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
-import validadorRouter from './routers/Validador.router.js'
+import equiposRouter from './routers/equipos.router.js'
 //import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres-handlebars no hace falta este.
 import handlebars from 'express-handlebars'  //es es el extendido para integración con express
 
@@ -66,7 +66,7 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 
 app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
 app.use('/api/users', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
-app.use('/api/validadores', validadorRouter)
+app.use('/api/equipos', equiposRouter)
 
 app.use( (req,res) => {        //middleware para cualquier otra ruta que no tenga router
   res.send('No se encontró la página')

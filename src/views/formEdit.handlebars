@@ -6,9 +6,9 @@
   </div>
 
   <div class="botones">
-    <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
-    <button id="actualizar" class="btn btn-info text-white ms-4">Guardar</button>
-    <a id="cancelar" href="/" class="btn btn-primary text-white ms-4">Cancelar</a>
+    <button class="btn btn-danger text-white ms-4">Borrar</button>
+    <button class="btn btn-info text-white ms-4">Guardar</button>
+    <a href="/" class="btn btn-primary text-white ms-4">Cancelar</a>
   </div>
 
   {{>popup}}
@@ -24,7 +24,7 @@
   })
 
   function confirmarBorrado() {
-    fetch('/api/validadores/delete/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
+    fetch('/api/equipos/delete/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
       method: 'DELETE',                         //porque estamos del lado del cliente
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +40,7 @@
       })
     .then(msg => {
       console.log('Se eliminó el ID: {{id}}', msg)
-      window.location.href = `/api/validadores/{{serie}}`;    // volvemos a ese serie
+      window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
     })  //muestro el mensaje en la consola del cliente
     .catch(err => { console.log('Ocurrió un error: ', err) })
     }
@@ -50,7 +50,7 @@
     //Leer Los datos actualizados:
     const datosForm = new FormData(formulario)         //se pasa el OBJETO formulario
     const datosJSON = JSON.stringify(Object.fromEntries(datosForm.entries()));   // PRUEBO mejor como JSON
-    fetch('/api/validadores/actualizar/{{id}}', {
+    fetch('/api/equipos/actualizar/{{id}}', {
       method: 'PUT',          //exite otra forma de enviar el formulario datosForm sin pasar a Json, pero no pude hacer que el servidor lo lea.
       headers: {
         'Content-Type': 'application/json',   //sin esto no anda.
@@ -74,7 +74,7 @@
       })
       .then(msg => {
         console.log('Se actualizó el ID: {{id}}', msg)
-        window.location.href = `/api/validadores/{{serie}}`;    // volvemos a ese serie
+        window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
       })  //muestro el mensaje en la consola del cliente
 
       .catch(err => { console.log('Ocurrió un error: ', err) })

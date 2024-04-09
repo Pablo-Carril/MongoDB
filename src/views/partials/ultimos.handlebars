@@ -1,9 +1,9 @@
 <div class="row mt-3">
 
   <div id="ultimos" class="col-8" >
-    <h5>Ultimos Anotados: <span id="titulo" class="fw-bold text-danger"> </span> </h5>
+    <h5>{{resultadosDe}} <span class="ms-2 fw-bold text-danger" style="font-size: 1.1rem;"> {{busqueda}} </span> </h5>
     <!--<button id="consultar" class="btn btn-primary text-white mb-3">Consultar</button> style="min-width: 200px;" -->
-    <table id="tablaValidador" class="table table-bordered lh-1" style="font-size: 0.90rem;">
+    <table class="table table-bordered lh-1" style="font-size: 0.90rem;">
       <thead>
         <tr>
           <th class="col-1">Equipo</th>
@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each validadores}}
+        {{#each equipos}}
         <tr>
           <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.equipo}}</td>
           <td class="fw-bold">{{this.serie}}</td>

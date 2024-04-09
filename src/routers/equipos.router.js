@@ -1,24 +1,24 @@
 import { Router } from 'express'
 //import {v4 as uuidv4} from 'uuid'
-import { Validadormodel } from '../models/validador.model.js'
+import { Equipomodel } from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
 import formateaResultados from '../utils.js'
 
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 
-const validadorRouter = Router()
+const equiposRouter = Router()
 
 //CONSULTAR POR ID:
-validadorRouter.get('/:serie', async (req, res) => {     //api/validadores/numero
+equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/numero
   const serie = req.params.serie      //obtenemos el serie pedido
   try {
-    const resultados = await Validadormodel.find({ serie })    //consultamos el modelo y por tanto la base de datos.
+    const resultados = await Equipomodel.find({ serie })    //consultamos el modelo y por tanto la base de datos.
     if (resultados.length == 0) { console.log("No se encontró ningún dato ☹") }
-    const validadores = formateaResultados(resultados)
+    const equipos = formateaResultados(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
-    res.render('index', { validadores, serie, fechaActual, mostrarTabla: true, })  //estas son variables de Handlebars para la TABLA
+    res.render('index', { equipos, serie, fechaActual, mostrarHistorial: true, })  //estas son variables de Handlebars para la TABLA
     res.status(200)
   }
   catch (err) {
@@ -31,14 +31,14 @@ validadorRouter.get('/:serie', async (req, res) => {     //api/validadores/numer
 //PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
 
 //CREAR NUEVO
-validadorRouter.post('/', async (req, res) => {
+equiposRouter.post('/', async (req, res) => {
   const { body } = req                                         //obtengo sólo el body
-  console.log("Post hacia api/validadores: " + body.serie)
+  console.log("Post hacia api/equipos: " + body.serie)
   try {
-    const nuevo = await Validadormodel.create(body)      //creamos un nuevo registro. sólo si cumple los requerimientos del esquema.   
+    const nuevo = await Equipomodel.create(body)      //creamos un nuevo registro. sólo si cumple los requerimientos del esquema.   
     //console.log(nuevo)
     const serie = body.serie
-    res.redirect('validadores/' + serie)     //redirigimos al serie recién agregado. no poner / al principio.
+    res.redirect('equipos/' + serie)     //redirigimos al serie recién agregado. no poner / al principio.
     res.status(201)  //funciona ok. si no respondemos con 201 el navegador se queda pensando...y hay que responder con algo
   }
   catch (err) {
@@ -50,13 +50,13 @@ validadorRouter.post('/', async (req, res) => {
 })
 
 //Formulario para Editar: 
-validadorRouter.get('/edit/:id', async (req, res) => {
+equiposRouter.get('/edit/:id', async (req, res) => {
   const id = req.params.id
   //console.log('Editar recibido: ' + id)
   try {
 
     // traer los datos de la base de datos
-    const datos = await Validadormodel.findById(id)
+    const datos = await Equipomodel.findById(id)
     //console.log(datos)
     //completar el formulario
     const equipo = datos.equipo
@@ -82,7 +82,7 @@ validadorRouter.get('/edit/:id', async (req, res) => {
 })
 
 //ACTUALIZAR
-validadorRouter.put('/actualizar/:id', async (req, res) => {
+equiposRouter.put('/actualizar/:id', async (req, res) => {
   const id = req.params.id
   const serie = req.body.serie
   console.log("Actualizando: ", id)
@@ -90,7 +90,7 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
     const datosFormulario = req.body
    // console.log(datosFormulario)
     
-    const resultado = await Validadormodel.findByIdAndUpdate(id, datosFormulario, {new:true})
+    const resultado = await Equipomodel.findByIdAndUpdate(id, datosFormulario, {new:true})
     if (!resultado) {
       console.log('No se encontró el ID')
       return res.status(404).json({ msg: 'No se encontró el equipo para actualizar.' });
@@ -112,17 +112,17 @@ validadorRouter.put('/actualizar/:id', async (req, res) => {
 //      window.location.href = response.url;
 
 //BORRAR
-validadorRouter.delete('/delete/:id', async (req, res) => {   //'/validadores/:id'
+equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
   //res.render('popup')
   try {
     const id = req.params.id
     const { body } = req
     console.log('Borrando: ' + id)
     console.log(body)
-    const result = await Validadormodel.findByIdAndDelete(id)
+    const result = await Equipomodel.findByIdAndDelete(id)
     if (!result) {
       // El documento no fue encontrado para eliminar
-      return res.status(404).json({ error: 'El validador no fue encontrado.' });
+      return res.status(404).json({ error: 'El equipo no fue encontrado.' });
     }
     //no se puede responder dos veces
     res.json({msg: 'se eliminó :', id: id})        //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
@@ -135,4 +135,4 @@ validadorRouter.delete('/delete/:id', async (req, res) => {   //'/validadores/:i
   }
 })
 
-export default validadorRouter       //para importar en app.js
+export default equiposRouter       //para importar en app.js
