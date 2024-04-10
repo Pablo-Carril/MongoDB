@@ -2,7 +2,8 @@
   <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).-->
   <div class="form-group">
     <label for="equipoSelect">Equipo:</label>
-    <select class="custom-select form-control" name='equipo' id="equipoSelect" required="">
+    <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required="">
+      <option value="">Todos</option>  <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
       <option value="Validador" {{isSelected equipo 'Validador'}}>Validador</option> 
       <option value="Teclado" {{isSelected equipo 'Teclado'}}>Teclado</option>
       <option value="MountinKit" {{isSelected equipo 'MountinKit'}}>MountinKit</option>
@@ -71,7 +72,7 @@
     }
   })
 
-  //Al consultar leemos el numero de serie ingresado por el usuario    FUNCIONA!!! aunque esté en otro handlebars!!
+  //Al consultar leemos el numero de serie ingresado por el usuario   //NO se puede acceder a Id's de otros Handlebars
   const consultarBtn = document.getElementById('consultar')
   consultarBtn.addEventListener('click', () => {
     const serieInput = document.getElementById('serie')     //leemos el serie ingresado. no se puede desde el servidor. 
@@ -83,37 +84,25 @@
     window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
   })
 
-  const serieHistorial = document.getElementById("serieHistorial")
-  const equipoInput = document.getElementById("equipoSelect")
+  const equipoSelect = document.getElementById("equipoSelect")
   //Al cambiar de equipo cambiamos los colores
-  equipoInput.addEventListener('change', () => {
-    equipoElegido = equipoInput.value
+  equipoSelect.addEventListener('change', () => {
+    equipoElegido = equipoSelect.value
     console.log(equipoElegido)
-    const color = '{{colorOpcion equipoElegido}}'   //TODO ESTO FUNSIONA BIEN!!!  **NO LLEGA EL VALOR equipoElegido al HELPER !!! ***
-    console.log(color)
-   // document.body.style.backgroundColor = {{colorOpcion colorElegido}}
+    const colores = {
+    'Validador': '#0d6efd',    //validadores                  
+    'Teclado': '#198754',      //teclados                     
+    'MountinKit': '#880',      //MK
+    'Concentrador': '#fd7e14',   //Concentradores
+    'Otros': '#666',             //otros
+  };
+  equipoSelect.style.color = colores[equipoElegido]
+  serieInput.style.color = colores[equipoElegido]
 
-  /*  if (equipoInput.value == 'Validador') {
-      equipoInput.style.border = "3px solid #0d6efd" //#86b7fe
-      serieHistorial.style.color = "#0d6efd"   //no se puede desde formulario. probar con variable global
-    }
-    if (equipoElegido == 'Teclado') {
-      equipoInput.style.border = "3px solid" + {{colorOpcion equipoElegido}} 
-    }
-    /*
-    if (equipoInput.value == 'MountinKit') {
-      equipoInput.style.border = "3px solid #ffc107"  
-    }
-    if (equipoInput.value == 'Concentrador') {
-      equipoInput.style.border = "3px solid #fd7e14"  
-    }
-     if (equipoInput.value == 'Otros') {
-      equipoInput.style.border = "3px solid #666"  
-    }
-  */
+  //y ENVIAMOS el equipoElegido al servidor:
+  // ******** PERO EL FORM YA LO HACEEEEEEEEEEEEEEEEEEEEE************
 
-  })
-
+})
 
 
 </script>

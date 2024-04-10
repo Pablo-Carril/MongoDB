@@ -13,7 +13,7 @@ import morgan from 'morgan'    //morgan permite ver las solicitudes http por con
 const helpers = handlebars.create()
 // Definir un helper llamado "isSelected"
 helpers.handlebars.registerHelper('isSelected', function(value, expectedValue) {
-  return value === expectedValue ? 'selected' : '';
+  return value === expectedValue ? 'selected' : '';   //si coinciden retorna true
 });
 
 helpers.handlebars.registerHelper('colorOpcion', function(equipo) {  //Este helper funciona perfecto. ver Ultimos.
