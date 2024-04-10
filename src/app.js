@@ -68,6 +68,11 @@ app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handl
 app.use('/api/users', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
 app.use('/api/equipos', equiposRouter)
 
+//app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
+//  res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+//  next()  
+//})          //POR algún motivo NO FUNCIONA. pero sí al ponerlo en el router. será setHeader en vez de set ???
+
 app.use( (req,res) => {        //middleware para cualquier otra ruta que no tenga router
   res.send('No se encontró la página')
   res.status(404)

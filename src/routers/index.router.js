@@ -14,7 +14,9 @@ let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla 
 //  return fechaLuxon
 //});
 
+//Al iniciar pide los ULTIMOS:
 indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   try {
     const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 

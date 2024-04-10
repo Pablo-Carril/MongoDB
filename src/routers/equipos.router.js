@@ -49,8 +49,9 @@ equiposRouter.post('/', async (req, res) => {
   }
 })
 
-//Formulario para Editar: 
+//Formulario para EDITAR: 
 equiposRouter.get('/edit/:id', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   const id = req.params.id
   //console.log('Editar recibido: ' + id)
   try {
@@ -73,7 +74,7 @@ equiposRouter.get('/edit/:id', async (req, res) => {
       linea, coche, caso, problema,
     })
     //res.json({Editando: id, serie: serie})
-    res.status(200)
+    res.status(200)  //303 para que no permita volver una página atrás.
   }
  catch (error) {
   console.error(error);
