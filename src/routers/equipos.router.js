@@ -4,6 +4,7 @@ import { Equipomodel } from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
 import formateaResultados from '../utils.js'
 const equiposRouter = Router()
+let elegido = 'ninguno'
 
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
@@ -12,13 +13,13 @@ let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tab
 //CONSULTAR POR SERIE:
 equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/numero
   const serie = req.params.serie      //obtenemos el serie pedido
-  try {
+  try {     // TENDRÍA QUE poner elegidos DENTRO del FIND ...y no enviarlo por hbs...creo..
     const resultados = await Equipomodel.find({ serie })    //consultamos el modelo y por tanto la base de datos.
     if (resultados.length == 0) { console.log("No se encontró ningún dato ☹") }
     const equipos = formateaResultados(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
-    res.render('index', { equipos, serie, fechaActual, mostrarHistorial: true, })  //estas son variables de Handlebars para la TABLA
+    res.render('index', { equipos, serie, fechaActual, mostrarHistorial: true, elegido })  //estas son variables de Handlebars para la TABLA
     res.status(200)
   }
   catch (err) {
@@ -44,7 +45,7 @@ equiposRouter.post('/', async (req, res) => {
   catch (err) {
     console.log("Error creando equipo. faltan datos: ", err.message)
     res.render('index', { serie })   // y si HAY UN ERROR hay que responder con algo. si no se queda PENSANDO.
-    //res.json({Error: id, mensage: err.message})
+    //res.json({Error: id, mensage: err.message}) CUIDADO PRIMERO EL STATUS. LUEGO EL JSON
     res.status(400)       // NO ALCANZA con responder un status.
   }
 })
@@ -73,7 +74,6 @@ equiposRouter.get('/edit/:id', async (req, res) => {
       equipo, serie, id, fechaActual,
       linea, coche, caso, problema,
     })
-    //res.json({Editando: id, serie: serie})
     res.status(200)  //303 para que no permita volver una página atrás.
   }
  catch (error) {
@@ -137,14 +137,14 @@ equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
 })
 
 equiposRouter.post('/equipoElegido', (req,res) => {
-  const elegido = req.body.equipo
   try { 
+    elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
     console.log(elegido)
-    res.json({msg: 'elegido'})
-    res.status(200)
+    res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan!!!!
+    //console.log(msg)
   }
   catch (error) {
-    console.error(error);
+   // console.error(error);
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
   }
 })
