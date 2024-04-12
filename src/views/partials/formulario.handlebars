@@ -3,12 +3,12 @@
   <div class="form-group">
     <label for="equipoSelect">Equipo:</label>
     <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required="">
-      <option value="">Todos</option>  <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
-      <option value="Validador" {{isSelected equipo 'Validador'}}>Validador</option> 
-      <option value="Teclado" {{isSelected equipo 'Teclado'}}>Teclado</option>
-      <option value="MountinKit" {{isSelected equipo 'MountinKit'}}>MountinKit</option>
-      <option value="Concentrador" {{isSelected equipo 'Concentrador'}}>Concentrador</option>
-      <option value="Otros" {{isSelected equipo 'Otros'}}>Otros</option>
+      <option value="">Todos</option> <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
+      <option value="Validador" {{isSelected equipo 'Validador' }}>Validador</option>
+      <option value="Teclado" {{isSelected equipo 'Teclado' }}>Teclado</option>
+      <option value="MountinKit" {{isSelected equipo 'MountinKit' }}>MountinKit</option>
+      <option value="Concentrador" {{isSelected equipo 'Concentrador' }}>Concentrador</option>
+      <option value="Otros" {{isSelected equipo 'Otros' }}>Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control" min="1" max="999999999"
@@ -53,7 +53,7 @@
     overflow-x: hidden;
     /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
 
-  /*color: {{colorOpcion equipoElegido}};    ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
+    /*color: {{colorOpcion equipoElegido}};    ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
   }
 </style>
 
@@ -88,21 +88,44 @@
   //Al cambiar de equipo cambiamos los colores
   equipoSelect.addEventListener('change', () => {
     equipoElegido = equipoSelect.value
-    console.log(equipoElegido)
+    //console.log(equipoElegido)
     const colores = {
-    'Validador': '#0d6efd',    //validadores                  
-    'Teclado': '#198754',      //teclados                     
-    'MountinKit': '#880',      //MK
-    'Concentrador': '#fd7e14',   //Concentradores
-    'Otros': '#666',             //otros
-  };
-  equipoSelect.style.color = colores[equipoElegido]
-  serieInput.style.color = colores[equipoElegido]
+      'Validador': '#0d6efd',    //validadores                  
+      'Teclado': '#198754',      //teclados                     
+      'MountinKit': '#880',      //MK
+      'Concentrador': '#fd7e14',   //Concentradores
+      'Otros': '#666',             //otros
+    };
+    equipoSelect.style.color = colores[equipoElegido]
+    serieInput.style.color = colores[equipoElegido]
 
-  //y ENVIAMOS el equipoElegido al servidor:
-  // ******** PERO EL FORM YA LO HACEEEEEEEEEEEEEEEEEEEEE************
+    //ENVIAMOS el equipoElegido al servidor:
+    const datos = JSON.stringify({ 'equipo': equipoElegido })
+    console.log(datos)
+    fetch('/api/equipos/equipoElegido', {   // + equipoElegido, { no hace falta mandarlo por la ruta. va por el body.
+      method: 'POST',             //PORQUE si la ruta está mal el server me devuelve status 200 ????????
+      headers: {
+        'Content-Type': 'application/json',   //sin esto no anda.
+      },
+      body: datos,
+    })
+      .then(response => {    //si el fetch fue correcto el servidor devuelve una respuesta (que no tiene que ver con el catch)
+        if (response.ok) {
+       // console.log(response)
+      //  location.reload();     // Actualizamos la página para que tome los colores
+                             //FUNCIONA! ahora poner el equipo y los colores en el Select
+        }
+        else {
+           throw new Error(`Error de red - ${response.status}`);
+        } 
+      })
+      .then(msg => {         //si llega un mensage desde el servidor lo leemos
+        console.log('Cambio a equipo: ', msg)
+      })
+      .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
+        console.log('Ocurrió un error: ', error)  
+      })
 
-})
-
+  })
 
 </script>

@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { Equipomodel} from '../models/equipo.model.js'
-const indexRouter = Router()
 import { DateTime } from 'luxon'
 import formateaResultados from '../utils.js'
+const indexRouter = Router()
 
 const ahora = DateTime.now()
 let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
@@ -97,7 +97,7 @@ indexRouter.post('/busqueda', async (req, res) => {
   console.log('busqueda: ', busqueda)
   try {      
     const resultados = await Equipomodel.find({
-      $or: [     //buscamos en varios campos. traemos todos (operación OR)
+      $or: [     //buscamos en varios campos. traemos todos los que cumplan (operación OR)
         {problema: { $regex: busqueda, $options: "i" }},
         {caso: { $regex: busqueda, $options: "i" }},
         {coche: { $regex: busqueda, $options: "i" }},

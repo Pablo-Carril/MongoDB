@@ -3,13 +3,13 @@ import { Router } from 'express'
 import { Equipomodel } from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
 import formateaResultados from '../utils.js'
+const equiposRouter = Router()
 
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 
-const equiposRouter = Router()
 
-//CONSULTAR POR ID:
+//CONSULTAR POR SERIE:
 equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/numero
   const serie = req.params.serie      //obtenemos el serie pedido
   try {
@@ -135,5 +135,19 @@ equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
   }
 })
+
+equiposRouter.post('/equipoElegido', (req,res) => {
+  const elegido = req.body.equipo
+  try { 
+    console.log(elegido)
+    res.json({msg: 'elegido'})
+    res.status(200)
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
+  }
+})
+
 
 export default equiposRouter       //para importar en app.js

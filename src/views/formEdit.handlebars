@@ -30,7 +30,7 @@
         'Content-Type': 'application/json',
         // Puedes agregar más encabezados si es necesario
       },
-      body: JSON.stringify({ id: '{{id}}', serie: {{ serie }} }),
+      body: JSON.stringify({ id: '{{id}}', serie: {{ serie }} }), //ENTONCES ES POSIBLE LEER VARIABLES DE HBS EN JAVASCRPT!!!
       })
       .then(response => {
         if (!response.ok) {
@@ -43,7 +43,7 @@
       window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
       history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
     })  //muestro el mensaje en la consola del cliente
-    .catch(err => { console.log('Ocurrió un error: ', err) })
+    .catch((error) => { console.log('Ocurrió un error: ', error) })
     }
 
   actualizar = document.getElementById('actualizar')
