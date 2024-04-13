@@ -118,18 +118,17 @@ equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
   try {
     const id = req.params.id
     const { body } = req
-    console.log('Borrando: ' + id)
-    console.log(body)
+    console.log('Borrando: ' + body.id + body.serie)
     const result = await Equipomodel.findByIdAndDelete(id)
     if (!result) {
       // El documento no fue encontrado para eliminar
       return res.status(404).json({ error: 'El equipo no fue encontrado.' });
     }
     //no se puede responder dos veces
+    res.status(200)
     res.json({msg: 'se eliminó :', id: id})        //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
     //res.redirect('/api/validadores/' + body.serie)  //la ruta es correcta pero no sé porque FALLA
     //VOY a manejar la redirección a la página desde el CLIENTE
-    res.status(200)
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
@@ -150,4 +149,4 @@ equiposRouter.post('/equipoElegido', (req,res) => {
 })
 
 
-export default equiposRouter       //para importar en app.js
+export {equiposRouter, elegido}       //para importar en app.js

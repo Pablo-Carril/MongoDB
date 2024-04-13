@@ -1,7 +1,7 @@
 import express from 'express'
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
-import equiposRouter from './routers/equipos.router.js'
+import {equiposRouter, elegido} from './routers/equipos.router.js'
 //import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres-handlebars no hace falta este.
 import handlebars from 'express-handlebars'  //es es el extendido para integración con express
 
@@ -58,31 +58,42 @@ app.set('view engine', 'handlebars')              //establecemos la extensión. 
 //})
 
 app.use(express.json())   //permite usar JSON en el body de los req Http. si necesitamos texto podemos usar express.text
+//app.use(bodyParser.json()); esta es otra forma pero hay que importarla
 app.use(express.urlencoded({extended: true}))   //para que hacepte datos de FORMULARIOS y url extendidas, o sea símbolos &, :, #, etc
 // también los datos de los formularios los convierte a formato Json. si no no se podrían leer.
 app.use(express.static(path.join(__dirname, './public')))  //definimos la carpeta estática. usamos path para definir mejor una carpeta absoluta
 //Ahora /public es la carpeta raíz de todo el proyecto y no se podrá acceder a ninguna carpeta superior. los atajos para encontrar rutas en VSCode ya no sirven del lado del CLIENTE.
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
 
-app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
-app.use('/api/users', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
-app.use('/api/equipos', equiposRouter)
 
 //app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
 //  res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
 //  next()  
-//})          //POR algún motivo NO FUNCIONA. pero sí al ponerlo en el router. será setHeader en vez de set ???
+//})          
 
-app.use( (req,res) => {        //middleware para cualquier otra ruta que no tenga router
-  res.send('No se encontró la página')
-  res.status(404)
-})
+app.use((req, res, next) => {   //middleware para enviar la variable del equipo elegido a TODOS los routers. tiene que estar antes de ellos.
+  req.equipoElegido = elegido;
+ // console.log('midle', elegido)
+  next();
+});
 
 app.use( (error, req, res, next) => {     //nuestro propio middleware de error cuando todos los anteriores fallan.
   const mensaje = 'ha ocurrido un error desconocido: '
   console.log(mensaje, error)
   res.status(500).json({mensaje})
 })
+
+//Los routers tienen que estar DESPUES de los middlewares que LE AFECTAN. los otros middlewares DESPUÉS!
+app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
+app.use('/api/users', userRouter)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
+app.use('/api/equipos', equiposRouter)
+
+app.use( (req,res) => {  //middleware para cualquier otra ruta que no tenga router
+  res.send('No se encontró la página')
+  res.status(404)
+})   // si este middleware estuviera al principio en todas las rutas se ejecutaría este primero.
+
+
 
 //app.listen(PUERTO, ()=> {     //levantamos el servidor AHORA LO HACEMOS DESDE SERVER.JS
 //    console.log(`Servidor corriendo en ${PUERTO}`)

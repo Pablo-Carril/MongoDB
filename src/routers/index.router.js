@@ -17,6 +17,8 @@ let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla 
 //Al iniciar pide los ULTIMOS:
 indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
+  console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
+  let elegido = req.equipoElegido
   try {
     const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
@@ -24,11 +26,12 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
     const equipos = formateaResultados(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
       equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
-      fechaActual: fecha,       // NO SE puede poner variables que no existen.
+      fechaActual: fecha,      
       resultadosDe: 'Ultimos anotados:',
       busqueda: '',
       mostrarHistorial: false,
-      mostrarUltimos: true })  //estas son variables de Handlebars para la TABLA
+      mostrarUltimos: true,
+     })  //estas son variables de Handlebars para la TABLA
     console.log('usuario conectado')
     res.status(200)
   }
