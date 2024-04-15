@@ -1,6 +1,6 @@
 <div class="row mt-3">
 
-  <div id="ultimos" class="col-8" >
+  <div id="ultimos" class="col-8">
     <h5>{{resultadosDe}} <span class="ms-2 fw-bold text-danger" style="font-size: 1.1rem;"> {{busqueda}} </span> </h5>
     <!--<button id="consultar" class="btn btn-primary text-white mb-3">Consultar</button> style="min-width: 200px;" -->
     <table class="table table-bordered lh-1" style="font-size: 0.90rem;">
@@ -27,23 +27,35 @@
           <td class="problema">{{this.problema}}</td>
           <td>{{this.caso}}</td>
           <td>
-            <a href="entregado/{{_id}}">check</a> 
+            <form action="entregado/{{_id}}" method="post">
+              {{#if this.caso}}
+              <button type="submit" style="border: none; background: none;">
+                {{#if this.entregado}}
+                <span class="ms-2">✅</span>
+                {{else}}
+                <span class="ms-2">⚪</span>
+                {{/if}}
+              </button>
+              {{/if}}
+            </form>
           </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
-  
+
 
 </div>
 
 <style>
   .problema {
-    white-space: nowrap;     /* evita el salto de línea */
-    text-overflow: ellipsis;  /* agrega puntos suspensivos... no funciona sin el nowrap */
-    overflow-x: hidden;      /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
+    white-space: nowrap;
+    /* evita el salto de línea */
+    text-overflow: ellipsis;
+    /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;
+    /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
     max-width: 500px;
   }
- 
 </style>

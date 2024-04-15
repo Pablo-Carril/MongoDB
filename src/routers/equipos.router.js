@@ -139,7 +139,7 @@ equiposRouter.post('/equipoElegido', (req,res) => {
   try { 
     elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
     console.log(elegido)
-    res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan!!!!
+    res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
     //console.log(msg)
   }
   catch (error) {

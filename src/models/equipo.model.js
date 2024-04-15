@@ -7,7 +7,8 @@ const equipoSchema = new mongoose.Schema({
   linea: {type: String, required: true}, 
   coche: {type: String, default: ""},
   problema: {type: String, required: true}, 
-  caso: {type: String, unique: true,},        
+  caso: {type: String, unique: true,},
+  entregado: {type: Boolean, default: false},        
 }, {timestamps: true})    //para que guarde la fecha actual de creación.
       //PASAMOS TODO A NOMBRE EQUIPOS PERO la COLECCION Validadores todavía existe. Crear coleccion EQUIPOS mas adelante.
 export const Equipomodel = mongoose.model('validadores', equipoSchema) 

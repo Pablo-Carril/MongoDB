@@ -25,12 +25,13 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaResultados(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
-      equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
+      equipos,                  // cuidado: puede haber otro router llamando al mismo handlebars.
       fechaActual: fecha,      
       resultadosDe: 'Ultimos anotados:',
       busqueda: '',
       mostrarHistorial: false,
       mostrarUltimos: true,
+      //entregado,
      })  //estas son variables de Handlebars para la TABLA
     console.log('usuario conectado')
     res.status(200)
@@ -64,7 +65,8 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
         resultadosDe: 'Ultimos',
         busqueda: 'Sonda',
         mostrarHistorial: false,
-        mostrarUltimos: true })  
+        mostrarUltimos: true,
+        })  
       res.status(200)
     }
     catch (err) {
@@ -123,6 +125,17 @@ indexRouter.post('/busqueda', async (req, res) => {
   }
 })
 
+indexRouter.post('/entregado/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const estado = await Equipomodel.findById(id);
+    const nuevoEstado = !estado.entregado;
+    await Equipomodel.findByIdAndUpdate(id, { entregado: nuevoEstado });
+    res.send('entregado: ', nuevoEstado);
+  } catch (error) {
+    res.status(500).send('Error al actualizar el estado.');
+  }
+});
 
 indexRouter.get('/notas', (req, res) => {
   res.render('notas')                      
