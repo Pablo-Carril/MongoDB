@@ -18,6 +18,7 @@
 
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" required="">
+      <option value=""> </option>
       <option value="85" {{isSelected linea '85' }}>85</option>
       <option value="98" {{isSelected linea '98' }}>98</option>
       <option value="307" {{isSelected linea '307' }}>307</option>
@@ -65,7 +66,7 @@
     //console.log(numSerie)
   })
   serieInput.addEventListener('keypress', e => {       //al apretar ENTER consultamos mediante redirección url a ese serie.
-    if (e.key == "Enter") {         // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA
+    if (e.key == "Enter") {    // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA - NO PARA REDIRIGIR. PARA PASAR AL SIGUIENTE.
       var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
       window.location.href = url
       //e.preventDefault()
@@ -94,11 +95,14 @@
       'Validador': '#0d6efd',    //validadores                  
       'Teclado': '#198754',      //teclados                     
       'MountinKit': '#880',      //MK
-      'Concentrador': '#fd7e14',   //Concentradores
+      'Concentrador': '#fd7e14',   //concentradores
       'Otros': '#666',             //otros
+      '': '#444',                 //todos (que necesita estar vacío)
     };
     equipoSelect.style.color = colores[equipoElegido]
-    serieInput.style.color = colores[equipoElegido]
+    equipoSelect.style.borderColor = colores[equipoElegido]
+    equipoSelect.style.borderWidth = '3px'
+    serieInput.style.color = colores[equipoElegido]  //'#86b7fe'  '#9ec5fe'
 
     //ENVIAMOS el equipoElegido al servidor:
     const datos = JSON.stringify({ 'equipo': equipoElegido })  //los datos AHORA llegan perfecto! al servidor

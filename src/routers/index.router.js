@@ -14,7 +14,7 @@ let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla 
 //  return fechaLuxon
 //});
 
-//Al iniciar pide los ULTIMOS:
+//Al iniciar mostrar ULTIMOS:
 indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
