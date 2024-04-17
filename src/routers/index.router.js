@@ -131,9 +131,10 @@ indexRouter.post('/entregado/:id', async (req, res) => {
     const estado = await Equipomodel.findById(id);
     const nuevoEstado = !estado.entregado;
     await Equipomodel.findByIdAndUpdate(id, { entregado: nuevoEstado });
-    res.send('entregado: ', nuevoEstado);
+    res.status(200)
+    res.redirect(req.get('referer')) //esto es GENIAL: puedo redirigir a la página que hiso el POST y no a la que llamó el formulario (form action="entregado/{{_id}}")
   } catch (error) {
-    res.status(500).send('Error al actualizar el estado.');
+    res.status(500).send('Error al actualizar el estado:' + error);
   }
 });
 

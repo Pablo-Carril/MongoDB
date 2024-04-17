@@ -129,6 +129,7 @@ equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
     res.json({msg: 'se eliminó :', id: id})        //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
     //res.redirect('/api/validadores/' + body.serie)  //la ruta es correcta pero no sé porque FALLA
     //VOY a manejar la redirección a la página desde el CLIENTE
+    // NUEVO: res.redirect(req.get('referer')) ESTO PODRÍA SOLUCIONARLO. hay varios métodos de redirección.
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
@@ -141,7 +142,7 @@ equiposRouter.post('/equipoElegido', (req,res) => {
     console.log(elegido)
     res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
     //console.log(msg)
-  }
+  }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
   catch (error) {
    // console.error(error);
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
