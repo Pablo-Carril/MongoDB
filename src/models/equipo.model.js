@@ -11,7 +11,7 @@ const equipoSchema = new mongoose.Schema({
   entregado: {type: Boolean, default: false},        
 }, {timestamps: true})    //para que guarde la fecha actual de creación.
       //PASAMOS TODO A NOMBRE EQUIPOS PERO la COLECCION Validadores todavía existe. Crear coleccion EQUIPOS mas adelante.
-export const Equipomodel = mongoose.model('validadores', equipoSchema) 
+export const Equipomodel = mongoose.model('equipos', equipoSchema) 
 //le pasamos el nombre de la Colección. siempre en minúsculas!!.
 // Si usamos un nombre de colección ERRONEO nos CREARA una nueva colección y no funcionará la nuestra.
 // Si usamos mayúsculas la pasará a minúsculas siempre y si ya existe una con mayúsculas CREARA una nueva con minusculas!!.
