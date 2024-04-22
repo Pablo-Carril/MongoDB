@@ -1,24 +1,54 @@
 <div class="container-fluid ">
   <div class="row" style="flex-wrap: nowrap;">
 
-    <div class="col-2" style="min-width: 240px;">  <!-- este maneja el ancho del formulario. y también ancho mínimo-->
-      {{>formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
-                      <!-- y para actualizarce debe actualizarce toda la página      text-danger   -->
+    {{> loading}}
+
+    <div class="col-2" style="min-width: 240px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
+      {{> formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
+      <!-- y para actualizarce debe actualizarce toda la página      text-danger   -->
     </div>
 
-    <div class="col-10 border" style="min-width: 200px;">    
-      {{#if mostrarHistorial}}  
-        <h6 class="mt-2 alert alert-primary p-2">HISTORIAL <span class="ms-2">Serie:</span> <span id="serieHistorial" class="fw-bold" style="font-size: 1rem;"> {{serie}} </span></h6> 
-        {{> historial}}        
+    <div class="col-10 border" style="min-width: 200px;">
+      {{#if mostrarHistorial}}
+      <h6 class="mt-2 alert alert-primary p-2">HISTORIAL <span class="ms-2">Serie:</span> <span id="serieHistorial"
+          class="fw-bold" style="font-size: 1rem;"> {{serie}} </span></h6>
+      {{> historial}}
       {{/if}}
 
       {{#if mostrarUltimos}}
-        {{> ultimos}}   
+      {{> ultimos}}
       {{/if}}
 
     </div>
 
-  <!--  <div id="nota"></div> -->
+    <!--  <div id="nota"></div> -->
 
   </div>
 </div>
+
+<script>
+
+  window.onload = function () {
+    document.getElementById('loading-popup').style.display = 'block';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    fetch('/iniciar-db', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   //sin esto no anda.
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al iniciar la base de datos');
+        }
+        // Ocultar el popup de carga una vez que la carga de la base de datos esté completa
+        document.getElementById('loading-popup').style.display = 'none';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      })
+  })
+
+</script>

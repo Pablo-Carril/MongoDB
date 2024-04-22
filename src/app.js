@@ -2,7 +2,7 @@ import express from 'express'
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import { initdb } from './db/mongodb.js'
-import { equiposRouter, elegido } from './routers/equipos.router.js'
+import equiposRouter from './routers/equipos.router.js'
 //import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres-handlebars no hace falta este.
 import handlebars from 'express-handlebars'  //es es el extendido para integración con express
 
@@ -12,6 +12,8 @@ import path from 'path'
 import morgan from 'morgan'    //morgan permite ver las solicitudes http por consola
 const PORT = process.env.PORT
 
+let elegido = 'ninguno'
+
 const helpers = handlebars.create()
 // Definir un helper llamado "isSelected"
 helpers.handlebars.registerHelper('isSelected', function (value, expectedValue) {
@@ -20,14 +22,14 @@ helpers.handlebars.registerHelper('isSelected', function (value, expectedValue) 
 
 helpers.handlebars.registerHelper('colorOpcion', function (equipo) {  //Este helper funciona perfecto. ver Ultimos.
   const colores = {
-    'Validador': '#0d6efd',    //validadores                  
-    'Teclado': '#198754',      //teclados                     
-    'MountinKit': '#AA2',    //MK
-    'Concentrador': '#fd7e14',   //Concentradores
-    'Otros': '#666',             //otros
+    'validador': '#0d6efd',    //validadores                  
+    'teclado': '#198754',      //teclados                     
+    'mountinKit': '#AA2',    //MK
+    'concentrador': '#fd7e14',   //Concentradores
+    'otros': '#666',             //otros
   };
   //console.log(`Color para ${equipo}: ${colores[equipo]}`)
-  return colores[equipo] || '#aaa'  //'#0d6efd'// si paso un valor a mano TODO FUNCIONA en la página.   
+  return colores[equipo] || '#aaa'  //'#0d6efd'  
 });
 
 
@@ -72,7 +74,7 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 //})          
 
 app.use((req, res, next) => {   //middleware para enviar la variable del equipo elegido a TODOS los routers. tiene que estar antes de ellos.
-  req.equipoElegido = elegido;
+  req.equipoElegido = elegido;  //está funcionando BIEN. sólo que al inicio pone ninguno. poner todos?
   // console.log('midle', elegido)
   next();
 });
@@ -83,28 +85,66 @@ app.use((error, req, res, next) => {     //nuestro propio middleware de error cu
   res.status(500).json({ mensaje })
 })
 
-//Mostramos página de LOADING:     // hay que acceder a ella desde el ACCESO DIRECTO de la PC ! que macana...
-app.get('/cargando', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/loading.html'));
-});
+ //iniciamos el SERVIDOR:
+ app.listen(PORT, () => {
+  console.log(`Servidor corriendo en Puerto: ${PORT}`)
+})
+
+//document.getElementById('loading-popup').style.display = 'block';
+
 
 //iniciamos MONGODB:
-//await initdb()
+//initdb()
+app.get('/iniciar-db', (req, res) => {
+  // Iniciar la carga de la base de datos aquí
+console.log('iniciamos db:')
 
-try {
+  initdb()
+    .then(() => {
+      // Base de datos iniciada con éxito
+      console.log('Base de datos iniciada');
+      res.sendStatus(200); // Enviar un código de estado 200 para indicar éxito
+    })
+    .catch(error => {
+      // Manejar errores al iniciar la base de datos
+      console.error('Error al iniciar la base de datos:', error);
+      res.sendStatus(500); // Enviar un código de estado 500 para indicar un error interno del servidor
+    });
+});
 
-  await initdb();
-
-  //iniciamos el SERVIDOR:
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en Puerto: ${PORT}`)
+//Mostramos página de LOADING:     // hay que acceder a ella desde el ACCESO DIRECTO de la PC ! que macana...
+//app.get('/cargando', (req, res) => {
+//  res.sendFile(path.join(__dirname, 'public/loading.html'));
+  
+  //iniciamos MONGODB:
+//  initdb().then(() => {
+    // Base de datos iniciada con éxito
+//    console.log('Base de datos iniciada');
+   
+   // setTimeout(() => {
+   //   console.log('Redirigiendo a la página principal');
+   //   res.redirect('/');
+   // }, 3000); // Redirigir después de 3 segundos (ajusta este tiempo según sea necesario)
     
-  })
+//  }).catch(error => {
+    // Manejar errores al iniciar la base de datos
+ //   console.error('Error al iniciar la base de datos:', error);
+//  });
+  
+//});
 
-} catch (error) {
-  console.error('Error iniciando.');
-}
-
+app.post('/equipoElegido', (req,res) => {
+  try { 
+    elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
+    console.log(elegido)
+    res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
+    //console.log(msg)
+  }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
+  catch (error) {
+   // console.error(error);
+    res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
+  }
+})
 
 //Los routers tienen que estar DESPUES de los middlewares que LE AFECTAN. los otros middlewares DESPUÉS!
 app.use('/', indexRouter)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.

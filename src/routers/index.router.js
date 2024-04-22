@@ -52,6 +52,7 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
   //  console.log('usuario conectado')
   })
 
+  // SONDA
   indexRouter.get('/sonda', async (req, res) => {   
     console.log('Sonda')
     try {      
@@ -75,6 +76,7 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
     }
 })
 
+//LA PLATA
 indexRouter.get('/laplata', async (req, res) => {   
   console.log('laplata')
   try {      
@@ -97,6 +99,7 @@ indexRouter.get('/laplata', async (req, res) => {
   }
 })
 
+//BUSCAR
 indexRouter.post('/busqueda', async (req, res) => {
   const busqueda = req.body.datosBuscar || 'nada'   //por body vienen datos de formulario sólamente cuando hacemos un post desde el cliente.
   console.log('busqueda: ', busqueda)
@@ -106,6 +109,7 @@ indexRouter.post('/busqueda', async (req, res) => {
         {problema: { $regex: busqueda, $options: "i" }},
         {caso: { $regex: busqueda, $options: "i" }},
         {coche: { $regex: busqueda, $options: "i" }},
+        {equipo: { $regex: busqueda, $options: "i" }},
        ]
       }).sort({ _id: -1 }).limit(20) 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
@@ -125,6 +129,7 @@ indexRouter.post('/busqueda', async (req, res) => {
   }
 })
 
+//CHECK ENTREGADO
 indexRouter.post('/entregado/:id', async (req, res) => {
   const id = req.params.id;
   try {

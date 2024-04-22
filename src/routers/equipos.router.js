@@ -4,7 +4,7 @@ import { Equipomodel } from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
 import formateaResultados from '../utils.js'
 const equiposRouter = Router()
-let elegido = 'ninguno'
+
 
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
@@ -136,18 +136,6 @@ equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
   }
 })
 
-equiposRouter.post('/equipoElegido', (req,res) => {
-  try { 
-    elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
-    console.log(elegido)
-    res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
-    //console.log(msg)
-  }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
-  catch (error) {
-   // console.error(error);
-    res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
-  }
-})
 
 
-export {equiposRouter, elegido}       //para importar en app.js
+export default equiposRouter       //para importar en app.js

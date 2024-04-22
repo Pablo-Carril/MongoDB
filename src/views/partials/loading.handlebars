@@ -1,0 +1,89 @@
+<title>Cargando...</title>
+
+<body>
+  <!-- Contenedor del cuadro de diálogo -->
+  <div id="loading-popup" class="popup">
+    <div class="popup-contenido">
+      <h2>LOADING...</h2>
+      <h3>Espere por favor</h3>
+    </div>
+  </div>
+
+  <script>
+
+
+   // let popupPromiseResolve;
+   // function mostrarLoading() {
+   //   const popup = document.getElementById('loading-popup');
+   //   popup.style.display = 'block';
+      // Crear una nueva promesa
+  //    const promise = new Promise((resolve) => {
+   //     popupPromiseResolve = resolve;
+   //   });
+      // Esperar 
+  //    promise.then((result) => {
+        // Ocultar el popup 
+  //      popup.style.display = 'none';
+   //     if (result) {
+   //       console.log('confirmado');
+          // Aquí puedes agregar la lógica 
+    ///    } else {
+    //      console.log('cancelado');
+   //     }
+   //   });
+   // }
+    function resolvePromise(result) {
+      popupPromiseResolve(result);
+    }
+
+    // Función para cerrar el cuadro de diálogo
+    function cerrarLoading() {
+      document.getElementById('loading-popup').style.display = 'none';
+    }
+
+    // function confirmarBorrado() {    //LA MANEJAMOS ahora DESDE formEdit
+  </script>
+
+</body>
+
+<style>
+  /* Estilos del cuadro de diálogo */
+  .popup {
+    display: none;
+    /* Ocultar el cuadro de diálogo por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fondo oscuro semi-transparente */
+  }
+
+  .popup-contenido {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+
+  .cerrar {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .cerrar:hover,
+  .cerrar:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>

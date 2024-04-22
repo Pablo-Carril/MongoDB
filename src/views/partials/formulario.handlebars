@@ -4,14 +4,14 @@
     <label for="equipoSelect">Equipo:</label>
     <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required="">
       <option value="">Todos</option> <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
-      <option value="Validador" {{isSelected equipo 'Validador' }}>Validador</option>
-      <option value="Teclado" {{isSelected equipo 'Teclado' }}>Teclado</option>
-      <option value="MountinKit" {{isSelected equipo 'MountinKit' }}>MountinKit</option>
-      <option value="Concentrador" {{isSelected equipo 'Concentrador' }}>Concentrador</option>
-      <option value="Otros" {{isSelected equipo 'Otros' }}>Otros</option>
+      <option value="validador" {{isSelected equipo 'Validador' }}>Validador</option>
+      <option value="teclado" {{isSelected equipo 'Teclado' }}>Teclado</option>
+      <option value="mountinKit" {{isSelected equipo 'MountinKit' }}>MountinKit</option>
+      <option value="concentrador" {{isSelected equipo 'Concentrador' }}>Concentrador</option>
+      <option value="otros" {{isSelected equipo 'Otros' }}>Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
-    <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control" min="1" max="999999999"
+    <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
       title="Numero de serie" required="" autofocus>
     <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
     <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control">
@@ -92,18 +92,17 @@
     equipoElegido = equipoSelect.value
     //console.log(equipoElegido)
     const colores = {
-      'Validador': '#0d6efd',    //validadores                  
-      'Teclado': '#198754',      //teclados                     
-      'MountinKit': '#880',      //MK
-      'Concentrador': '#fd7e14',   //concentradores
-      'Otros': '#666',             //otros
+      'validador': '#0d6efd',    //validadores                  
+      'teclado': '#198754',      //teclados                     
+      'mountinKit': '#880',      //MK
+      'concentrador': '#fd7e14',   //concentradores
+      'otros': '#666',             //otros
       '': '#444',                 //todos (que necesita estar vacío)
     };
     equipoSelect.style.color = colores[equipoElegido]
     equipoSelect.style.borderColor = colores[equipoElegido]
     equipoSelect.style.borderWidth = '3px'
-    serieInput.style.color = colores[equipoElegido]  //'#86b7fe'  '#9ec5fe'
-
+    serieInput.style.color = colores[equipoElegido] 
     //ENVIAMOS el equipoElegido al servidor:
     const datos = JSON.stringify({ 'equipo': equipoElegido })  //los datos AHORA llegan perfecto! al servidor
     console.log(datos)
