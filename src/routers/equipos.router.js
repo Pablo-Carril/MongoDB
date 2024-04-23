@@ -5,13 +5,13 @@ import { DateTime } from 'luxon'
 import formateaResultados from '../utils.js'
 const equiposRouter = Router()
 
-
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 
-
 //CONSULTAR POR SERIE:
-equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/numero
+equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
+  let elegido = req.equipoElegido
+  let equipo = elegido  
   const serie = req.params.serie      //obtenemos el serie pedido
   try {     // TENDRÍA QUE poner elegidos DENTRO del FIND ...y no enviarlo por hbs...creo..
     const resultados = await Equipomodel.find({ serie })    //consultamos el modelo y por tanto la base de datos.
@@ -19,7 +19,13 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/numero
     const equipos = formateaResultados(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
-    res.render('index', { equipos, serie, fechaActual, mostrarHistorial: true, elegido })  //estas son variables de Handlebars para la TABLA
+    res.render('index', {
+      equipos,
+      serie,
+      fechaActual,
+      mostrarHistorial: true,
+      equipo,
+    })  //estas son variables de Handlebars para la TABLA
     res.status(200)
   }
   catch (err) {
@@ -68,7 +74,7 @@ equiposRouter.get('/edit/:id', async (req, res) => {
     const coche = datos.coche
     const problema = datos.problema
     const caso = datos.caso
-    
+
     // aquí renderizamos un VIEW con formulario de EDICION:
     res.render('formEdit', {
       equipo, serie, id, fechaActual,
@@ -76,9 +82,9 @@ equiposRouter.get('/edit/:id', async (req, res) => {
     })
     res.status(200)  //303 para que no permita volver una página atrás.
   }
- catch (error) {
-  console.error(error);
-  res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
   }
 })
 
@@ -89,13 +95,13 @@ equiposRouter.put('/actualizar/:id', async (req, res) => {
   console.log("Actualizando: ", id)
   try {
     const datosFormulario = req.body
-   // console.log(datosFormulario)
-    
-    const resultado = await Equipomodel.findByIdAndUpdate(id, datosFormulario, {new:true})
+    // console.log(datosFormulario)
+
+    const resultado = await Equipomodel.findByIdAndUpdate(id, datosFormulario, { new: true })
     if (!resultado) {
       console.log('No se encontró el ID')
       return res.status(404).json({ msg: 'No se encontró el equipo para actualizar.' });
-    } 
+    }
     res.json({ msg: 'se actualizó :', id: id })
     //res.redirect('validadores/' + serie) 
     res.status(200)
@@ -126,7 +132,7 @@ equiposRouter.delete('/delete/:id', async (req, res) => {   //'/equipos/:id'
     }
     //no se puede responder dos veces
     res.status(200)
-    res.json({msg: 'se eliminó :', id: id})        //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
+    res.json({ msg: 'se eliminó :', id: id })        //responder de esta forma permite ver los mensajes en la CONSOLA del CLIENTE (si lo capturamos con JS)
     //res.redirect('/api/validadores/' + body.serie)  //la ruta es correcta pero no sé porque FALLA
     //VOY a manejar la redirección a la página desde el CLIENTE
     // NUEVO: res.redirect(req.get('referer')) ESTO PODRÍA SOLUCIONARLO. hay varios métodos de redirección.

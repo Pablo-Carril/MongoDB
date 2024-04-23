@@ -15,11 +15,13 @@ let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla 
 //});
 
 //Al iniciar mostrar ULTIMOS:
-indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
+indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
   let elegido = req.equipoElegido
+  let equipo = elegido  //envío equipo en vez de elegido
   try {
+    //aquí habría que filtrar por ELEGIDO, en el find
     const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
@@ -31,6 +33,8 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
       busqueda: '',
       mostrarHistorial: false,
       mostrarUltimos: true,
+      equipo,          // envío equipo en vez de elegido para que no haya conflico al EDITAR que usa {{equipo}} en el select
+     // mostrarLoading: false, 
       //entregado,
      })  //estas son variables de Handlebars para la TABLA
     console.log('usuario conectado')
@@ -53,8 +57,11 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
   })
 
   // SONDA
-  indexRouter.get('/sonda', async (req, res) => {   
+  indexRouter.get('/sonda', async (req, res) => { 
+    let elegido = req.equipoElegido
+    let equipo = elegido  //envío equipo en vez de elegido  
     console.log('Sonda')
+
     try {      
       const resultados = await Equipomodel.find({linea: { $in: ["85", "98"] }}).sort({ _id: -1 }).limit(20) 
       // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
@@ -67,6 +74,7 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
         busqueda: 'Sonda',
         mostrarHistorial: false,
         mostrarUltimos: true,
+        equipo,
         })  
       res.status(200)
     }
@@ -78,6 +86,8 @@ indexRouter.get('/', async (req, res) => {   //router del raíz. aquí especific
 
 //LA PLATA
 indexRouter.get('/laplata', async (req, res) => {   
+  let elegido = req.equipoElegido
+  let equipo = elegido  //envío equipo en vez de elegido
   console.log('laplata')
   try {      
     const resultados = await Equipomodel.find({linea: { $in: ["307", "275"] }}).sort({ _id: -1 }).limit(20)
@@ -90,7 +100,9 @@ indexRouter.get('/laplata', async (req, res) => {
       resultadosDe: 'Ultimos',
       busqueda: 'La Plata',
       mostrarHistorial: false,
-      mostrarUltimos: true })  //estas son variables de Handlebars para la TABLA
+      mostrarUltimos: true,
+      equipo,
+     })  //estas son variables de Handlebars para la TABLA
     res.status(200)
   }
   catch (err) {

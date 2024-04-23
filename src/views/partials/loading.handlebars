@@ -4,44 +4,21 @@
   <!-- Contenedor del cuadro de diálogo -->
   <div id="loading-popup" class="popup">
     <div class="popup-contenido">
-      <h2>LOADING...</h2>
+      <h2>Cargando...</h2>
       <h3>Espere por favor</h3>
     </div>
   </div>
 
   <script>
-
-
-   // let popupPromiseResolve;
-   // function mostrarLoading() {
-   //   const popup = document.getElementById('loading-popup');
-   //   popup.style.display = 'block';
-      // Crear una nueva promesa
-  //    const promise = new Promise((resolve) => {
-   //     popupPromiseResolve = resolve;
-   //   });
-      // Esperar 
-  //    promise.then((result) => {
-        // Ocultar el popup 
-  //      popup.style.display = 'none';
-   //     if (result) {
-   //       console.log('confirmado');
-          // Aquí puedes agregar la lógica 
-    ///    } else {
-    //      console.log('cancelado');
-   //     }
-   //   });
-   // }
-    function resolvePromise(result) {
-      popupPromiseResolve(result);
-    }
+    setTimeout(() => {
+      cerrarLoading();
+      window.location.href = '/ultimos';
+    }, 3000);
 
     // Función para cerrar el cuadro de diálogo
     function cerrarLoading() {
       document.getElementById('loading-popup').style.display = 'none';
     }
-
-    // function confirmarBorrado() {    //LA MANEJAMOS ahora DESDE formEdit
   </script>
 
 </body>
@@ -49,8 +26,8 @@
 <style>
   /* Estilos del cuadro de diálogo */
   .popup {
-    display: none;
-    /* Ocultar el cuadro de diálogo por defecto */
+    /*   display: none; */
+    /* Ocultar el cuadro de diálogo por defecto. NO LO USO YA QUE LE PASO EL IF POR HANDLEBARS */
     position: fixed;
     z-index: 1;
     left: 0;
@@ -71,7 +48,6 @@
     max-width: 400px;
     text-align: center;
   }
-
 
   .cerrar {
     color: #aaa;

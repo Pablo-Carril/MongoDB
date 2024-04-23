@@ -12,7 +12,7 @@ import path from 'path'
 import morgan from 'morgan'    //morgan permite ver las solicitudes http por consola
 const PORT = process.env.PORT
 
-let elegido = 'ninguno'
+let elegido = 'todos'
 
 const helpers = handlebars.create()
 // Definir un helper llamado "isSelected"
@@ -73,9 +73,9 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 //  next()  
 //})          
 
-app.use((req, res, next) => {   //middleware para enviar la variable del equipo elegido a TODOS los routers. tiene que estar antes de ellos.
-  req.equipoElegido = elegido;  //está funcionando BIEN. sólo que al inicio pone ninguno. poner todos?
-  // console.log('midle', elegido)
+app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
+  req.equipoElegido = elegido;  
+   console.log('midle: ', elegido)
   next();
 });
 
@@ -90,48 +90,37 @@ app.use((error, req, res, next) => {     //nuestro propio middleware de error cu
   console.log(`Servidor corriendo en Puerto: ${PORT}`)
 })
 
-//document.getElementById('loading-popup').style.display = 'block';
-
-
 //iniciamos MONGODB:
-//initdb()
-app.get('/iniciar-db', (req, res) => {
-  // Iniciar la carga de la base de datos aquí
-console.log('iniciamos db:')
+initdb()
 
-  initdb()
-    .then(() => {
-      // Base de datos iniciada con éxito
-      console.log('Base de datos iniciada');
-      res.sendStatus(200); // Enviar un código de estado 200 para indicar éxito
-    })
-    .catch(error => {
-      // Manejar errores al iniciar la base de datos
-      console.error('Error al iniciar la base de datos:', error);
-      res.sendStatus(500); // Enviar un código de estado 500 para indicar un error interno del servidor
-    });
-});
-
-//Mostramos página de LOADING:     // hay que acceder a ella desde el ACCESO DIRECTO de la PC ! que macana...
-//app.get('/cargando', (req, res) => {
-//  res.sendFile(path.join(__dirname, 'public/loading.html'));
-  
-  //iniciamos MONGODB:
-//  initdb().then(() => {
-    // Base de datos iniciada con éxito
-//    console.log('Base de datos iniciada');
-   
-   // setTimeout(() => {
-   //   console.log('Redirigiendo a la página principal');
-   //   res.redirect('/');
-   // }, 3000); // Redirigir después de 3 segundos (ajusta este tiempo según sea necesario)
-    
-//  }).catch(error => {
-    // Manejar errores al iniciar la base de datos
- //   console.error('Error al iniciar la base de datos:', error);
-//  });
-  
-//});
+//Página PRINCIPAL
+app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
+ // console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
+ // let elegido = req.equipoElegido
+  try {
+  //  const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
+    // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
+  //  if (resultados.length == 0) { console.log("No se encontró ningún dato") }
+  //  const equipos = formateaResultados(resultados)
+    res.render('index', {       
+     // equipos,                 
+     // fechaActual: fecha,      
+     // resultadosDe: 'Ultimos anotados:',
+     // busqueda: '',
+     // mostrarHistorial: false,
+     // mostrarUltimos: true,
+      mostrarLoading: true, 
+      //entregado,
+     })  //estas son variables de Handlebars para la TABLA
+    console.log('usuario conectado')
+    res.status(200)
+  }
+  catch (err) {
+    console.log("Error en la raiz:  ", err)
+    res.status(400)
+  }
+})
 
 app.post('/equipoElegido', (req,res) => {
   try { 
