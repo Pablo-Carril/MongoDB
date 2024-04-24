@@ -13,7 +13,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
   let elegido = req.equipoElegido
   let equipo = elegido  
   const serie = req.params.serie      //obtenemos el serie pedido
-  try {     // TENDRÍA QUE poner elegidos DENTRO del FIND ...y no enviarlo por hbs...creo..
+  try {     
     const resultados = await Equipomodel.find({ serie })    //consultamos el modelo y por tanto la base de datos.
     if (resultados.length == 0) { console.log("No se encontró ningún dato ☹") }
     const equipos = formateaResultados(resultados)

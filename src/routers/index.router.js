@@ -19,10 +19,11 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
   let elegido = req.equipoElegido
-  let equipo = elegido  //envío equipo en vez de elegido
+  let equipo = elegido  //envío equipo en vez de elegido para que lo hacepte el formulario (se usa también para editar)
+  //if (equipo == "") { equipo = }
   try {
-    //aquí habría que filtrar por ELEGIDO, en el find
-    const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
+    //filtramos por equipo ELEGIDO:
+    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido }).sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaResultados(resultados)

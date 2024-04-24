@@ -22,6 +22,7 @@ helpers.handlebars.registerHelper('isSelected', function (value, expectedValue) 
 
 helpers.handlebars.registerHelper('colorOpcion', function (equipo) {  //Este helper funciona perfecto. ver Ultimos.
   const colores = {
+    '': '#333',               //Todos
     'validador': '#0d6efd',    //validadores                  
     'teclado': '#198754',      //teclados                     
     'mountinKit': '#AA2',    //MK
