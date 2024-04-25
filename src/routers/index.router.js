@@ -19,11 +19,11 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
   let elegido = req.equipoElegido
-  let equipo = elegido  //envío equipo en vez de elegido para que lo hacepte el formulario (se usa también para editar)
-  //if (equipo == "") { equipo = }
+  let equipo = elegido  //envío equipo en vez de elegido para que lo acepte el formulario (se usa también para editar)
+  if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
-    //filtramos por equipo ELEGIDO:
-    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido }).sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
+    //filtramos por equipo ELEGIDO:       //si elegido esta vacío busca todos. si no, el equipo elegido.
+    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido }).sort({ _id: -1 }).limit(40) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaResultados(resultados)
@@ -61,10 +61,15 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
   indexRouter.get('/sonda', async (req, res) => { 
     let elegido = req.equipoElegido
     let equipo = elegido  //envío equipo en vez de elegido  
+    if (equipo == 'todos') { elegido = '' }
     console.log('Sonda')
 
     try {      
-      const resultados = await Equipomodel.find({linea: { $in: ["85", "98"] }}).sort({ _id: -1 }).limit(20) 
+      const resultados = await Equipomodel.find(
+        elegido === '' ? { linea: { $in: ["85", "98"]} } 
+        : { $and: [ {equipo: elegido}, {linea: { $in: ["85", "98"]}} ] })
+       .sort({ _id: -1 })
+       .limit(40) 
       // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
       if (resultados.length == 0) { console.log("No se encontró ningún dato") }
       const equipos = formateaResultados(resultados)
@@ -89,9 +94,13 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
 indexRouter.get('/laplata', async (req, res) => {   
   let elegido = req.equipoElegido
   let equipo = elegido  //envío equipo en vez de elegido
+  if (equipo == 'todos') { elegido = '' }
   console.log('laplata')
   try {      
-    const resultados = await Equipomodel.find({linea: { $in: ["307", "275"] }}).sort({ _id: -1 }).limit(20)
+    const resultados = await Equipomodel.find(elegido === '' ? { linea: { $in: ["275", "307"]} } 
+    : { $and: [ {equipo: elegido}, {linea: { $in: ["275", "307"]}} ] })
+   .sort({ _id: -1 })
+   .limit(40) 
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaResultados(resultados)
@@ -124,7 +133,7 @@ indexRouter.post('/busqueda', async (req, res) => {
         {coche: { $regex: busqueda, $options: "i" }},
         {equipo: { $regex: busqueda, $options: "i" }},
        ]
-      }).sort({ _id: -1 }).limit(20) 
+      }).sort({ _id: -1 }).limit(40) 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaResultados(resultados)
     res.render('index', {       

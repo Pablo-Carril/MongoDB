@@ -14,7 +14,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
   let equipo = elegido  
   const serie = req.params.serie      //obtenemos el serie pedido
   try {     
-    const resultados = await Equipomodel.find({ serie })    //consultamos el modelo y por tanto la base de datos.
+    const resultados = await Equipomodel.find({ serie }).sort({ _id: -1 })    //consultamos el modelo y por tanto la base de datos. ordenamos de mayor a menor (nuevos a antiguos)
     if (resultados.length == 0) { console.log("No se encontró ningún dato ☹") }
     const equipos = formateaResultados(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
