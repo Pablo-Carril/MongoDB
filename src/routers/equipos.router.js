@@ -25,6 +25,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
       fechaActual,
       mostrarHistorial: true,
       equipo,
+     // busqueda: elegido, devería ponerlo ???
     })  //estas son variables de Handlebars para la TABLA
     res.status(200)
   }

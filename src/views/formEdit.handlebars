@@ -64,7 +64,7 @@
       //linea: '{{linea}}',
       //coche: '{{coche}}',
       //problema: '{{problema}}',
-      //caso: '{{caso}}'
+      //caso: '{{caso}}',
       // }),
     })
       .then(response => {
@@ -76,9 +76,9 @@
       .then(msg => {
         console.log('Se actualizó el ID: {{id}}', msg)
         window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
-       // while (history.length > 1) {  //NO FUNCIONA SE QUEDA PENSANDO...
-       //   history.back();  //borramos todo el historial anterior de la pestaña.
-       // }
+        // while (history.length > 1) {  //NO FUNCIONA SE QUEDA PENSANDO...
+        //   history.back();  //borramos todo el historial anterior de la pestaña.
+        // }
         history.replaceState({}, '', `/api/equipos/{{serie}}`);
       })  //muestro el mensaje en la consola del cliente
 

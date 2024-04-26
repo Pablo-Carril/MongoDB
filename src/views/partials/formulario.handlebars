@@ -95,10 +95,10 @@
     const colores = {
       'validador': '#0d6efd',    //validadores                  
       'teclado': '#198754',      //teclados                     
-      'mountinKit': '#880',      //MK
+      'mountinKit': '#BB0',      //MK
       'concentrador': '#fd7e14',   //concentradores
-      'otros': '#666',             //otros
-      '': '#444',                 //todos (que necesita estar vacío)
+      'otros': '#555',             //otros
+      '': '#333',                 //todos (que necesita estar vacío)
     };
     equipoSelect.style.color = colores[equipoElegido]
     equipoSelect.style.borderColor = colores[equipoElegido]
@@ -124,7 +124,7 @@
       })
       .then(msg => {         //ahora llega bien el equipo elegido!!
         console.log('Cambio a equipo: ', msg)
-        location.reload();  // Actualizamos la página para que tome el equipo elegido y los colores
+        if ('{{#if ocultar}}oculto{{/if}}') location.reload(); // Actualizamos la página para que tome el equipo elegido y los colores
       })
       .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
         console.log('Ocurrió un error: ', error)  

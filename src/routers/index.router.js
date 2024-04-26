@@ -31,7 +31,7 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
       equipos,                  // cuidado: puede haber otro router llamando al mismo handlebars.
       fechaActual: fecha,      
       resultadosDe: 'Ultimos anotados:',
-      busqueda: '',
+      busqueda: elegido,  //aquí debería estar el equipo elegido
       mostrarHistorial: false,
       mostrarUltimos: true,
       equipo,          // envío equipo en vez de elegido para que no haya conflico al EDITAR que usa {{equipo}} en el select

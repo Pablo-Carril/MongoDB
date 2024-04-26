@@ -25,12 +25,12 @@ helpers.handlebars.registerHelper('colorOpcion', function (equipo) {  //Este hel
     '': '#333',               //Todos
     'validador': '#0d6efd',    //validadores                  
     'teclado': '#198754',      //teclados                     
-    'mountinKit': '#AA2',    //MK
+    'mountinKit': '#BB2',    //MK
     'concentrador': '#fd7e14',   //Concentradores
-    'otros': '#666',             //otros
+    'otros': '#555',             //otros
   };
   //console.log(`Color para ${equipo}: ${colores[equipo]}`)
-  return colores[equipo] || '#aaa'  //'#0d6efd'  
+  return colores[equipo] || '#333'  //'#0d6efd'  
 });
 
 
