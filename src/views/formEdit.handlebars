@@ -2,12 +2,13 @@
 
   <h4>Editar registro: </h4>
   <div>
-    {{>formulario ocultar=true}} <!--podemos enviar datos al llamar a parciales (oculta es para el boton guardar)-->
+    {{>formulario ocultar=true}}
+    <!--podemos enviar datos al llamar a parciales (ocultar es para ocultar el boton guardar y consultar)-->
   </div>
-
+  <!--una vez ocultados agregamos borar, actualizar, y cancelar-->
   <div class="botones">
     <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
-    <button id="actualizar" class="btn btn-info text-white ms-4">Guardar</button>
+    <button id="actualizar" class="btn btn-info text-white ms-4">Actualizar</button>
     <a href="/api/equipos/{{serie}}" class="btn btn-primary text-white ms-4">Cancelar</a>
   </div>
 
@@ -57,15 +58,7 @@
         'Content-Type': 'application/json',   //sin esto no anda.
       },
       //Enviamos los DATOS por el BODY para probar. funciona bien como Json.
-      body: datosJSON,
-      //body: JSON.stringify({      //esta es otra forma que funciona muy bien. de forma individual.
-      // id:'{{id}}',
-      //serie: '{{serie}}',    
-      //linea: '{{linea}}',
-      //coche: '{{coche}}',
-      //problema: '{{problema}}',
-      //caso: '{{caso}}',
-      // }),
+      body: datosJSON
     })
       .then(response => {
         if (!response.ok) {
@@ -84,6 +77,15 @@
 
       .catch(err => { console.log('Ocurrió un error: ', err) })
   })
+
+  //body: JSON.stringify({      //esta es otra forma que funciona muy bien. de forma individual.
+  // id:'{{id}}',
+  //serie: '{{serie}}',
+  //linea: '{{linea}}',
+  //coche: '{{coche}}',
+  //problema: '{{problema}}',
+  //caso: '{{caso}}',
+  // }),
 </script>
 
 <style>

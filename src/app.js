@@ -75,8 +75,8 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 //})          
 
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
-  req.equipoElegido = elegido;  
-   console.log('midle: ', elegido)
+  req.equipoElegido = elegido;  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
+   console.log('midle: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
   next();
 });
 
@@ -111,7 +111,7 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
      // busqueda: '',
      // mostrarHistorial: false,
      // mostrarUltimos: true,
-      mostrarLoading: true, 
+     // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
       //entregado,
      })  //estas son variables de Handlebars para la TABLA
     console.log('usuario conectado')

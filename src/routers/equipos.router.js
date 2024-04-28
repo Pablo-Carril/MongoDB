@@ -8,25 +8,29 @@ const equiposRouter = Router()
 const ahora = DateTime.now()
 let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 
-//CONSULTAR POR SERIE:
+//CONSULTAR por SERIE y mostrar HISTORIAL
 equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
-  let elegido = req.equipoElegido
+  let elegido = req.equipoElegido   //variable global que viene de un middleware
   let equipo = elegido  
   const serie = req.params.serie      //obtenemos el serie pedido
+  if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {     
-    const resultados = await Equipomodel.find({ serie }).sort({ _id: -1 })    //consultamos el modelo y por tanto la base de datos. ordenamos de mayor a menor (nuevos a antiguos)
-    if (resultados.length == 0) { console.log("No se encontró ningún dato ☹") }
+    const resultados = await Equipomodel.find(
+     // {serie: serie}
+       elegido === '' ? {serie: serie} : { $and: [ {equipo: elegido}, {serie: serie} ] }
+    )
+       .sort({ _id: -1 })    // ordenamos de mayor a menor (nuevos a antiguos)
+    if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
     const equipos = formateaResultados(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
     res.render('index', {
-      equipos,
+      equipos,         //estas son variables de Handlebars para la TABLA
       serie,
       fechaActual,
       mostrarHistorial: true,
       equipo,
-     // busqueda: elegido, devería ponerlo ???
-    })  //estas son variables de Handlebars para la TABLA
+    })  
     res.status(200)
   }
   catch (err) {
