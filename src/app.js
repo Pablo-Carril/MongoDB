@@ -28,6 +28,10 @@ helpers.handlebars.registerHelper('colorOpcion', function (equipo) {  //Este hel
     'mountinKit': '#BB2',    //MK
     'concentrador': '#fd7e14',   //Concentradores
     'otros': '#555',             //otros
+    '85': '#1c68a7',
+    '98': '#1f55b4',
+    '307': '#09485f',
+    '275': '#0c6b72',
   };
   //console.log(`Color para ${equipo}: ${colores[equipo]}`)
   return colores[equipo] || '#333'  //'#0d6efd'  
