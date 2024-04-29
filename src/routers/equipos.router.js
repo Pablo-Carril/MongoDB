@@ -2,11 +2,13 @@ import { Router } from 'express'
 //import {v4 as uuidv4} from 'uuid'
 import { Equipomodel } from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
-import formateaResultados from '../utils.js'
+import formateaFecha from '../utils.js'
 const equiposRouter = Router()
 
-const ahora = DateTime.now()
-let fechaActual = ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
+const hoy = () => {
+  const ahora = DateTime.now()
+  return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
+}
 
 //CONSULTAR por SERIE y mostrar HISTORIAL
 equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
@@ -19,15 +21,15 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
      // {serie: serie}
        elegido === '' ? {serie: serie} : { $and: [ {equipo: elegido}, {serie: serie} ] }
     )
-       .sort({ _id: -1 })    // ordenamos de mayor a menor (nuevos a antiguos)
+       .sort({ fecha: -1 })    // ordenamos de mayor a menor (nuevos a antiguos)
     if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
-    const equipos = formateaResultados(resultados)
+    const equipos = formateaFecha(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
     res.render('index', {
       equipos,         //estas son variables de Handlebars para la TABLA
       serie,
-      fechaActual,
+      fechaActual: hoy(),
       mostrarHistorial: true,
       equipo,
     })  
@@ -74,7 +76,7 @@ equiposRouter.get('/edit/:id', async (req, res) => {
     //completar el formulario
     const equipo = datos.equipo
     const serie = datos.serie
-    fechaActual = datos.fecha
+    let fechaActual = datos.fecha
     const linea = datos.linea
     const coche = datos.coche
     const problema = datos.problema

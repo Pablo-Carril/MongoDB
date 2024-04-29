@@ -5,11 +5,11 @@ import { initdb } from './db/mongodb.js'
 import equiposRouter from './routers/equipos.router.js'
 //import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres-handlebars no hace falta este.
 import handlebars from 'express-handlebars'  //es es el extendido para integración con express
-
 import { __dirname } from './utils.js'
 import path from 'path'
 //import { log } from 'console'  
 import morgan from 'morgan'    //morgan permite ver las solicitudes http por consola
+
 const PORT = process.env.PORT
 
 let elegido = 'todos'

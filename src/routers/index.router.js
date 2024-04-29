@@ -1,11 +1,13 @@
 import { Router } from 'express'
 import { Equipomodel} from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
-import formateaResultados from '../utils.js'
+import formateaFecha from '../utils.js'
 const indexRouter = Router()
 
-const ahora = DateTime.now()
-let fecha = ahora.toISODate()     //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
+const hoy = () => {
+  const ahora = DateTime.now()
+  return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
+}
 
 //por algún motivo desaparece el calendario YA no hace falta. ahora funciona todo.
 //handlebars.registerHelper('formatFecha', function (fechaLuxon) {   //el helper funciona pero fechaluxon es undefined cuando uso fecha.
@@ -23,13 +25,13 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
   if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
     //filtramos por equipo ELEGIDO:       //si elegido esta vacío busca todos. si no, el equipo elegido.
-    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido }).sort({ _id: -1 }).limit(40) //ULTIMOS VEINTE
+    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido }).sort({ fecha: -1 }).limit(40) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-    const equipos = formateaResultados(resultados)
-    res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
+    const equipos = formateaFecha(resultados)
+    res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars. así que no hace falta poner un let, pero SI hace falta el let en otras ocaciones.
       equipos,                  // cuidado: puede haber otro router llamando al mismo handlebars.
-      fechaActual: fecha,      
+      fechaActual: hoy(),      
       resultadosDe: 'Ultimos anotados:',
       busqueda: elegido,  //aquí debería estar el equipo elegido
       mostrarHistorial: false,
@@ -68,14 +70,14 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
       const resultados = await Equipomodel.find(
         elegido === '' ? { linea: { $in: ["85", "98"]} } 
         : { $and: [ {equipo: elegido}, {linea: { $in: ["85", "98"]}} ] })
-       .sort({ _id: -1 })
+       .sort({fecha: -1 })
        .limit(40) 
       // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
       if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-      const equipos = formateaResultados(resultados)
+      const equipos = formateaFecha(resultados)
       res.render('index', {       
         equipos,                  
-        fechaActual: fecha,
+        fechaActual: hoy(),
         resultadosDe: 'Ultimos',
         busqueda: 'Sonda',
         mostrarHistorial: false,
@@ -99,14 +101,14 @@ indexRouter.get('/laplata', async (req, res) => {
   try {      
     const resultados = await Equipomodel.find(elegido === '' ? { linea: { $in: ["275", "307"]} } 
     : { $and: [ {equipo: elegido}, {linea: { $in: ["275", "307"]}} ] })
-   .sort({ _id: -1 })
+   .sort({ fecha: -1 })
    .limit(40) 
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-    const equipos = formateaResultados(resultados)
+    const equipos = formateaFecha(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
       equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
-      fechaActual: fecha,
+      fechaActual: hoy(),
       resultadosDe: 'Ultimos',
       busqueda: 'La Plata',
       mostrarHistorial: false,
@@ -133,12 +135,12 @@ indexRouter.post('/busqueda', async (req, res) => {
         {coche: { $regex: busqueda, $options: "i" }},
         {equipo: { $regex: busqueda, $options: "i" }},
        ]
-      }).sort({ _id: -1 }).limit(40) 
+      }).sort({ fecha: -1 }).limit(40) 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-    const equipos = formateaResultados(resultados)
+    const equipos = formateaFecha(resultados)
     res.render('index', {       
       equipos,                  
-      fechaActual: fecha,
+      fechaActual: hoy(),
       resultadosDe: 'Buscar:',
       busqueda: busqueda,
       mostrarHistorial: false,

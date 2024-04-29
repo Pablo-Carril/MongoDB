@@ -2,9 +2,15 @@ import url from 'url'
 import path from 'path'
 import { DateTime } from 'luxon'
 
-function formateaResultados(resultados) {
+const hoy = () => {
+  const ahora = DateTime.now()
+  return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
+}
+// habría que exportar hoy() para usarlo en los routers, en vez de cada cual con su rutina.
+
+function formateaFecha(resultados) {
   const validadores = [];
-  //Procesamos los datos de la DB:
+  //Procesamos los datos traídos de la DB:
   if (Array.isArray(resultados)) {    //si los resultados vienen en una lista...
     resultados.forEach((datos) => {
       let fecha = datos.fecha
@@ -34,5 +40,5 @@ function formateaResultados(resultados) {
 
 export const __filename = url.fileURLToPath(import.meta.url)    //de url a path
 export const __dirname = path.dirname(__filename)             //obtenemos sólo la carpeta
-export default formateaResultados
+export default formateaFecha
 
