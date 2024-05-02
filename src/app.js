@@ -29,8 +29,8 @@ helpers.handlebars.registerHelper('colorOpcion', function (equipo) {  //Este hel
     'concentrador': '#fd7e14',   //Concentradores
     'otros': '#555',             //otros
     '85': '#1c68a7',
-    '98': '#1f55b4',
-    '307': '#09485f',
+    '98': '#1c68a7',        // '#1f55b4',
+    '307': '#0c6b72',      //'#09485f',
     '275': '#0c6b72',
   };
   //console.log(`Color para ${equipo}: ${colores[equipo]}`)
