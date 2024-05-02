@@ -41,8 +41,8 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
       //entregado,
      })  //estas son variables de Handlebars para la TABLA
     console.log('usuario conectado')
-    res.status(200)
-  }
+    res.status(200)      // con .res(message: 'ok', redirect: '/' ) PODEMOS REDIRIGIR SEGÚN LA DESICIÓN DEL SERVIDOR, y en el cliente,
+  }                      // mediante resjson = await res.json(); if(resjson.redirect) { window.location.href = resjson.redirect } en el Fetch
   catch (err) {
     console.log("Error en la búsqueda por número de serie:  ", err)
     res.status(400)

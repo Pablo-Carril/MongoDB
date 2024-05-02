@@ -54,4 +54,13 @@
     overflow-x: hidden;      /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
     max-width: 550px;
   }
+  
+ .problema:hover {
+  white-space: normal; /* Permite que el texto se muestre completo */
+  overflow: visible; /* Muestra todo el texto */
+  z-index: 999; /* Asegura que el texto completo esté encima de otras filas */
+  position: absolute; /* Permite que el texto completo se muestre sobre otras filas */
+  background-color: white; /* Fondo blanco para mayor claridad */
+  border: 1px solid orange;
+}
  </style>
