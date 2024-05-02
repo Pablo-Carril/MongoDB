@@ -5,7 +5,7 @@ import { initdb } from './db/mongodb.js'
 import equiposRouter from './routers/equipos.router.js'
 //import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres-handlebars no hace falta este.
 import handlebars from 'express-handlebars'  //es es el extendido para integración con express
-import { __dirname } from './utils.js'
+import { __dirname, hoy } from './utils.js'
 import path from 'path'
 //import { log } from 'console'  
 import morgan from 'morgan'    //morgan permite ver las solicitudes http por consola
@@ -109,8 +109,8 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
   //  if (resultados.length == 0) { console.log("No se encontró ningún dato") }
   //  const equipos = formateaResultados(resultados)
     res.render('index', {       
-     // equipos,                 
-     // fechaActual: fecha,      
+     // equipos,               // Podría poner las NOTAS al iniciar...  
+      fechaActual: hoy(),      
      // resultadosDe: 'Ultimos anotados:',
      // busqueda: '',
      // mostrarHistorial: false,
@@ -122,7 +122,7 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
     res.status(200)
   }
   catch (err) {
-    console.log("Error en la raiz:  ", err)
+    console.log("Error en la pagina principal:  ", err)
     res.status(400)
   }
 })

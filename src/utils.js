@@ -2,7 +2,7 @@ import url from 'url'
 import path from 'path'
 import { DateTime } from 'luxon'
 
-const hoy = () => {
+export const hoy = () => {
   const ahora = DateTime.now()
   return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 }

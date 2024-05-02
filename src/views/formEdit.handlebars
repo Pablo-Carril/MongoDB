@@ -58,7 +58,7 @@
         'Content-Type': 'application/json',   //sin esto no anda.
       },
       //Enviamos los DATOS por el BODY para probar. funciona bien como Json.
-      body: datosJSON
+      body: datosJSON  //otra forma es con body: JSON.stringify({ y todos los datos individuales con doble llaves de handlebars.
     })
       .then(response => {
         if (!response.ok) {
@@ -78,14 +78,9 @@
       .catch(err => { console.log('Ocurrió un error: ', err) })
   })
 
-  //body: JSON.stringify({      //esta es otra forma que funciona muy bien. de forma individual.
-  // id:'{{id}}',
-  //serie: '{{serie}}',
-  //linea: '{{linea}}',
-  //coche: '{{coche}}',
-  //problema: '{{problema}}',
-  //caso: '{{caso}}',
-  // }),
+// CUIDADO: HANDLEBARS también reemplaza las variables dentro de los COMENTARIOS, y puede traer problemas
+// al llegar un dato con errores o inclusive un Enter en un string, y hace fallar el script en el NAVEGADOR.
+  
 </script>
 
 <style>
