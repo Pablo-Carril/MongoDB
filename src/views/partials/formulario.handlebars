@@ -120,7 +120,7 @@
       body: dato,
     })
       .then(response => {    //si el fetch fue correcto el servidor devuelve una respuesta (que no tiene que ver con el catch)
-        if (response.ok) {
+        if (response.ok) {   //el ok es parte de una Api Rest, así como el body.
           return response.json()   //esto TIENE QUE ESTAR para poder recibir luego el msg. lo pasa a json para poder ser leído por el siguiente .then{msg}
         }
         else {
