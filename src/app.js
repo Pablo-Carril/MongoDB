@@ -110,8 +110,9 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
   //  const equipos = formateaResultados(resultados)
     res.render('index', {       
      // equipos,               // Podría poner las NOTAS al iniciar...  
-      fechaActual: hoy(),      
-     // resultadosDe: 'Ultimos anotados:',
+      fechaActual: hoy(),
+      ocultar: true,      //esto lo pongo para que no actualize la página, que es lo que hace el fetch de /equipoElegido en el Formulario
+     // resultadosDe: 'Ultimos anotados:',     //DEBEÍA MANEJAR esto de otra forma en vez de usar la variable ocultar.
      // busqueda: '',
      // mostrarHistorial: false,
      // mostrarUltimos: true,
@@ -130,7 +131,7 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
 app.post('/equipoElegido', (req,res) => {
   try { 
     elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
-    console.log(elegido)
+    console.log("/equipoElegido(app):" + elegido)
     res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
     //console.log(msg)
   }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????

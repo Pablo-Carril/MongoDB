@@ -25,7 +25,8 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
   if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
     //filtramos por equipo ELEGIDO:       //si elegido esta vacío busca todos. si no, el equipo elegido.
-    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido }).sort({ fecha: -1 }).limit(40) //ULTIMOS VEINTE
+    const resultados = await Equipomodel.find(elegido === '' ? {} : { equipo: elegido })
+       .sort({ fecha: -1, _id: -1 }).limit(40) //Primero se ordena por fecha, y si hay varios con la misma fecha los ordena por id. GENIAL.
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
@@ -70,7 +71,7 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
       const resultados = await Equipomodel.find(
         elegido === '' ? { linea: { $in: ["85", "98"]} } 
         : { $and: [ {equipo: elegido}, {linea: { $in: ["85", "98"]}} ] })
-       .sort({fecha: -1 })
+       .sort({fecha: -1, _id: -1 })
        .limit(40) 
       // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
       if (resultados.length == 0) { console.log("No se encontró ningún dato") }
@@ -101,7 +102,7 @@ indexRouter.get('/laplata', async (req, res) => {
   try {      
     const resultados = await Equipomodel.find(elegido === '' ? { linea: { $in: ["275", "307"]} } 
     : { $and: [ {equipo: elegido}, {linea: { $in: ["275", "307"]}} ] })
-   .sort({ fecha: -1 })
+   .sort({ fecha: -1, _id: -1 })
    .limit(40) 
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
@@ -135,7 +136,7 @@ indexRouter.post('/busqueda', async (req, res) => {
         {coche: { $regex: busqueda, $options: "i" }},
         {equipo: { $regex: busqueda, $options: "i" }},
        ]
-      }).sort({ fecha: -1 }).limit(40) 
+      }).sort({ fecha: -1, _id: -1 }).limit(40) 
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
     res.render('index', {       

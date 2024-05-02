@@ -21,7 +21,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
      // {serie: serie}
        elegido === '' ? {serie: serie} : { $and: [ {equipo: elegido}, {serie: serie} ] }
     )
-       .sort({ fecha: -1 })    // ordenamos de mayor a menor (nuevos a antiguos)
+       .sort({ fecha: -1, _id: -1 })    // ordenamos de mayor a menor (nuevos a antiguos)
     if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
     const equipos = formateaFecha(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.

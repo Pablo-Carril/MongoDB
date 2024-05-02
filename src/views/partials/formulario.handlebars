@@ -130,7 +130,7 @@
       .then(msg => {         //ahora llega bien el equipo elegido!!
         console.log('Cambio a equipo: ', msg)
         if (!'{{ocultar}}') location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
-      })
+      })  //debería chequear otra cosa junto con ocultar, para no depender de esa variable, que tiene otra función.
       .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
         console.log('Ocurrió un error: ', error)
       })
