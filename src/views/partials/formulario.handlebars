@@ -78,6 +78,18 @@
     }
   })
 
+  const formEntrada = document.getElementById('formEntrada')
+  formEntrada.addEventListener('submit', ()=> {
+      const inputNumero = document.getElementById("serie");
+      const valor = inputNumero.value;
+      console.log(valor)
+      // Usando el método slice()
+      const valorSinCeros = valor.slice(1).replace(/0*/g, "");
+      console.log(valorSinCeros)
+      inputNumero.value = valorSinCeros;
+    }
+  )
+
   //Al CONSULTAR
   //leemos el numero de serie ingresado por el usuario   //NO se puede acceder a Id's de otros Handlebars
   const consultarBtn = document.getElementById('consultar')
