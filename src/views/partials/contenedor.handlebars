@@ -1,9 +1,9 @@
 <div class="container-fluid ">
   <div class="row" style="flex-wrap: nowrap;">
 
-    {{#if mostrarLoading}}
-    {{> loading}}
-    {{/if}}
+    {{!-- {{#if mostrarLoading}}
+      {{> !--loading}}
+    {{/if}} --}}
 
     <div class="col-2" style="min-width: 240px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
       {{> formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
@@ -13,15 +13,20 @@
     <div class="col-9 border" style="min-width: 200px;">
 
       {{#if mostrarHistorial}}
-      <h5 class="mt-2 p-2" style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe">HISTORIAL <span class="ms-2">Serie:</span> <span id="serieHistorial"
-          class="fw-bold ms-2" style="font-size: 1rem; color: {{colorOpcion this.equipo}};"> {{serie}} </span></h5>
-      {{> historial}}
+        <h5 class="mt-2 p-2" style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe">
+        HISTORIAL <span class="ms-2">Serie:</span> <span id="serieHistorial" class="fw-bold ms-2"
+          style="font-size: 1rem; color: {{colorOpcion this.equipo}};"> {{serie}} </span></h5>
+        {{> historial}}
       {{/if}}
 
       {{#if mostrarUltimos}}
-      {{> ultimos}}
+        {{> ultimos}}
       {{/if}}
 
+      {{#if spinner}}
+        <span style="color: red;">SPINNER</span>
+      {{/if}}
+      
     </div>
 
     <!--  <div id="nota"></div> -->
