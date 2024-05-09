@@ -8,9 +8,9 @@
       <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
  <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
       <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
-      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
-      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
-      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
+      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option> 
+      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option> 
+      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option> 
     </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
@@ -38,7 +38,7 @@
       <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
         class="form-control mb-3">{{caso}}</textarea>
     </div>
-    <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
+    <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>  
     <button id="consultar" class="btn btn-primary text-white ms-3 {{#if ocultar}}oculto{{/if}} ">Historial</button>
   </div>
 </form>
@@ -61,6 +61,8 @@
 </style>
 
 <script>
+  const equipoSelect = document.getElementById("equipoSelect")
+
   let numSerie = ""
   const serieInput = document.getElementById("serie")
   serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
@@ -78,15 +80,17 @@
     }
   })
 
+// al GUARDAR (submit) sacar ceros de la izquierda
   const formEntrada = document.getElementById('formEntrada')
   formEntrada.addEventListener('submit', ()=> {
       const inputNumero = document.getElementById("serie");
       const valor = inputNumero.value;
       console.log(valor)
       // Usando el método slice()
-      const valorSinCeros = valor.slice(1).replace(/0*/g, "");
+      const valorSinCeros = valor.replace(/^0+/, "").slice(0)
       console.log(valorSinCeros)
       inputNumero.value = valorSinCeros;
+    //  equipoSelect.value = ""    //ANDA MAL, por algún motivo me deja el serie vacío (invalida todo el form) será que actualiza después de borrarse el form? TENGO que hacerlo en otro lado
     }
   )
 
@@ -104,7 +108,6 @@
     window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
   })
 
-  const equipoSelect = document.getElementById("equipoSelect")
   //Al cambiar de equipo cambiamos los colores
   equipoSelect.addEventListener('change', () => {
     equipoElegido = equipoSelect.value
@@ -143,6 +146,7 @@
         console.log('Cambio a equipo: ', msg)
         if (!'{{ocultar}}') location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
       })  //debería chequear otra cosa junto con ocultar, para no depender de esa variable, que tiene otra función.
+          // YA CREÉ UN NUEVO FORMULARIO de EDICION así que ocultar ya no hace falta
       .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
         console.log('Ocurrió un error: ', error)
       })
