@@ -6,7 +6,7 @@
       style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo" autofocus>
       <option value="">Todos</option> <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
       <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
- <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
+      <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
       <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
       <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
       <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
@@ -16,7 +16,8 @@
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
       title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">
     <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
-    <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control" title="Fecha del Caso o del día que falló">
+    <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control"
+      title="Fecha del Caso o del día que falló">
 
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" title="Seleccione la línea" required="">
@@ -61,6 +62,31 @@
 </style>
 
 <script>
+  //GUARDO lo escrito en el formulario en SessionStorage para recuperarlo despues
+  formEntrada.addEventListener('submit', (event) => {
+    event.preventDefault();
+    guardar()
+  });
+  function guardar() {
+    const formData = new FormData(formEntrada); // Obtener los datos del formulario
+    for (const [key, value] of formData.entries()) {
+      sessionStorage.setItem(key, value); // Guardar cada campo en sessionStorage
+    }
+  }
+  // RECUPERO Lo escrito en el formulario
+  window.onload = () => {
+    cargar()
+  };
+  function cargar() {
+    const formFields = ['serie', 'fecha', 'linea', 'coche', 'problema', 'caso'];
+    formFields.forEach(field => {
+      const fieldValue = sessionStorage.getItem(field);
+      if (fieldValue) {
+        document.getElementById(field).value = fieldValue;
+      }
+    });
+  }
+
   let numSerie = ""
   const serieInput = document.getElementById("serie")
   serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
@@ -71,6 +97,7 @@
     if (e.key == "Enter") {    // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA - NO PARA REDIRIGIR. PARA PASAR AL SIGUIENTE.
       if (numSerie) {
         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
+        guardar()
         window.location.href = url
       }
       else { url = '#' }
@@ -89,6 +116,7 @@
     } else { url = '#' }
     //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
     console.log('{{elegido}}')    //ESTA ES LA FORMA DE leer una VARIABLE HANDLEBARS en JAVASCRIPT: entre comillas para que la trate como un string.
+    guardar()
     window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
   })
 
