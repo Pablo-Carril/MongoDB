@@ -1,4 +1,5 @@
 import express from 'express'
+import sessions from 'express-sessions'
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import { initdb } from './db/mongodb.js'
@@ -12,6 +13,7 @@ import morgan from 'morgan'    //morgan permite ver las solicitudes http por con
 
 const PORT = process.env.PORT
 // ************** PROBANDO NUEVA RAMA SESIONES ***************** EN PC DE CASA TAMBIÉN  **
+const SESSION_SECRET = process.env.SESSION_SECRET
 let elegido = 'todos'
 
 const helpers = handlebars.create()
@@ -71,6 +73,14 @@ app.use(express.urlencoded({ extended: true }))   //para que hacepte datos de FO
 app.use(express.static(path.join(__dirname, './public')))  //definimos la carpeta estática. usamos path para definir mejor una carpeta absoluta
 //Ahora /public es la carpeta raíz de todo el proyecto y no se podrá acceder a ninguna carpeta superior. los atajos para encontrar rutas en VSCode ya no sirven del lado del CLIENTE.
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
+app.use((req, res, next) => {
+  sessions({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+ })
+ next()
+})
 
 
 //app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
@@ -80,7 +90,7 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
   req.equipoElegido = elegido;  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
-   console.log('midle: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
+  console.log('midle: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
   next();
 });
 
@@ -90,8 +100,8 @@ app.use((error, req, res, next) => {     //nuestro propio middleware de error cu
   res.status(500).json({ mensaje })
 })
 
- //iniciamos el SERVIDOR:
- app.listen(PORT, () => {
+//iniciamos el SERVIDOR:
+app.listen(PORT, () => {
   console.log(`Servidor corriendo en Puerto: ${PORT}`)
 })
 
@@ -101,42 +111,51 @@ initdb()
 //Página PRINCIPAL
 app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
- // console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
- // let elegido = req.equipoElegido
+  // console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
+  // let elegido = req.equipoElegido
   try {
-  //  const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
+    //  const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
-  //  if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-  //  const equipos = formateaResultados(resultados)
-    res.render('index', {       
-     // equipos,               // Podría poner las NOTAS al iniciar...  
-      fechaActual: hoy(),
-      ocultar: true,      //esto lo pongo para que no actualize la página, que es lo que hace el fetch de /equipoElegido en el Formulario
-     // resultadosDe: 'Ultimos anotados:',     //DEBEÍA MANEJAR esto de otra forma en vez de usar la variable ocultar.
-     // busqueda: '',
-     // mostrarHistorial: false,
-     // mostrarUltimos: true,
-     // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
-      //entregado,
-     })  //estas son variables de Handlebars para la TABLA
-    console.log('usuario conectado')
-    res.status(200)
-  }
-  catch (err) {
+    //  if (resultados.length == 0) { console.log("No se encontró ningún dato") }
+    //  const equipos = formateaResultados(resultados)
+    if (!req.session.counter) {
+      req.session.counter = 1
+      res.send('Bienvenido')
+    }
+    else {
+      req.session.counter++
+      res.send(`has visitado ${ req.session.counter } veces`)
+    }
+
+  res.render('index', {
+    // equipos,               // Podría poner las NOTAS al iniciar...  
+    fechaActual: hoy(),
+    ocultar: true,      //esto lo pongo para que no actualize la página, que es lo que hace el fetch de /equipoElegido en el Formulario
+    // resultadosDe: 'Ultimos anotados:',     //DEBEÍA MANEJAR esto de otra forma en vez de usar la variable ocultar.
+    // busqueda: '',
+    // mostrarHistorial: false,
+    // mostrarUltimos: true,
+    // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
+    //entregado,
+    })  //estas son variables de Handlebars para la TABLA
+  console.log('usuario conectado')
+  res.status(200)
+    }
+    catch (err) {
     console.log("Error en la pagina principal:  ", err)
     res.status(400)
-  }
+  }  
 })
 
-app.post('/equipoElegido', (req,res) => {
-  try { 
+app.post('/equipoElegido', (req, res) => {
+  try {
     elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
     console.log("/equipoElegido(app):" + elegido)
-    res.status(200).json({msg: elegido})   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
+    res.status(200).json({ msg: elegido })   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
     //console.log(msg)
   }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
   catch (error) {
-   // console.error(error);
+    // console.error(error);
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
   }
 })
