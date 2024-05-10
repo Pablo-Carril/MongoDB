@@ -42,4 +42,15 @@
  //   document.getElementById("formEntrada").reset()
  //  })
  // })
+/* document.addEventListener('DOMContentLoaded', () => {  //FUNCIONA! pero no si viene de otra página...tal vez en un nivel superior como main
+  const lastRouteLink = document.querySelector('.nav-link');
+  const spinnerContainer = document.querySelector('.spinner-container');
+  lastRouteLink.addEventListener('click', (event)=> {
+  event.preventDefault();
+  const route = event.target.href;
+  spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+  window.location.href = route
+  })
+}) */
+
 </script>

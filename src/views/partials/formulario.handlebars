@@ -121,8 +121,12 @@
   })
 
   const equipoSelect = document.getElementById("equipoSelect")
-  //Al cambiar de equipo cambiamos los colores
+  
+  //Al cambiar el SELECT:
   equipoSelect.addEventListener('change', () => {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+    //Al cambiar de equipo cambiamos los colores:
     equipoElegido = equipoSelect.value
     //console.log(equipoElegido)
     const colores = {
@@ -137,6 +141,7 @@
     equipoSelect.style.borderColor = colores[equipoElegido]
     equipoSelect.style.borderWidth = '3px'
     serieInput.style.color = colores[equipoElegido]
+
     //ENVIAMOS el equipoElegido al servidor:
     const dato = JSON.stringify({ 'equipo': equipoElegido })  //los datos AHORA llegan perfecto! al servidor
     console.log(dato)
