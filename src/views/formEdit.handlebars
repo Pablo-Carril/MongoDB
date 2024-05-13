@@ -2,10 +2,75 @@
 
   <h4>Editar registro: </h4>
   <div>
-    {{>formulario ocultar=true}}
+   {{!--  {{>formularioanterior ocultar=true}} PRUEBO FORMULARIO APARTE DEL PRINCIPAL --}} 
     <!--podemos enviar variables (nuevas) al llamar a parciales (ocultar es para ocultar el boton guardar y consultar)-->
+
+  <form id="formEdit" action="/api/equipos" method="post">
+  <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).  <option value="{{elegido}}" selected>{{elegido}} </option>  -->
+  <div class="form-group">
+    <label for="equipoSelect">Equipo</label>
+    <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
+      style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo" autofocus>
+      <option value="">Todos</option> <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
+      <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
+ <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
+      <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
+      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option> 
+      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option> 
+      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option> 
+    </select>
+    <label for="serie">Numero de serie:</label>
+    <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
+      title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">
+    <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
+    <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control" title="Fecha del Caso o del día que falló">
+
+    <label for="linea">Linea:</label>
+    <select name="linea" class="custom-select form-control" id="linea" title="Seleccione la línea" required="">
+      <option value=""> </option>
+      <option value="85" {{isSelected linea '85' }}>85</option>
+      <option value="98" {{isSelected linea '98' }}>98</option>
+      <option value="307" {{isSelected linea '307' }}>307</option>
+      <option value="275" {{isSelected linea '275' }}>275</option>
+    </select>
+    <label for="coche">Coche:</label>
+    <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">
+    <label for="problema">Problema:</label>
+    <div class="form-group">
+      <textarea type="number" name="problema" id="problema" cols="30" rows="1" minlength="3" maxlength="150" required=""
+        class="form-control" title="Ingrese el problema que presenta">{{problema}}</textarea>
+    </div>
+    <label for="caso">Caso:</label>
+    <div class="form-group">
+      <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
+        class="form-control mb-3">{{caso}}</textarea>
+    </div>
+
+   {{!--  <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
+    <button id="consultar" class="btn btn-primary text-white ms-3 {{#if ocultar}}oculto{{/if}} ">Historial</button> --}}
+
   </div>
-  <!--una vez ocultados agregamos borar, actualizar, y cancelar-->
+</form>
+
+<style>
+  .oculto {
+    display: none;
+  }
+
+  #problema {
+    white-space: nowrap;
+    /* evita el salto de línea */
+    text-overflow: ellipsis;
+    /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;
+    /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
+
+    /*color: {{colorOpcion equipoElegido}};    ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
+  }
+</style>
+
+</div>
+
   <div class="botones">
     <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
     <button id="actualizar" class="btn btn-info text-white ms-4">Actualizar</button>
@@ -17,7 +82,7 @@
 </div>
 
 <script>
-  const formulario = document.getElementById('formEntrada')
+  const formulario = document.getElementById('formEdit')
   borrar = document.getElementById('borrar')
 
   borrar.addEventListener('click', () => {
@@ -91,7 +156,7 @@
     align-items: center;
   }
 
-  #formEntrada {
+  #formEdit {
     min-width: 500px;
   }
 

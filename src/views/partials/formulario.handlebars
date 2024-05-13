@@ -62,30 +62,7 @@
 </style>
 
 <script>
-  //GUARDO lo escrito en el formulario en SessionStorage para recuperarlo despues
-  formEntrada.addEventListener('submit', (event) => {
-    event.preventDefault();
-    guardar()
-  });
-  function guardar() {
-    const formData = new FormData(formEntrada); // Obtener los datos del formulario
-    for (const [key, value] of formData.entries()) {
-      sessionStorage.setItem(key, value); // Guardar cada campo en sessionStorage
-    }
-  }
-  // RECUPERO Lo escrito en el formulario
-  window.onload = () => {
-    cargar()
-  };
-  function cargar() {
-    const formFields = ['serie', 'fecha', 'linea', 'coche', 'problema', 'caso'];
-    formFields.forEach(field => {
-      const fieldValue = sessionStorage.getItem(field);
-      if (fieldValue) {
-        document.getElementById(field).value = fieldValue;
-      }
-    });
-  }
+  const equipoSelect = document.getElementById("equipoSelect")
 
   let numSerie = ""
   const serieInput = document.getElementById("serie")
@@ -94,7 +71,7 @@
     //console.log(numSerie)
   })
   serieInput.addEventListener('keypress', e => {       //al apretar ENTER consultamos mediante redirección url a ese serie.
-    if (e.key == "Enter") {    // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA - NO PARA REDIRIGIR. PARA PASAR AL SIGUIENTE.
+    if (e.key == "Enter") {    
       if (numSerie) {
         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
         guardar()
@@ -104,6 +81,20 @@
       //e.preventDefault()
     }
   })
+
+// al GUARDAR (submit) sacar ceros de la izquierda
+  const formEntrada = document.getElementById('formEntrada')
+  formEntrada.addEventListener('submit', ()=> {
+      const inputNumero = document.getElementById("serie");
+      const valor = inputNumero.value;
+      console.log(valor)
+      // Usando el método slice()
+      const valorSinCeros = valor.replace(/^0+/, "").slice(0)
+      console.log(valorSinCeros)
+      inputNumero.value = valorSinCeros;
+
+    }
+  )
 
   //Al CONSULTAR
   //leemos el numero de serie ingresado por el usuario   //NO se puede acceder a Id's de otros Handlebars
@@ -120,9 +111,7 @@
     window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
   })
 
-  const equipoSelect = document.getElementById("equipoSelect")
-  
-  //Al cambiar el SELECT:
+  //Al cambiar de equipo cambiamos los colores
   equipoSelect.addEventListener('change', () => {
     const spinnerContainer = document.querySelector('.spinner-container');
     spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
@@ -141,9 +130,9 @@
     equipoSelect.style.borderColor = colores[equipoElegido]
     equipoSelect.style.borderWidth = '3px'
     serieInput.style.color = colores[equipoElegido]
-
+    
     //ENVIAMOS el equipoElegido al servidor:
-    const dato = JSON.stringify({ 'equipo': equipoElegido })  //los datos AHORA llegan perfecto! al servidor
+    const dato = JSON.stringify({ 'equipo': equipoElegido })  
     console.log(dato)
     fetch('/equipoElegido', {   // + equipoElegido, { no hace falta mandarlo por la ruta. va por el body.
       method: 'POST',             //PORQUE si la ruta está mal el server me devuelve status 200 ????????
@@ -162,8 +151,11 @@
       })
       .then(msg => {         //ahora llega bien el equipo elegido!!
         console.log('Cambio a equipo: ', msg)
-        if (!'{{ocultar}}') location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
+        if (!'{{ocultar}}') { 
+           location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
+        }
       })  //debería chequear otra cosa junto con ocultar, para no depender de esa variable, que tiene otra función.
+          // YA CREÉ UN NUEVO FORMULARIO de EDICION así que ocultar ya no hace falta
       .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
         console.log('Ocurrió un error: ', error)
       })

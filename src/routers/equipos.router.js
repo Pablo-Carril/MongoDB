@@ -31,6 +31,8 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
       serie,
       fechaActual: hoy(),
       mostrarHistorial: true,
+      resultadosDe: 'Historial: ',
+      busqueda: serie,
       equipo,
     })  
     res.status(200)
@@ -44,8 +46,8 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
 //Los VALUE de los INPUTS también pueden ser modificados con {{variable}}
 //PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
 
-//CREAR NUEVO
-equiposRouter.post('/', async (req, res) => {
+//CREAR NUEVO (maneja el SUBMIT del FORMULARIO)
+equiposRouter.post('/', async (req, res) => {       //DE ALGUNA FORMA TENGO QUE PASAR EQUIPO A "TODOS" luego de GUARDAR
   const { body } = req                                         //obtengo sólo el body
   console.log("Post hacia api/equipos: " + body.serie)
   try {
