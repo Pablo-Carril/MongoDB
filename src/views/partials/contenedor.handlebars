@@ -12,10 +12,25 @@
 
     <div class="col-9 border" style="min-width: 200px;">
 
-      <h5 class="mt-2 p-2" style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" >{{resultadosDe}} 
-        <span class="ms-2 fw-bold " style="font-size: 1.1rem; color: {{colorOpcion this.equipo}};"> {{busqueda}} </span> 
-      </h5>
-    
+      <div>
+        <h5 class="mt-2 p-2" style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe">
+          {{resultadosDe}}
+          <span class="ms-2 fw-bold " style="font-size: 1.1rem; color: {{colorOpcion this.equipo}};"> {{busqueda}}
+          </span>
+        </h5>
+        <select class="custom-select form-control fw-bold" name='equi' id="equiSel"
+          style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo">
+          <option value="">Todos</option>
+          <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
+          <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
+          <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
+          <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
+          <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
+          <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
+          <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
+        </select>
+      </div>
+
 
       {{#if mostrarHistorial}}
       {{> historial}}
@@ -25,7 +40,7 @@
       {{> ultimos}}
       {{/if}}
 
-      
+
 
     </div>
 
@@ -34,3 +49,40 @@
   </div>
 </div>
 
+<script>
+  const equiSel = document.getElementById("equiSel")
+  equiSel.addEventListener('change', () => {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+
+    equipoElegido = equiSel.value
+    //ENVIAMOS el equipoElegido al servidor:
+    const dato = JSON.stringify({ 'equipo': equipoElegido })
+    console.log(dato)
+    fetch('/equipoElegido', {   // + equipoElegido, { no hace falta mandarlo por la ruta. va por el body.
+      method: 'POST',             //PORQUE si la ruta está mal el server me devuelve status 200 ????????
+      headers: {
+        'Content-Type': 'application/json',   //sin esto no anda.
+      },
+      body: dato,
+    })
+      .then(response => {    //si el fetch fue correcto el servidor devuelve una respuesta (que no tiene que ver con el catch)
+        if (response.ok) {   //el ok es parte de una Api Rest, así como el body.
+          return response.json()   //esto TIENE QUE ESTAR para poder recibir luego el msg. lo pasa a json para poder ser leído por el siguiente .then{msg}
+        }
+        else {
+          throw new Error(`Error de red - ${response.status}`); //esto se hace para que lo capture el .catch siguiente. lanzamos un error adrede.
+        }
+      })
+      .then(msg => {         //ahora llega bien el equipo elegido!!
+        console.log('Cambio a equipo: ', msg)
+        if (!'{{ocultar}}') {
+          location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
+        }
+      })  //debería chequear otra cosa junto con ocultar, para no depender de esa variable, que tiene otra función.
+      // YA CREÉ UN NUEVO FORMULARIO de EDICION así que ocultar ya no hace falta
+      .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
+        console.log('Ocurrió un error: ', error)
+      })
+  })
+</script>
