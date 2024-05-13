@@ -4,13 +4,13 @@
     <label for="equipoSelect">Equipo</label>
     <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
       style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo" autofocus>
-      <option value="">Todos</option> <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
-      <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
-      <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
-      <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
-      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
-      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
-      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
+      <option value=""></option> 
+      <option value="validador">Validador</option>
+      
+      <option value="teclado">Teclado</option>
+      <option value="mountinKit">MountinKit</option>
+      <option value="concentrador">Concentrador</option>
+      <option value="otros">Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
@@ -107,14 +107,14 @@
     } else { url = '#' }
     //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
     console.log('{{elegido}}')    //ESTA ES LA FORMA DE leer una VARIABLE HANDLEBARS en JAVASCRIPT: entre comillas para que la trate como un string.
-    guardar()
+   // guardar()
     window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
   })
 
   //Al cambiar de equipo cambiamos los colores
   equipoSelect.addEventListener('change', () => {
-    const spinnerContainer = document.querySelector('.spinner-container');
-    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+   // const spinnerContainer = document.querySelector('.spinner-container'); YA NO HACE FALTA SPINNER AQUI
+   // spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
     //Al cambiar de equipo cambiamos los colores:
     equipoElegido = equipoSelect.value
     //console.log(equipoElegido)
@@ -131,8 +131,6 @@
     equipoSelect.style.borderWidth = '3px'
     serieInput.style.color = colores[equipoElegido]
     
-    
-
   })
 
 </script>
