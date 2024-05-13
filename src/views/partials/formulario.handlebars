@@ -8,9 +8,9 @@
       <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
  <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
       <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
-      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option> 
-      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option> 
-      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option> 
+      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
+      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
+      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
     <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
@@ -38,7 +38,7 @@
       <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
         class="form-control mb-3">{{caso}}</textarea>
     </div>
-    <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>  
+    <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
     <button id="consultar" class="btn btn-primary text-white ms-3 {{#if ocultar}}oculto{{/if}} ">Historial</button>
   </div>
 </form>
@@ -70,7 +70,7 @@
     //console.log(numSerie)
   })
   serieInput.addEventListener('keypress', e => {       //al apretar ENTER consultamos mediante redirección url a ese serie.
-    if (e.key == "Enter") {    // nesesito agregarlos a todos los input ??   SI ...A LA MAYORIA - NO PARA REDIRIGIR. PARA PASAR AL SIGUIENTE.
+    if (e.key == "Enter") {    
       if (numSerie) {
         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
         window.location.href = url
@@ -90,7 +90,7 @@
       const valorSinCeros = valor.replace(/^0+/, "").slice(0)
       console.log(valorSinCeros)
       inputNumero.value = valorSinCeros;
-    //  equipoSelect.value = ""    //ANDA MAL, por algún motivo me deja el serie vacío (invalida todo el form) será que actualiza después de borrarse el form? TENGO que hacerlo en otro lado
+
     }
   )
 
@@ -124,8 +124,9 @@
     equipoSelect.style.borderColor = colores[equipoElegido]
     equipoSelect.style.borderWidth = '3px'
     serieInput.style.color = colores[equipoElegido]
+    
     //ENVIAMOS el equipoElegido al servidor:
-    const dato = JSON.stringify({ 'equipo': equipoElegido })  //los datos AHORA llegan perfecto! al servidor
+    const dato = JSON.stringify({ 'equipo': equipoElegido })  
     console.log(dato)
     fetch('/equipoElegido', {   // + equipoElegido, { no hace falta mandarlo por la ruta. va por el body.
       method: 'POST',             //PORQUE si la ruta está mal el server me devuelve status 200 ????????
@@ -135,7 +136,7 @@
       body: dato,
     })
       .then(response => {    //si el fetch fue correcto el servidor devuelve una respuesta (que no tiene que ver con el catch)
-        if (response.ok) {
+        if (response.ok) {   //el ok es parte de una Api Rest, así como el body.
           return response.json()   //esto TIENE QUE ESTAR para poder recibir luego el msg. lo pasa a json para poder ser leído por el siguiente .then{msg}
         }
         else {
@@ -144,7 +145,9 @@
       })
       .then(msg => {         //ahora llega bien el equipo elegido!!
         console.log('Cambio a equipo: ', msg)
-        if (!'{{ocultar}}') location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
+        if (!'{{ocultar}}') { 
+           location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
+        }
       })  //debería chequear otra cosa junto con ocultar, para no depender de esa variable, que tiene otra función.
           // YA CREÉ UN NUEVO FORMULARIO de EDICION así que ocultar ya no hace falta
       .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.

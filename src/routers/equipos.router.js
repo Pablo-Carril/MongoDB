@@ -31,6 +31,8 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
       serie,
       fechaActual: hoy(),
       mostrarHistorial: true,
+      resultadosDe: 'Historial: ',
+      busqueda: serie,
       equipo,
     })  
     res.status(200)
