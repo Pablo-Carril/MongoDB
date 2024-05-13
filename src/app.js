@@ -1,5 +1,5 @@
 import express from 'express'
-import sessions from 'express-sessions'
+//import sessions from 'express-sessions'        // cuidado: tira errores deprecated al habilitar esta línea
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import { initdb } from './db/mongodb.js'
@@ -73,15 +73,16 @@ app.use(express.urlencoded({ extended: true }))   //para que hacepte datos de FO
 app.use(express.static(path.join(__dirname, './public')))  //definimos la carpeta estática. usamos path para definir mejor una carpeta absoluta
 //Ahora /public es la carpeta raíz de todo el proyecto y no se podrá acceder a ninguna carpeta superior. los atajos para encontrar rutas en VSCode ya no sirven del lado del CLIENTE.
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
-app.use((req, res, next) => {
+
+/* app.use((req, res, next) => {
   sessions({
-  secret: SESSION_SECRET,
+  secret: SESSION_SECRET,   // CANCELO LAS SESIONES POR AHORA. NO FUNCIONA, tira ERRORES  **********
   resave: false,
   saveUninitialized: true,
  })
  next()
 })
-
+ */
 
 //app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
 //  res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
@@ -118,14 +119,14 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
     //  if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     //  const equipos = formateaResultados(resultados)
-    if (!req.session.counter) {
-      req.session.counter = 1
+    /* if (!req.session.counter) {
+      req.session.counter = 1       //esto es de SESIONES
       res.send('Bienvenido')
     }
     else {
       req.session.counter++
       res.send(`has visitado ${ req.session.counter } veces`)
-    }
+    }  */
 
   res.render('index', {
     // equipos,               // Podría poner las NOTAS al iniciar...  
