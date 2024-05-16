@@ -33,7 +33,7 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars. así que no hace falta poner un let, pero SI hace falta el let en otras ocaciones.
       equipos,                  // cuidado: puede haber otro router llamando al mismo handlebars.
       fechaActual: hoy(),      
-      resultadosDe: 'Ultimos anotados:',
+      resultadosDe: 'Ultimos',
       busqueda: elegido,  //aquí debería estar el equipo elegido
       mostrarHistorial: false,
       mostrarUltimos: true,
@@ -42,7 +42,7 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
      // mostrarLoading: false, 
       //entregado,
      })  //estas son variables de Handlebars para la TABLA
-    console.log('usuario conectado')
+    //console.log('usuario conectado')
     res.status(200)      // con .res(message: 'ok', redirect: '/' ) PODEMOS REDIRIGIR SEGÚN LA DESICIÓN DEL SERVIDOR, y en el cliente,
   }                      // mediante resjson = await res.json(); if(resjson.redirect) { window.location.href = resjson.redirect } en el Fetch
   catch (err) {
@@ -80,8 +80,8 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
       res.render('index', {       
         equipos,                  
         fechaActual: hoy(),
-        resultadosDe: 'Ultimos',
-        busqueda: 'Sonda',
+        resultadosDe: 'Sonda',
+        //busqueda: 'Sonda',
         mostrarHistorial: false,
         mostrarUltimos: true,
         equipo,
@@ -111,8 +111,8 @@ indexRouter.get('/laplata', async (req, res) => {
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
       equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
       fechaActual: hoy(),
-      resultadosDe: 'Ultimos',
-      busqueda: 'La Plata',
+      resultadosDe: 'La Plata',
+      //busqueda: 'La Plata',
       mostrarHistorial: false,
       mostrarUltimos: true,
       equipo,

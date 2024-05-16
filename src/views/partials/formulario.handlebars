@@ -70,7 +70,7 @@
     numSerie = serieInput.value
     //console.log(numSerie)
   })
-  serieInput.addEventListener('keypress', e => {       //al apretar ENTER consultamos mediante redirección url a ese serie.
+  serieInput.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
     if (e.key == "Enter") {    
       if (numSerie) {
         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
@@ -78,8 +78,8 @@
         window.location.href = url
       }
       else { url = '#' }
-      //e.preventDefault()
-    }
+      // El FORMULARIO siempre se va a reiniciar al actualizar la página. SACAR historial Serie del FORM
+    }  // y colocar un nuevo INPUT al lado del FILTRO por EQuipo
   })
 
 // al GUARDAR (submit) sacar ceros de la izquierda
