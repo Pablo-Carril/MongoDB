@@ -128,24 +128,24 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
       res.send(`has visitado ${ req.session.counter } veces`)
     }  */
 
-  res.render('index', {
-    // equipos,               // Podría poner las NOTAS al iniciar...  
-    fechaActual: hoy(),
-    ocultar: true,      //esto lo pongo para que no actualize la página, que es lo que hace el fetch de /equipoElegido en el Formulario
-    // resultadosDe: 'Ultimos anotados:',     //DEBEÍA MANEJAR esto de otra forma en vez de usar la variable ocultar.
-    // busqueda: '',
-    // mostrarHistorial: false,
-    // mostrarUltimos: true,
-    // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
-    //entregado,
+    res.render('index', {
+      // equipos,               // Podría poner las NOTAS al iniciar...  
+      fechaActual: hoy(),
+      ocultar: true,      //esto lo pongo para que no actualize la página, que es lo que hace el fetch de /equipoElegido en el Formulario
+      // resultadosDe: 'Ultimos anotados:',     //DEBEÍA MANEJAR esto de otra forma en vez de usar la variable ocultar.
+      // busqueda: '',
+      // mostrarHistorial: false,
+      // mostrarUltimos: true,
+      // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
+      //entregado,
     })  //estas son variables de Handlebars para la TABLA
-  console.log('usuario conectado')
-  res.status(200)
-    }
-    catch (err) {
+    console.log('usuario conectado')
+    res.status(200)
+  }
+  catch (err) {
     console.log("Error en la pagina principal:  ", err)
     res.status(400)
-  }  
+  }
 })
 
 app.post('/equipoElegido', (req, res) => {

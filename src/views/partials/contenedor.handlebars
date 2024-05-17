@@ -1,9 +1,6 @@
 <div class="container-fluid ">
   <div class="row" style="flex-wrap: nowrap;">
 
-    {{!-- {{#if mostrarLoading}}
-    {{/if}} --}}
-
     <div class="col-2" style="min-width: 240px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
       {{> formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
       <!-- y para actualizarce debe actualizarce toda la página      text-danger  alert alert-primary   -->
@@ -56,6 +53,13 @@
       {{> ultimos}}
       {{/if}}
 
+      {{#if ocultar}}
+      <h4>Bienvenido</h4>
+      <p>Para grabar un equipo llene el formulario de la derecha, o en el</p>
+      <p>menú superior eliga la consulta a realizar. luego podrá</p>
+      <p>filtrar la consulta por tipo de equipo en "Flitrar por".</p>
+      <p>Para buscar un número de serie ingreselo en "Buscar Serie".</p>
+      {{/if}}
 
 
     </div>
