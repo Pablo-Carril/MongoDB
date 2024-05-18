@@ -1,7 +1,7 @@
 <div class="container-fluid ">
   <div class="row" style="flex-wrap: nowrap;">
 
-    <div class="col-2" style="min-width: 240px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
+    <div class="col-1" style="min-width: 190px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
       {{> formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
       <!-- y para actualizarce debe actualizarce toda la página      text-danger  alert alert-primary   -->
     </div>
@@ -9,10 +9,10 @@
     <div class="col-9" style="min-width: 200px;"> <!-- CUIDADO: afecta a toda la tabla también -->
 
       <div class="container">
-        <div class="row">
+        <div class="border navbar-nav flex-row">
 
           <!-- style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" -->
-          <div class="col-2">
+          <div class="">
             <h5 class="mt-2 p-2">
               {{resultadosDe}}
               <span class="ms-2 fw-bold " style="font-size: 1.1rem; color: {{colorOpcion this.equipo}};"> {{busqueda}}
@@ -20,11 +20,17 @@
             </h5>
           </div>
 
-          <div class="col-md-4 mt-2">
-            <div class="form-group">
+          <div style="display: flex; align-items: center; white-space: nowrap;">
+            <label for="equiSel">Buscar Serie:</label>
+            <input type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold" min="1" max="999999999"
+              title="Ingrese serie" style="color: {{colorOpcion this.equipo}};">
+            <button id="consultar" class="btn ms-3 {{#if ocultar}}oculto{{/if}} ">📂</button>
+          </div>
+
+          <div style="display: flex; align-items: center; white-space: nowrap;">          
               <label for="equiSel">Filtrar por:</label>
               <select class="custom-select form-control fw-bold " name='equi' id="equiSel"
-                style="color: {{colorOpcion this.equipo}}; display: inline-block;" title="Seleccione el equipo">
+                style="color: {{colorOpcion this.equipo}}; display: inline-block; appearance: auto;" title="Seleccione el equipo">
                 <option value="">Todos</option>
                 <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
                 <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
@@ -32,13 +38,7 @@
                 <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
                 <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
               </select>
-            </div>
-          </div>
-
-          <div class="col-md-4 mt-2">
-            <label for="equiSel">Buscar Serie:</label>
-            <input type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold" min="1" max="999999999"
-              title="Ingrese serie" style="color: {{colorOpcion this.equipo}};">
+            
           </div>
 
         </div>
@@ -72,6 +72,7 @@
 <script>
   //SELECT para FILTRO por EQUIPO:
   const equiSel = document.getElementById("equiSel")
+
   equiSel.addEventListener('change', () => {
     const spinnerContainer = document.querySelector('.spinner-container');
     spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
@@ -105,5 +106,34 @@
       .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
         console.log('Ocurrió un error: ', error)
       })
+  })
+
+  //Al CONSULTAR
+  //leemos el numero de serie ingresado por el usuario   //NO se puede acceder a Id's de otros Handlebars
+  const consultarBtn = document.getElementById('consultar')
+  const serieHisto = document.getElementById('serieHisto')   
+
+  consultarBtn.addEventListener('click', () => {
+    const serieNum = serieHisto.value                     // SALVO que hagamos un formulario normal y nos evitamos todo este Javascript. HACERLO EN EL FUTURO
+    if (serieNum) {                              //si se ingresó algo..
+      var url = '/api/equipos/' + encodeURIComponent(serieNum);
+    } else { url = '#' }
+    //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
+    console.log('{{elegido}}')    //ESTA ES LA FORMA DE leer una VARIABLE HANDLEBARS en JAVASCRIPT: entre comillas para que la trate como un string.
+   // guardar()
+    window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
+  })
+
+   serieHisto.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
+    if (e.key == "Enter") {   
+      const numSerie = serieHisto.value                 
+      if (numSerie) {
+        var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
+     
+        window.location.href = url
+      }
+      else { url = '#' }
+      
+    }  
   })
 </script>
