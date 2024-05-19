@@ -9,10 +9,10 @@
     <div class="col-9" style="min-width: 200px;"> <!-- CUIDADO: afecta a toda la tabla también -->
 
       <div class="container">
-        <div class="border navbar-nav flex-row">
+        <div class="navbar-nav flex-row">
 
           <!-- style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" -->
-          <div class="">
+          <div style="min-width: 150px;">
             <h5 class="mt-2 p-2">
               {{resultadosDe}}
               <span class="ms-2 fw-bold " style="font-size: 1.1rem; color: {{colorOpcion this.equipo}};"> {{busqueda}}
@@ -20,16 +20,16 @@
             </h5>
           </div>
 
-          <div style="display: flex; align-items: center; white-space: nowrap;">
+          <div style="display: flex; align-items: center; white-space: nowrap;" class="ms-3">
             <label for="equiSel">Buscar Serie:</label>
-            <input type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold" min="1" max="999999999"
+            <input autofocus type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold ms-2" min="1" max="999999999"
               title="Ingrese serie" style="color: {{colorOpcion this.equipo}};">
-            <button id="consultar" class="btn ms-3 {{#if ocultar}}oculto{{/if}} ">📂</button>
+            <button id="consultar" class="border btn {{#if ocultar}}oculto{{/if}} ">📂</button>
           </div>
 
           <div style="display: flex; align-items: center; white-space: nowrap;">          
-              <label for="equiSel">Filtrar por:</label>
-              <select class="custom-select form-control fw-bold " name='equi' id="equiSel"
+              <label for="equiSel" class="ms-3">Filtrar por:</label>
+              <select class="custom-select form-control fw-bold ms-2" name='equi' id="equiSel"
                 style="color: {{colorOpcion this.equipo}}; display: inline-block; appearance: auto;" title="Seleccione el equipo">
                 <option value="">Todos</option>
                 <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
