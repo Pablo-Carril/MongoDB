@@ -1,5 +1,5 @@
 import express from 'express'
-//import sessions from 'express-sessions'        // cuidado: tira errores deprecated al habilitar esta línea
+import session from 'express-session'     
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import { initdb } from './db/mongodb.js'
@@ -74,15 +74,13 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 //Ahora /public es la carpeta raíz de todo el proyecto y no se podrá acceder a ninguna carpeta superior. los atajos para encontrar rutas en VSCode ya no sirven del lado del CLIENTE.
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
 
-/* app.use((req, res, next) => {
-  sessions({
-  secret: SESSION_SECRET,   // CANCELO LAS SESIONES POR AHORA. NO FUNCIONA, tira ERRORES  **********
-  resave: false,
-  saveUninitialized: true,
- })
- next()
-})
- */
+app.use(session({
+  secret: SESSION_SECRET,
+ // resave: false,
+ // saveUninitialized: true,
+}
+))
+
 
 //app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
 //  res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
