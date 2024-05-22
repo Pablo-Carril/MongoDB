@@ -1,5 +1,5 @@
 import express from 'express'
-import session from 'express-session'     
+import session from 'express-session'
 import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import { initdb } from './db/mongodb.js'
@@ -75,15 +75,25 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
 
 app.use(session({
-  secret: SESSION_SECRET,
- // resave: false,
- // saveUninitialized: true,
+  secret: SESSION_SECRET,      //hash para firmar los cookies que genera session
+  resave: false,         //mantiene la sesión activa(renueva). en false se vence apenas vensa el tiempo
+  saveUninitialized: true,     //crea la sesión igualmente aunque no haya datos guardados
 }
 ))
+// Middleware para verificar si la sesión está registrada. agregar a todas las rutas que necesitemos proteger.
+const sessionControl = (req, res, next) => {
+  if (!req.session.logeado) { // Si el usuario no está logueado
+    res.redirect('/'); // Redirecciona a la página de inicio
+  } else {
+    next(); // Continúa con el siguiente middleware si está logueado
+  }
+};
+
+module.exports.sessionControl = sessionControl;
 
 
 //app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
-//  res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+//  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
 //  next()  
 //})          
 
@@ -109,23 +119,23 @@ initdb()
 
 //Página PRINCIPAL
 app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   // console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
   // let elegido = req.equipoElegido
+  //if (!req.session.logeado) { // Verifica si el usuario está logueado
+  // Si el usuario no está logueado, redirige a la página de inicio de sesión o realiza alguna otra acción
+  //  res.redirect('/'); // aquí se debería redirigir a una página de inicio de sesión ('/login')
+  //  return;
+  //}
   try {
-    //  const resultados = await Equipomodel.find().sort({ _id: -1 }).limit(20) //ULTIMOS VEINTE
-    // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
-    //  if (resultados.length == 0) { console.log("No se encontró ningún dato") }
-    //  const equipos = formateaResultados(resultados)
-    /* if (!req.session.counter) {
-      req.session.counter = 1       //esto es de SESIONES
-      res.send('Bienvenido')
+    if (!req.session.counter) {
+      req.session.counter = 1
+      req.session.logeado = true;       //registramos el nuevo logueo 
+      console.log('Bienvenido. nueva sesión iniciada')
     }
     else {
       req.session.counter++
-      res.send(`has visitado ${ req.session.counter } veces`)
-    }  */
-
+      console.log(`has visitado ${req.session.counter} veces`)
+    }
     res.render('index', {
       // equipos,               // Podría poner las NOTAS al iniciar...  
       fechaActual: hoy(),
@@ -137,12 +147,10 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
       // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
       //entregado,
     })  //estas son variables de Handlebars para la TABLA
-    console.log('usuario conectado')
-    res.status(200)
   }
   catch (err) {
-    console.log("Error en la pagina principal:  ", err)
-    res.status(400)
+    console.log("Error mostrando la pagina principal:  ", err)
+    res.status(500).send("Error mostrando la página principal");
   }
 })
 
