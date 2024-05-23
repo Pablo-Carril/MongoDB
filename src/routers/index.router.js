@@ -2,7 +2,10 @@ import { Router } from 'express'
 import { Equipomodel} from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
 import formateaFecha from '../utils.js'
+import { sessionControl } from '../middlewares/sessions.js'
+
 const indexRouter = Router()
+//indexRouter.use('/', sessionControl); es otro método??
 
 const hoy = () => {
   const ahora = DateTime.now()
@@ -17,7 +20,7 @@ const hoy = () => {
 //});
 
 //Al iniciar mostrar ULTIMOS:
-indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
+indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido )  //no viene a travez de body.
   let elegido = req.equipoElegido
@@ -62,7 +65,7 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
   })
 
   // SONDA
-  indexRouter.get('/sonda', async (req, res) => { 
+  indexRouter.get('/sonda', sessionControl, async (req, res) => { 
     let elegido = req.equipoElegido
     let equipo = elegido  //envío equipo en vez de elegido  
     if (equipo == 'todos') { elegido = '' }
@@ -95,7 +98,7 @@ indexRouter.get('/ultimos', async (req, res) => {   //router del raíz. aquí es
 })
 
 //LA PLATA
-indexRouter.get('/laplata', async (req, res) => {   
+indexRouter.get('/laplata', sessionControl, async (req, res) => {   
   let elegido = req.equipoElegido
   let equipo = elegido  //envío equipo en vez de elegido
   if (equipo == 'todos') { elegido = '' }
@@ -126,7 +129,7 @@ indexRouter.get('/laplata', async (req, res) => {
 })
 
 //BUSCAR
-indexRouter.post('/busqueda', async (req, res) => {
+indexRouter.post('/busqueda', sessionControl, async (req, res) => {
   const busqueda = req.body.datosBuscar || 'nada'   //por body vienen datos de formulario sólamente cuando hacemos un post desde el cliente.
   console.log('busqueda: ', busqueda)
   try {      
@@ -156,7 +159,7 @@ indexRouter.post('/busqueda', async (req, res) => {
 })
 
 //CHECK ENTREGADO
-indexRouter.post('/entregado/:id', async (req, res) => {
+indexRouter.post('/entregado/:id', sessionControl, async (req, res) => {
   const id = req.params.id;
   try {
     const estado = await Equipomodel.findById(id);
@@ -169,7 +172,7 @@ indexRouter.post('/entregado/:id', async (req, res) => {
   }
 });
 
-indexRouter.get('/notas', (req, res) => {
+indexRouter.get('/notas', sessionControl, (req, res) => {
   res.render('notas')                      
   res.status(200)
 })
