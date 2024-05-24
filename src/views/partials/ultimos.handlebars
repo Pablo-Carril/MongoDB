@@ -26,15 +26,16 @@
           <td>{{this.caso}}</td>
           <td>
             <form action="entregado/{{_id}}" method="post">
-              {{#if this.caso}}
-              <button type="submit" style="border: none; background: none;">
-                {{#if this.entregado}}
-                <span class="ms-2">✅</span>
-                {{else}}
-                <span class="ms-2">⚪</span>
-                {{/if}}
-              </button>
+            <!--<form id="entregado-form-{{_id}}" class="entregado-form" data-id="{{_id}}"> -->
+            {{#if this.caso}}
+            <button type="submit" style="border: none; background: none;">
+              {{#if this.entregado}}
+              <span class="ms-2">✅</span>
+              {{else}}
+              <span class="ms-2">⚪</span>
               {{/if}}
+            </button>
+            {{/if}}
             </form>
           </td>
         </tr>
@@ -56,21 +57,62 @@
     /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
     min-width: 200px;
     max-width: 400px;
-   /* background-color: #1f55b4; */
+    /* background-color: #1f55b4; */
   }
- .problema:hover {
-  white-space: normal; /* Permite que el texto se muestre completo */
-  overflow: visible; /* Muestra todo el texto */
-  z-index: 999; /* Asegura que el texto completo esté encima de otras filas */
-  position: absolute; /* Permite que el texto completo se muestre sobre otras filas */
-  background-color: white; /* Fondo blanco para mayor claridad */
-  border: 1px solid orange;
-}
+
+  .problema:hover {
+    white-space: normal;
+    /* Permite que el texto se muestre completo */
+    overflow: visible;
+    /* Muestra todo el texto */
+    z-index: 999;
+    /* Asegura que el texto completo esté encima de otras filas */
+    position: absolute;
+    /* Permite que el texto completo se muestre sobre otras filas */
+    background-color: white;
+    /* Fondo blanco para mayor claridad */
+    border: 1px solid orange;
+  }
 </style>
 
-<script>  //no es lo que quería. antes de cargarse mostrar el spinner. luego se sale solo. PRUEBO DESDE EL NAV
-//  window.onload = () => {
-//    const spinnerContainer = document.querySelector('.spinner-container');
-//    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
-//  };
+<script>
+  // Espero a que el DOM esté completamente cargado
+  document.addEventListener('DOMContentLoaded', function () {
+    // Selecciona todos los formularios con la clase 'entregado-form'
+    const forms = document.querySelectorAll('.entregado-form');
+    forms.forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const id = form.getAttribute('data-id');
+        entregarFunc(id);
+      });
+    });
+  });
+
+  function entregarFunc(id) {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+
+    console.log(`Formulario con ID ${id} entregado`);
+    fetch ('entregado/' + id, {
+       method: 'POST',                     
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      //body: JSON.stringify({ id: '{{id}}', serie: {{ serie }} }), 
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error de red - ${response.status}`);
+        }
+        return response.json();  //
+      })
+    .then(msg => {
+      console.log('entregado: ', msg)
+    //  window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
+    //  history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
+    })
+    .catch((error) => { console.log('Ocurrió un error: ', error) })
+}
+
 </script>

@@ -1,0 +1,172 @@
+<div class="container-fluid ">
+  <div class="row" style="flex-wrap: nowrap;">
+
+    <div class="col-1" style="min-width: 190px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
+      {{> formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
+      <!-- y para actualizarce debe actualizarce toda la página      text-danger  alert alert-primary   -->
+    </div>
+
+    <div class="col-9" style="min-width: 200px;"> <!-- CUIDADO: afecta a toda la tabla también -->
+
+      <div class="container">
+        <div class="navbar-nav flex-row">
+
+          <!-- style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" -->
+          <div style="min-width: 150px;">
+            <h5 class="mt-2 p-2">
+              {{resultadosDe}}
+              <span class="ms-2 me-2 fw-bold " style="font-size: 1.1rem; color: {{colorOpcion this.equipo}};">
+                {{busqueda}}
+              </span>
+            </h5>
+          </div>
+
+          <div style="display: flex; align-items: center; white-space: nowrap;" class="ms-3">
+            <label for="equiSel">Buscar Serie:</label>
+            <input autofocus type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold ms-2" min="1"
+              max="999999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}};">
+            <button id="consultar" class="border btn {{#if ocultar}}oculto{{/if}} ">📂</button>
+          </div>
+
+          <div style="display: flex; align-items: center; white-space: nowrap;">
+            <label for="equiSel" class="ms-3">Filtrar por:</label>
+            <select class="custom-select form-control fw-bold ms-2" name='equi' id="equiSel"
+              style="color: {{colorOpcion this.equipo}}; display: inline-block; appearance: auto;"
+              title="Seleccione el equipo">
+              <option value="">Todos</option>
+              <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
+              <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
+              <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
+              <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
+              <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
+            </select>
+
+          </div>
+
+        </div>
+      </div>
+
+
+      {{#if mostrarHistorial}}
+      {{> historial}}
+      {{/if}}
+
+      {{#if mostrarUltimos}}
+      {{> ultimos}}
+      {{/if}}
+
+      {{#if ocultar}}
+      <div class="col-10 mx-auto">
+        <br>
+        <b>Uso de la Aplicación:</b>
+        <p>👉Para grabar un equipo llenar el formulario de la derecha. primero hay que seleccionar el <b>Equipo</b>,
+          luego colocar el número de <b>serie</b>, luego la <b>fecha</b> (que por defecto es la de hoy pero se puede
+          elegir
+          cualquier otra), y la <b>línea</b>. El número de <b>interno</b> se puede omitir si no se conoce.
+          El <b>Problema</b> es obligatorio ya que se tiene que especificar qué le ocurrió al equipo.
+          El número de <b>Caso</b> sólo debe colocarse cuando un equipo se envía a reparación. pero se puede anotarlo
+          para controlarlo
+          sin número de caso y hacerle un seguimiento, por ejemplo si se logra reparar en taller o ya no repite la
+          falla.
+          Por ejemplo: Teclado serie 1234, se mojó, lo seco, y lo coloco en el interno 27 para controlar.
+        </p>
+        <p>👉Use <b>Buscar Serie</b> para ver el <b>Historial</b> de ese equipo.
+        <p>👉Use <b>Filtrar por</b> para cambiar el tipo de equipo a mostrar: <br>
+          de esta forma todas las consultas mostrarán sólo ese tipo de equipo.<br>
+          Para volver a ver todos debemos seleccionar <b>Todos</b>. </p>
+        <p>👉Cuando un equipo vuelva es necesario marcarlo como <b>entregado</b> con el check verde de la derecha: ⚪ / ✅
+        </p>
+        👉Arriba en el menú azul tenemos las <b>consultas:</b> <br> <b>Ultimos</b> son los ultimos anotados,
+        <b>Sonda</b>
+        muestra sólo línea 85 y línea 98, y <b>La Plata</b> sólo muestra las líneas 307 y 275 (506 no hace falta ya que
+        el número de interno lo especifica).
+        <span style="color: red">Arriba de todo se muestran los más recientes y hacia abajo los mas
+          antiguos.</span> <br>
+        <br>
+        <p>👉<b>Buscar:</b> en la barra de búsqueda podemos ingresar un problema, o un número de caso, o un interno en
+          particular.
+          Por ejemplo si ingresamos "gps" nos buscará todos los equipos que presenten falla de GPS.</p>
+      </div>
+      {{/if}}
+
+
+    </div>
+
+    <!--  <div id="nota"></div> -->
+
+  </div>
+</div>
+
+<script>
+  //SELECT para FILTRO por EQUIPO:
+  const equiSel = document.getElementById("equiSel")
+
+  equiSel.addEventListener('change', () => {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+
+    equipoElegido = equiSel.value
+    //ENVIAMOS el equipoElegido al servidor:
+    const dato = JSON.stringify({ 'equipo': equipoElegido })
+    console.log(dato)
+    fetch('/equipoElegido', {   // + equipoElegido, { no hace falta mandarlo por la ruta. va por el body.
+      method: 'POST',             //PORQUE si la ruta está mal el server me devuelve status 200 ????????
+      headers: {
+        'Content-Type': 'application/json',   //sin esto no anda.
+      },
+      body: dato,
+    })
+      .then(response => {    //si el fetch fue correcto el servidor devuelve una respuesta (que no tiene que ver con el catch)
+        if (response.ok) {   //el ok es parte de una Api Rest, así como el body.
+          return response.json()   //esto TIENE QUE ESTAR para poder recibir luego el msg. lo pasa a json para poder ser leído por el siguiente .then{msg}
+        }
+        else {
+          throw new Error(`Error de red - ${response.status}`); //esto se hace para que lo capture el .catch siguiente. lanzamos un error adrede.
+        }
+      })
+      .then(msg => {         //ahora llega bien el equipo elegido!!
+        console.log('Cambio a equipo: ', msg)
+        if (!'{{ocultar}}') {
+          location.reload(); // Actualizamos la página para que tome el equipo elegido SOLO si NO está oculto los botones, o sea cuando NO estoy Editando.
+        }
+      })  //debería chequear otra cosa junto con ocultar, para no depender de esa variable, que tiene otra función.
+      // YA CREÉ UN NUEVO FORMULARIO de EDICION así que ocultar ya no hace falta
+      .catch((error) => {       //si la ruta está mal devuelve el error por aquí aunque el status sea 200. sólo maneja errores de red.
+        console.log('Ocurrió un error: ', error)
+      })
+  })
+
+  //Al CONSULTAR
+  //leemos el numero de serie ingresado por el usuario   //NO se puede acceder a Id's de otros Handlebars
+  const consultarBtn = document.getElementById('consultar')
+  const serieHisto = document.getElementById('serieHisto')
+
+  consultarBtn.addEventListener('click', () => {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+
+    const serieNum = serieHisto.value                     // SALVO que hagamos un formulario normal y nos evitamos todo este Javascript. HACERLO EN EL FUTURO
+    if (serieNum) {                              //si se ingresó algo..
+      var url = '/api/equipos/' + encodeURIComponent(serieNum);
+    } else { url = '#' }
+    //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
+    console.log('{{elegido}}')    //ESTA ES LA FORMA DE leer una VARIABLE HANDLEBARS en JAVASCRIPT: entre comillas para que la trate como un string.
+    // guardar()
+    window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
+  })
+
+  serieHisto.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
+    if (e.key == "Enter") {
+      const spinnerContainer = document.querySelector('.spinner-container');
+      spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+      const numSerie = serieHisto.value
+      if (numSerie) {
+        var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
+
+        window.location.href = url
+      }
+      else { url = '#' }
+
+    }
+  })
+</script>

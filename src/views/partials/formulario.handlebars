@@ -4,9 +4,9 @@
     <label for="equipoSelect">Equipo</label>
     <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
       style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo">
-      <option value=""></option> 
+      <option value=""></option>
       <option value="validador">Validador</option>
-      
+
       <option value="teclado">Teclado</option>
       <option value="mountinKit">MountinKit</option>
       <option value="concentrador">Concentrador</option>
@@ -27,7 +27,7 @@
       <option value="307" {{isSelected linea '307' }}>307</option>
       <option value="275" {{isSelected linea '275' }}>275</option>
     </select>
-    <label for="coche">Coche:</label>
+    <label for="coche">Interno:</label>
     <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">
     <label for="problema">Problema:</label>
     <div class="form-group">
@@ -40,7 +40,7 @@
         class="form-control mb-3">{{caso}}</textarea>
     </div>
     <button type="submit" class="btn btn-primary ms-4 text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
- 
+
   </div>
 </form>
 
@@ -65,41 +65,44 @@
 
   let numSerie = ""
   const serieInput = document.getElementById("serie")
- // serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
- //   numSerie = serieInput.value
-    //console.log(numSerie)
- // })
- /* serieInput.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
-    if (e.key == "Enter") {    
-      if (numSerie) {
-        var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
-      //  guardar()   //esto era para guardar en Storage. no creo que lo vuelva a usar
-        window.location.href = url
-      }
-      else { url = '#' }
-      
-    }  
-  }) */
+  // serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
+  //   numSerie = serieInput.value
+  //console.log(numSerie)
+  // })
+  /* serieInput.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
+     if (e.key == "Enter") {    
+       if (numSerie) {
+         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
+       //  guardar()   //esto era para guardar en Storage. no creo que lo vuelva a usar
+         window.location.href = url
+       }
+       else { url = '#' }
+       
+     }  
+   }) */
 
-// al GUARDAR (submit) sacar ceros de la izquierda
+  // al GUARDAR (submit) sacar ceros de la izquierda
   const formEntrada = document.getElementById('formEntrada')
-  formEntrada.addEventListener('submit', ()=> {
-      const inputNumero = document.getElementById("serie");
-      const valor = inputNumero.value;
-      console.log(valor)
-      // Usando el método slice()
-      const valorSinCeros = valor.replace(/^0+/, "").slice(0)
-      console.log(valorSinCeros)
-      inputNumero.value = valorSinCeros;
+  formEntrada.addEventListener('submit', () => {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
 
-    }
+    const inputNumero = document.getElementById("serie");
+    const valor = inputNumero.value;
+    console.log(valor)
+    // Usando el método slice()
+    const valorSinCeros = valor.replace(/^0+/, "").slice(0)
+    console.log(valorSinCeros)
+    inputNumero.value = valorSinCeros;
+
+  }
   )
-  
+
   const equipoSelect = document.getElementById("equipoSelect")
   //Al cambiar de equipo cambiamos los colores
   equipoSelect.addEventListener('change', () => {
-   // const spinnerContainer = document.querySelector('.spinner-container'); YA NO HACE FALTA SPINNER AQUI
-   // spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+    // const spinnerContainer = document.querySelector('.spinner-container'); YA NO HACE FALTA SPINNER AQUI
+    // spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
     //Al cambiar de equipo cambiamos los colores:
     equipoElegido = equipoSelect.value
     //console.log(equipoElegido)
@@ -115,7 +118,7 @@
     equipoSelect.style.borderColor = colores[equipoElegido]
     equipoSelect.style.borderWidth = '3px'
     serieInput.style.color = colores[equipoElegido]
-    
+
   })
 
 </script>

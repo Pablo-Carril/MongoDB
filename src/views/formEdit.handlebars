@@ -2,74 +2,77 @@
 
   <h4>Editar registro: </h4>
   <div>
-   {{!--  {{>formularioanterior ocultar=true}} PRUEBO FORMULARIO APARTE DEL PRINCIPAL --}} 
+    {{!-- {{>formularioanterior ocultar=true}} PRUEBO FORMULARIO APARTE DEL PRINCIPAL --}}
     <!--podemos enviar variables (nuevas) al llamar a parciales (ocultar es para ocultar el boton guardar y consultar)-->
 
-  <form id="formEdit" action="/api/equipos" method="post">
-  <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).  <option value="{{elegido}}" selected>{{elegido}} </option>  -->
-  <div class="form-group">
-    <label for="equipoSelect">Equipo</label>
-    <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
-      style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo" autofocus>
-      <option value="">Todos</option> <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
-      <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
- <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
-      <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
-      <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option> 
-      <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option> 
-      <option value="otros" {{isSelected equipo 'otros' }}>Otros</option> 
-    </select>
-    <label for="serie">Numero de serie:</label>
-    <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999999"
-      title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">
-    <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
-    <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control" title="Fecha del Caso o del día que falló">
+    <form id="formEdit" action="/api/equipos" method="post">
+      <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).  <option value="{{elegido}}" selected>{{elegido}} </option>  -->
+      <div class="form-group">
+        <label for="equipoSelect">Equipo</label>
+        <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
+          style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo" autofocus>
+          <option value="">Todos</option>
+          <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
+          <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
+          <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
+          <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
+          <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
+          <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
+          <option value="otros" {{isSelected equipo 'otros' }}>Otros</option>
+        </select>
+        <label for="serie">Numero de serie:</label>
+        <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1"
+          max="999999999" title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">
+        <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
+        <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control"
+          title="Fecha del Caso o del día que falló">
 
-    <label for="linea">Linea:</label>
-    <select name="linea" class="custom-select form-control" id="linea" title="Seleccione la línea" required="">
-      <option value=""> </option>
-      <option value="85" {{isSelected linea '85' }}>85</option>
-      <option value="98" {{isSelected linea '98' }}>98</option>
-      <option value="307" {{isSelected linea '307' }}>307</option>
-      <option value="275" {{isSelected linea '275' }}>275</option>
-    </select>
-    <label for="coche">Coche:</label>
-    <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">
-    <label for="problema">Problema:</label>
-    <div class="form-group">
-      <textarea type="number" name="problema" id="problema" cols="30" rows="1" minlength="3" maxlength="150" required=""
-        class="form-control" title="Ingrese el problema que presenta">{{problema}}</textarea>
-    </div>
-    <label for="caso">Caso:</label>
-    <div class="form-group">
-      <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
-        class="form-control mb-3">{{caso}}</textarea>
-    </div>
+        <label for="linea">Linea:</label>
+        <select name="linea" class="custom-select form-control" id="linea" title="Seleccione la línea" required="">
+          <option value=""> </option>
+          <option value="85" {{isSelected linea '85' }}>85</option>
+          <option value="98" {{isSelected linea '98' }}>98</option>
+          <option value="307" {{isSelected linea '307' }}>307</option>
+          <option value="275" {{isSelected linea '275' }}>275</option>
+        </select>
+        <label for="coche">Coche:</label>
+        <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">
+        <label for="problema">Problema:</label>
+        <div class="form-group">
+          <textarea type="number" name="problema" id="problema" cols="30" rows="1" minlength="3" maxlength="150"
+            required="" class="form-control" title="Ingrese el problema que presenta">{{problema}}</textarea>
+        </div>
+        <label for="caso">Caso:</label>
+        <div class="form-group">
+          <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
+            class="form-control mb-3">{{caso}}</textarea>
+        </div>
 
-   {{!--  <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
-    <button id="consultar" class="btn btn-primary text-white ms-3 {{#if ocultar}}oculto{{/if}} ">Historial</button> --}}
+        {{!-- <button type="submit" class="btn btn-primary text-white {{#if ocultar}}oculto{{/if}} ">Guardar</button>
+        <button id="consultar" class="btn btn-primary text-white ms-3 {{#if ocultar}}oculto{{/if}} ">Historial</button>
+        --}}
+
+      </div>
+    </form>
+
+    <style>
+      .oculto {
+        display: none;
+      }
+
+      #problema {
+        white-space: nowrap;
+        /* evita el salto de línea */
+        text-overflow: ellipsis;
+        /* agrega puntos suspensivos... no funciona sin el nowrap */
+        overflow-x: hidden;
+        /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
+
+        /*color: {{colorOpcion equipoElegido}};    ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
+      }
+    </style>
 
   </div>
-</form>
-
-<style>
-  .oculto {
-    display: none;
-  }
-
-  #problema {
-    white-space: nowrap;
-    /* evita el salto de línea */
-    text-overflow: ellipsis;
-    /* agrega puntos suspensivos... no funciona sin el nowrap */
-    overflow-x: hidden;
-    /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
-
-    /*color: {{colorOpcion equipoElegido}};    ESTO FUNCIONA BIEN cuando retorno un color a mano desde el HELPER */
-  }
-</style>
-
-</div>
 
   <div class="botones">
     <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
@@ -90,6 +93,9 @@
   })
 
   function confirmarBorrado() {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+    
     fetch('/api/equipos/delete/{{id}}', {    //siempre tiene que comenzar con la raíz (/) y TODA la ruta. con fetch no se pueden acortar las rutas como en los routers.
       method: 'DELETE',                         //porque estamos del lado del cliente
       headers: {
@@ -114,6 +120,9 @@
 
   actualizar = document.getElementById('actualizar')
   actualizar.addEventListener('click', () => {
+    const spinnerContainer = document.querySelector('.spinner-container');
+    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+
     //Leer Los datos actualizados:
     const datosForm = new FormData(formulario)         //se pasa el OBJETO formulario
     const datosJSON = JSON.stringify(Object.fromEntries(datosForm.entries()));   // PRUEBO mejor como JSON
@@ -143,9 +152,9 @@
       .catch(err => { console.log('Ocurrió un error: ', err) })
   })
 
-// CUIDADO: HANDLEBARS también reemplaza las variables dentro de los COMENTARIOS, y puede traer problemas
-// al llegar un dato con errores o inclusive un Enter en un string, y hace fallar el script en el NAVEGADOR.
-  
+  // CUIDADO: HANDLEBARS también reemplaza las variables dentro de los COMENTARIOS, y puede traer problemas
+  // al llegar un dato con errores o inclusive un Enter en un string, y hace fallar el script en el NAVEGADOR.
+
 </script>
 
 <style>
