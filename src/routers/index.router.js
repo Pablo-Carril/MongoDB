@@ -84,7 +84,7 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
         equipos,                  
         fechaActual: hoy(),
         resultadosDe: 'Sonda',
-        //busqueda: 'Sonda',
+        busqueda: elegido,
         mostrarHistorial: false,
         mostrarUltimos: true,
         equipo,
@@ -115,7 +115,7 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
       equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
       fechaActual: hoy(),
       resultadosDe: 'La Plata',
-      //busqueda: 'La Plata',
+      busqueda: elegido,
       mostrarHistorial: false,
       mostrarUltimos: true,
       equipo,

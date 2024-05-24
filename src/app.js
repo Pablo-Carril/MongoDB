@@ -13,7 +13,7 @@ import morgan from 'morgan'    //morgan permite ver las solicitudes http por con
 import { sessionControl } from './middlewares/sessions.js'
 
 const PORT = process.env.PORT
-// ************** PROBANDO NUEVA RAMA SESIONES ***************** EN PC DE CASA TAMBIÉN  **
+// session
 const SESSION_SECRET = process.env.SESSION_SECRET
 let elegido = 'todos'
 
