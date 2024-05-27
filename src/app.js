@@ -64,19 +64,20 @@ app.set('view engine', 'handlebars')              //establecemos la extensión. 
 //  next()          //pasamos al siguiente middleware
 //})
 
-const SESSION_LIFETIME = 1000 * 60 * 20   //treinta minutos de sesión. luego expira
+const SESSION_LIFETIME = 1000 * 60 * 60   //sesenta minutos de sesión. luego expira
 
 app.use(session({
   secret: SESSION_SECRET,      //hash para firmar los cookies que genera session
-  resave: false,         //mantiene la sesión activa(renueva). en false se vence apenas vensa el tiempo
+  resave: false,              //guarda la sesión en el almacenamiento en cada solicitud. genera mucho tráfico. es mejor rolling.
   saveUninitialized: true,     //crea la sesión igualmente aunque no haya datos guardados
   cookie: {
     maxAge: SESSION_LIFETIME       // Tiempo de vida de la cookie de sesión en milisegundos
   },
+  rolling: true,       //renueva el tiempo de vida de la cookie en cada solicitud. sin esto se vence mientras la estás usando.
 }
 ))
 
-app.use(express.json())   //permite usar JSON en el body de los req Http. si necesitamos texto podemos usar express.text
+app.use(express.json())   //permite usar JSON en el body de los req Http. si necesitamos texto podemos usar express.text. sólo para las solicitudes ENTRANTES al servidor. 
 //app.use(bodyParser.json()); esta es otra forma pero hay que importarla
 app.use(express.urlencoded({ extended: true }))   //para que hacepte datos de FORMULARIOS y url extendidas, o sea símbolos &, :, #, etc
 // también los datos de los formularios los convierte a formato Json. si no no se podrían leer.

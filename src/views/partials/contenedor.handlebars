@@ -24,8 +24,8 @@
           <div style="display: flex; align-items: center; white-space: nowrap;" class="ms-3">
             <label for="equiSel">Buscar Serie:</label>
             <input autofocus type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold ms-2" min="1"
-              max="999999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}};">
-            <button id="consultar" class="border btn {{#if ocultar}}oculto{{/if}} ">📂</button>
+              max="999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}};" required="">
+            <button id="consultar" class="border btn">📂</button>
           </div>
 
           <div style="display: flex; align-items: center; white-space: nowrap;">
@@ -145,28 +145,35 @@
     const spinnerContainer = document.querySelector('.spinner-container');
     spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
 
-    const serieNum = serieHisto.value                     // SALVO que hagamos un formulario normal y nos evitamos todo este Javascript. HACERLO EN EL FUTURO
-    if (serieNum) {                              //si se ingresó algo..
-      var url = '/api/equipos/' + encodeURIComponent(serieNum);
-    } else { url = '#' }
-    //fetch(url)    //un fetch sería buena opción para enviar los datos por el body y no por la url
-    console.log('{{elegido}}')    //ESTA ES LA FORMA DE leer una VARIABLE HANDLEBARS en JAVASCRIPT: entre comillas para que la trate como un string.
-    // guardar()
-    window.location.href = url    //como el enlace tiene un # necesitamos darle la nueva url                    
+    const numSerie = serieHisto.value
+    if (numSerie === '' || isNaN(numSerie)) {
+      //podríamos mostrar un mensaje de error
+      serieHisto.setCustomValidity('Ingrese un número de serie');
+      serieHisto.reportValidity();
+      spinnerContainer.classList.add('escondido')  // OCULTAMOS el spinner!
+    }
+    else {
+      serieHisto.setCustomValidity('');
+      var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
+      window.location.href = url
+    }
   })
 
-  serieHisto.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
+  serieHisto.addEventListener('keydown', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
     if (e.key == "Enter") {
+      e.preventDefault()
       const spinnerContainer = document.querySelector('.spinner-container');
       spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
-      const numSerie = serieHisto.value
-      if (numSerie) {
-        var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
 
+      const numSerie = serieHisto.value
+      if (numSerie === '' || isNaN(numSerie)) {
+        // simplemente no hacemos nada. podríamos mostrar un mensaje de error pero no creo que haga falta.
+        spinnerContainer.classList.add('escondido')  // OCULTAMOS el spinner!
+      }
+      else {
+        var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
         window.location.href = url
       }
-      else { url = '#' }
-
     }
   })
 </script>

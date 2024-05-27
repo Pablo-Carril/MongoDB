@@ -25,10 +25,10 @@
           <td class="problema">{{this.problema}}</td>
           <td>{{this.caso}}</td>
           <td>
-            <form action="entregado/{{_id}}" method="post">
-            <!--<form id="entregado-form-{{_id}}" class="entregado-form" data-id="{{_id}}"> -->
+            <!-- <form action="entregado/_id" method="post">  -->
             {{#if this.caso}}
-            <button type="submit" style="border: none; background: none;">
+            <button class="entregado-btn" data-id="{{_id}}" style="border: none; background: none;">
+              <!-- HAY que usar CLASS si o si. no sirve id -->
               {{#if this.entregado}}
               <span class="ms-2">✅</span>
               {{else}}
@@ -36,7 +36,7 @@
               {{/if}}
             </button>
             {{/if}}
-            </form>
+
           </td>
         </tr>
         {{/each}}
@@ -78,41 +78,46 @@
 <script>
   // Espero a que el DOM esté completamente cargado
   document.addEventListener('DOMContentLoaded', function () {
-    // Selecciona todos los formularios con la clase 'entregado-form'
-    const forms = document.querySelectorAll('.entregado-form');
-    forms.forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        const id = form.getAttribute('data-id');
-        entregarFunc(id);
+    const buttons = document.querySelectorAll('.entregado-btn');
+
+    // Selecciona todos los botones. tiene que ser con class ya que id aquí no serviría.
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const spinnerContainer = document.querySelector('.spinner-container');
+        spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+
+        const id = this.dataset.id;
+        const url = `/entregado/${id}`;
+
+        fetch(url, {
+          method: 'POST',
+         // headers: {
+         //   'Content-Type': 'application/json'
+         // }
+        })
+          .then(response => {
+            if (response.ok) {
+              spinnerContainer.classList.add('escondido')  // OCULTAMOS el spinner!
+              location.reload()  //esto funciona bien. pero ubiera estado bueno sin redireccionar
+              return response.json();
+            } else {
+              throw new Error('Error en la solicitud');
+            }
+          })
+          .then(data => {
+            console.log('Success:', data);
+            // Actualizar el estado del botón según la respuesta
+            if (data.entregado) {     // puse redireccion, pero ubiera estado bueno sin redireccionar
+              this.querySelector('span').textContent = '✅';   //de marcado a desmarcado anda.
+            } else {
+              this.querySelector('span').textContent = '⚪';    //de desmarcado a marcado no anda. por que??
+            }
+            spinnerContainer.classList.add('escondido')  // OCULTAMOS el spinner!
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
       });
     });
   });
-
-  function entregarFunc(id) {
-    const spinnerContainer = document.querySelector('.spinner-container');
-    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
-
-    console.log(`Formulario con ID ${id} entregado`);
-    fetch ('entregado/' + id, {
-       method: 'POST',                     
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      //body: JSON.stringify({ id: '{{id}}', serie: {{ serie }} }), 
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Error de red - ${response.status}`);
-        }
-        return response.json();  //
-      })
-    .then(msg => {
-      console.log('entregado: ', msg)
-    //  window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
-    //  history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
-    })
-    .catch((error) => { console.log('Ocurrió un error: ', error) })
-}
-
 </script>
