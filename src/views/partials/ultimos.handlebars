@@ -82,40 +82,39 @@
 
     // Selecciona todos los botones. tiene que ser con class ya que id aquí no serviría.
     buttons.forEach(button => {
-      button.addEventListener('click', function () {
+      button.addEventListener('click', function () {    //no usamos función flecha para poder usar .this en cada botón. si lo usara con flecha se referiría al contexto 
         const spinnerContainer = document.querySelector('.spinner-container');
-        spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+        spinnerContainer.classList.remove('escondido') // Muestra el Spinner
 
         const id = this.dataset.id;
         const url = `/entregado/${id}`;
 
         fetch(url, {
           method: 'POST',
-         // headers: {
-         //   'Content-Type': 'application/json'
-         // }
+          // headers: {
+          //   'Content-Type': 'application/json' //no hace falta ya que enviamos el dato por la url
+          // }
         })
           .then(response => {
-            if (response.ok) {
-              spinnerContainer.classList.add('escondido')  // OCULTAMOS el spinner!
-              location.reload()  //esto funciona bien. pero ubiera estado bueno sin redireccionar
-              return response.json();
-            } else {
+            if (!response.ok) {
               throw new Error('Error en la solicitud');
             }
+            return response.json();
           })
           .then(data => {
-            console.log('Success:', data);
-            // Actualizar el estado del botón según la respuesta
-            if (data.entregado) {     // puse redireccion, pero ubiera estado bueno sin redireccionar
-              this.querySelector('span').textContent = '✅';   //de marcado a desmarcado anda.
+            //console.log('entregado:', data);
+            //location.reload()  //esto funcionaba bien, pero ahora lo puedo hacer sin recargar!!! podría hacerlo en las otras solicitudes!
+            // Actualizar el estado del botón según la respuesta:
+            if (data.entregado) {     //ahora el servidor contesta con el estado de entregado!
+              this.querySelector('span').textContent = '✅';
             } else {
-              this.querySelector('span').textContent = '⚪';    //de desmarcado a marcado no anda. por que??
+              this.querySelector('span').textContent = '⚪';
             }
-            spinnerContainer.classList.add('escondido')  // OCULTAMOS el spinner!
+            spinnerContainer.classList.add('escondido'); // Ocultar el spinner
           })
           .catch(error => {
             console.error('Error:', error);
+            spinnerContainer.classList.add('escondido'); // Ocultar el spinner en caso de error
           });
       });
     });
