@@ -4,6 +4,7 @@ import indexRouter from './routers/index.router.js'
 import userRouter from './routers/users.router.js'
 import { initdb } from './db/mongodb.js'
 import equiposRouter from './routers/equipos.router.js'
+import notasRouter from './routers/notas.router.js'
 //import handlebarsHelp from 'handlebars';  //es es el handlebars básico. si usamos expres-handlebars no hace falta este.
 import handlebars from 'express-handlebars'  //es es el extendido para integración con express
 import { __dirname, hoy } from './utils.js'
@@ -64,7 +65,7 @@ app.set('view engine', 'handlebars')              //establecemos la extensión. 
 //  next()          //pasamos al siguiente middleware
 //})
 
-const SESSION_LIFETIME = 1000 * 60 * 60   //sesenta minutos de sesión. luego expira
+const SESSION_LIFETIME = 1000 * 60 * 90   //noventa minutos de sesión. luego expira
 
 app.use(session({
   secret: SESSION_SECRET,      //hash para firmar los cookies que genera session
@@ -75,7 +76,7 @@ app.use(session({
   },
   rolling: true,       //renueva el tiempo de vida de la cookie en cada solicitud. sin esto se vence mientras la estás usando.
 }
-))
+))   //La única forma de mantener viva la sesión si la página sigue abierta es enviando un keep alive cada cierto tiempo.
 
 app.use(express.json())   //permite usar JSON en el body de los req Http. si necesitamos texto podemos usar express.text. sólo para las solicitudes ENTRANTES al servidor. 
 //app.use(bodyParser.json()); esta es otra forma pero hay que importarla
@@ -157,6 +158,7 @@ app.post('/equipoElegido', (req, res) => {
 app.use('/', indexRouter, sessionControl)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
 app.use('/api/users', userRouter, sessionControl)     //agregamos todos los routers dentro de /api mediante comas (userRouter, carritoRouter, etc)
 app.use('/api/equipos', equiposRouter, sessionControl)
+app.use('/', notasRouter, sessionControl)   //ejemplo de otras rutas sobre la raíz. el use no es para encerrar o limitar a una ruta en especial. sólo desde dónde se accede.
 
 app.use((req, res) => {  //middleware para cualquier otra ruta que no tenga router
   res.send('No se encontró la página')

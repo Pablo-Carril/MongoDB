@@ -176,8 +176,8 @@ indexRouter.post('/entregado/:id', sessionControl, async (req, res) => {
   }
 });
 
-indexRouter.get('/notas', sessionControl, (req, res) => {
-  res.render('notas')                      
+indexRouter.get('/ayuda', sessionControl, (req, res) => {
+  res.render('ayuda')                      
   res.status(200)
 })
 

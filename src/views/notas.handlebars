@@ -1,73 +1,27 @@
-<div class="row mt-3">
+<div class="col-9 mx-auto border">
 
-  <div class="col-9 mx-auto">
-    <b>Uso de la Aplicación:</b>
-    <p>👉Para llenar el formulario primero hay que seleccionar el <b>Equipo</b>, luego colocar el número de <b>serie</b>,
-      luego la <b>fecha</b> (que por defecto es la de hoy pero se puede elegir cualquier otra), y la <b>línea</b>. El
-      número de <b>interno</b> se puede omitir si no se conoce.
-       <b>Problema</b> es obligatorio ya que se tiene que especificar qué le ocurrió al equipo.
-      El número de <b>Caso</b> sólo debe colocarse cuando un equipo se envía a reparación. si por el contrario se logra
-      reparar en taller, o no repite la falla, se puede anotarlo para controlarlo sin número de caso.
-      Lo mismo para hacer un seguimiento podemos anotar cualquier observación, sin numero de interno y sin caso. 
-      Por ejemplo: Teclado serie 1234, se mojó, lo seco y lo coloco en el interno 27 para controlar. 
-    </p>
-      <p>👉Use <b>Buscar Serie</b> para ver el <b>Historial</b> de ese equipo. presione Enter o el botón Consultar para verlo.</p>
-      <p>👉Arriba de los resultados tenemos el filtro por tipo de equipos: <br>
-      - Si elegimos Validador nos mostrará sólo los validadores, aunque vayamos a Ultimos, a Sonda, o a La Plata. <br>
-      - Si estamos en La Plata podemos cambiar el equipo a Teclado para ver sólo los teclados de la plata. <br>
-      - Para volver a ver todos debemos seleccionar <b>Todos</b>. </p>
-      <p>👉Cuando un equipo vuelva es necesario marcarlo como <b>entregado</b> con el check verde de la derecha: ⚪ / ✅ </p>
-      👉Arriba en el menú azul tenemos las consultas: <br> <b>Ultimos</b> son los ultimos anotados, <b>Sonda</b> muestra
-      sólo línea 85 y línea 98, y <b>La Plata</b>
-      sólo muestra las líneas 307 y 275 (506 no hace falta ya que el número de interno lo especifica).
-      <span style="color: red">El orden de los equipos es arriba los más recientes y hacia abajo los mas antiguos.</span> <br>
-      <br>
-      <p>👉<b>Buscar:</b> en la barra de búsqueda podemos ingresar un problema, o un número de caso, o un interno en particular.
-        Por ejemplo si ingresamos "gps" nos buscará todos los equipos que presenten falla de GPS.</p>
-      <p>
-      <b>Nuevo:</b> ahora podemos elegir <span style="color: #0d6efd">Validadores</span>, <span
-        style="color: #198754">Teclados</span>,
-      <span style="color: #BB0">MountingKit</span>, <span style="color: #fd7e14">Concentradores</span>, y
-      <span style="color: #555"> Otros</span>. otros serían cualquier dispositivo como
-      antena, instalación, brazo de teclado, o incluso algo que no sea de sube: computadora, ups, aire acondicionado, etc.
-    </p>
-    {{!-- <table class="table table-bordered lh-1" style="font-size: 0.90rem;">
-      <thead>
-        <tr>
-          <th class="col-1">Nota</th>
-          <th class="col-1">Fecha</th>
-          <th class="col-8">Anotaciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each notas}}
-        <tr>
-          <td class="fw-bold">{{this.nota}}</td>
-          <td style="white-space: nowrap;">{{this.fecha}}</td>
-          <td class="anotaciones">{{anotaciones}}</td>
-          <td>
-            <a href="notas/{{_id}}">check</a>
-          </td>
-        </tr>
-        {{/each}}
+<h1>Notas</h1>
+  
+  <!-- Formulario para agregar una nueva nota -->
+  <form action="/notas" method="POST">
+    <textarea name="contenido" rows="4" cols="50" placeholder="Escribe tu nota aquí..." required></textarea><br>
+    <button type="submit">Agregar Nota</button>
+  </form>
 
-        <tr>Ayuda: </tr>
-
-      </tbody>
-    </table> --}}
-
-  </div>
-
+  <!-- Lista de notas -->
+  {{#each notas}}
+    <div class="nota">
+      <p>{{this.contenido}}</p>
+      <small>{{this.fecha}}</small>
+    </div>
+  {{/each}}
+  
 </div>
 
-<style>
-  .anotaciones {
-    white-space: nowrap;
-    /* evita el salto de línea */
-    text-overflow: ellipsis;
-    /* agrega puntos suspensivos... no funciona sin el nowrap */
-    overflow-x: hidden;
-    /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
-    max-width: 800px;
-  }
-</style>
+ <style>
+    .nota {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
