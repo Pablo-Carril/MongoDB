@@ -1,17 +1,17 @@
 import { Router } from 'express'
 import { Equipomodel} from '../models/equipo.model.js'
-import { DateTime } from 'luxon'
-import formateaFecha from '../utils.js'
+//import { DateTime } from 'luxon'
+import { formateaFecha, hoy } from '../utils.js'
 import { sessionControl } from '../middlewares/sessions.js'
 
 const indexRouter = Router()
 //indexRouter.use('/', sessionControl); es otro método??
 
-const hoy = () => {
+/* const hoy = () => {
   const ahora = DateTime.now()
   return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 }
-
+ */
 //por algún motivo desaparece el calendario YA no hace falta. ahora funciona todo.
 //handlebars.registerHelper('formatFecha', function (fechaLuxon) {   //el helper funciona pero fechaluxon es undefined cuando uso fecha.
 //  console.log(fechaLuxon)

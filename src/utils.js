@@ -6,9 +6,14 @@ export const hoy = () => {
   const ahora = DateTime.now()
   return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 }
-// habría que exportar hoy() para usarlo en los routers, en vez de cada cual con su rutina.
 
-function formateaFecha(resultados) {
+export function invertirFecha(fecha) {
+  let fechaLuxon = DateTime.fromISO(fecha)
+  let nuevaFecha = fechaLuxon.toFormat('dd/MM/yyyy')
+  return nuevaFecha
+}
+
+export function formateaFecha(resultados) {
   const validadores = [];
   //Procesamos los datos traídos de la DB:
   if (Array.isArray(resultados)) {    //si los resultados vienen en una lista...

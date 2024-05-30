@@ -1,27 +1,84 @@
-<div class="col-9 mx-auto border">
+<div class="col-10 mx-auto">
 
-<h1>Notas</h1>
-  
+  <h4>Notas:</h4>
+
   <!-- Formulario para agregar una nueva nota -->
   <form action="/notas" method="POST">
     <textarea name="contenido" rows="4" cols="50" placeholder="Escribe tu nota aquí..." required></textarea><br>
-    <button type="submit">Agregar Nota</button>
+    <button type="submit" class="btn btn-primary ms-2 text-white">✔</button>
   </form>
 
   <!-- Lista de notas -->
   {{#each notas}}
+  <div class="contenedor-notas">
     <div class="nota">
       <p>{{this.contenido}}</p>
       <small>{{this.fecha}}</small>
     </div>
+    <button class="btn btn-primary ms-2 text-white hover-btn">📝</button>
+    <span class="tooltip">Editar</span>
+    <button class="btn btn-warning ms-2 text-white">🗑</button>
+  </div>
   {{/each}}
-  
+
 </div>
 
- <style>
-    .nota {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-  </style>
+<style>
+  .contenedor-notas {
+    display: flex;
+    align-items: center;
+  }
+
+  .nota {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  form {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+
+  }
+
+  textarea {
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: 100%;
+  }
+  
+  button {
+    max-height: 3rem;
+  }
+
+  .hover-btn {
+  position: relative;
+    cursor: pointer;
+
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  z-index: 1;
+  bottom: 125%; /* Colocar por encima del botón */
+  left: 50%;
+}
+
+.hover-btn:hover + .tooltip {
+  display: block;
+  background-color: #ffc;
+}
+</style>

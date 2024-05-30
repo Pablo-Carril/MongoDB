@@ -69,14 +69,26 @@ const SESSION_LIFETIME = 1000 * 60 * 90   //noventa minutos de sesión. luego ex
 
 app.use(session({
   secret: SESSION_SECRET,      //hash para firmar los cookies que genera session
-  resave: false,              //guarda la sesión en el almacenamiento en cada solicitud. genera mucho tráfico. es mejor rolling.
+  resave: false,              //guarda la sesión en el almacenamiento en cada solicitud. genera mucho tráfico y llena la dB. es mejor rolling.
   saveUninitialized: true,     //crea la sesión igualmente aunque no haya datos guardados
   cookie: {
     maxAge: SESSION_LIFETIME       // Tiempo de vida de la cookie de sesión en milisegundos
   },
   rolling: true,       //renueva el tiempo de vida de la cookie en cada solicitud. sin esto se vence mientras la estás usando.
 }
-))   //La única forma de mantener viva la sesión si la página sigue abierta es enviando un keep alive cada cierto tiempo.
+))   
+//La única forma de mantener viva la sesión si la página sigue abierta es enviando un keep alive cada cierto tiempo:
+app.post('/keep-alive', (req, res) => {    //ruta que recibe el keep-alive
+  if (req.session) {
+    // Opcional: puedes actualizar la fecha de expiración de la sesión aquí
+    req.session._garbage = Date();
+    req.session.touch();
+    console.log("keepalive")
+    res.sendStatus(200); // Enviar una respuesta de éxito
+  } else {
+    res.sendStatus(401); // La sesión no está activa
+  }
+});
 
 app.use(express.json())   //permite usar JSON en el body de los req Http. si necesitamos texto podemos usar express.text. sólo para las solicitudes ENTRANTES al servidor. 
 //app.use(bodyParser.json()); esta es otra forma pero hay que importarla
