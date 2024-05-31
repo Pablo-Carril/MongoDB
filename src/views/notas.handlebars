@@ -15,9 +15,11 @@
       <p>{{this.contenido}}</p>
       <small>{{this.fecha}}</small>
     </div>
-    <button class="btn btn-primary ms-2 text-white hover-btn">📝</button>
+    <button class="btn btn-primary ms-2 text-white hover-btn edit-btn" data-id="{{this._id}}">📝</button>
+    <!-- el id de la nota lo pasamos como atributo. buena técnica!! -->
     <span class="tooltip">Editar</span>
-    <button class="btn btn-warning ms-2 text-white">🗑</button>
+    <button class="btn btn-warning ms-2 text-white delete-btn" data-id="{{this._id}}">🗑</button>
+    <!-- usamos una clase nuestra (delete-btn) para escuchar todos los botones de todas las notas -->
   </div>
   {{/each}}
 
@@ -33,9 +35,16 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
-    margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     width: 100%;
+
+  }
+
+  .nota p {
+    white-space: pre-wrap;
+    /* Preservar saltos de línea y espacios */
+    word-wrap: break-word;
+    /* Para romper palabras largas */
   }
 
   form {
@@ -50,35 +59,113 @@
     padding: 0.5rem;
     width: 100%;
   }
-  
+
   button {
     max-height: 3rem;
   }
 
   .hover-btn {
-  position: relative;
+    position: relative;
     cursor: pointer;
 
-}
+  }
 
-.tooltip {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 5px;
-  border-radius: 3px;
-  white-space: nowrap;
-  z-index: 1;
-  bottom: 125%; /* Colocar por encima del botón */
-  left: 50%;
-}
+  .tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 1;
+    bottom: 125%;
+    /* Colocar por encima del botón */
+    left: 50%;
+  }
 
-.hover-btn:hover + .tooltip {
-  display: block;
-  background-color: #ffc;
-}
+  .hover-btn:hover+.tooltip {
+    display: block;
+    background-color: #ffc;
+  }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const id = e.target.getAttribute('data-id');  //el id se lo pasamos como atributo al momento de renderizar las notas
+        if (confirm('¿Estás seguro de que deseas eliminar esta nota?')) {
+          try {
+            const response = await fetch(`/notas/${id}`, {
+              method: 'DELETE'
+            });
+            if (response.ok) {
+              // Eliminar la nota del DOM
+              e.target.closest('.contenedor-notas').remove();  //padre o ancestro más cercano
+            } else {
+              alert('Error al eliminar la nota');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar la nota');
+          }
+        }
+      })
+    })
+
+    document.querySelectorAll('.edit-btn').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const id = e.target.getAttribute('data-id'); // Obtener el ID de la nota
+        const contenedorNota = e.target.closest('.contenedor-notas');
+        const nota = contenedorNota.querySelector(`.nota[data-id="${id}"]`);
+        const contenido = nota.querySelector('p').textContent;
+   
+        // Mostrar el formulario de edición
+        const formularioEdicion = document.createElement('form');
+        formularioEdicion.innerHTML = `
+        <textarea name="contenido" rows="4" cols="50">${contenido}</textarea><br>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      `;
+
+        // Reemplazar la nota con el formulario de edición
+        nota.innerHTML = '';
+        nota.appendChild(formularioEdicion);
+
+        // Manejar el envío del formulario de edición
+        formularioEdicion.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const nuevoContenido = formularioEdicion.querySelector('textarea').value;
+          try {
+            const response = await fetch(`/notas/${id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ contenido: nuevoContenido })
+            });
+            if (response.ok) {
+              // Actualizar la vista con el contenido editado
+              nota.innerHTML = `
+              <p>${nuevoContenido}</p>
+              <small>Fecha de edición: ${new Date().toLocaleString()}</small>
+            `;
+            } else {
+              alert('Error al editar la nota');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error al editar la nota');
+          }
+        });
+      });
+    });
+
+  })
+
+
+</script>

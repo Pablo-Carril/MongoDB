@@ -75,9 +75,9 @@ app.use(session({
     maxAge: SESSION_LIFETIME       // Tiempo de vida de la cookie de sesión en milisegundos
   },
   rolling: true,       //renueva el tiempo de vida de la cookie en cada solicitud. sin esto se vence mientras la estás usando.
-}
+}                      //aunque no la mantiene con la pestaña abierta.
 ))   
-//La única forma de mantener viva la sesión si la página sigue abierta es enviando un keep alive cada cierto tiempo:
+//La única forma de mantener viva la sesión si la pestaña sigue abierta es enviando un keep alive cada cierto tiempo:
 app.post('/keep-alive', (req, res) => {    //ruta que recibe el keep-alive
   if (req.session) {
     // Opcional: puedes actualizar la fecha de expiración de la sesión aquí
