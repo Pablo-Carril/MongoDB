@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"  //importamos el paginador
 
 const equipoSchema = new mongoose.Schema({
   equipo: {type: String, required: true},           
@@ -10,7 +11,8 @@ const equipoSchema = new mongoose.Schema({
   caso: {type: String, unique: true,},
   entregado: {type: Boolean, default: false},        
 }, {timestamps: true})    //para que guarde la fecha actual de creación.
-      //PASAMOS TODO A NOMBRE EQUIPOS PERO la COLECCION Validadores todavía existe. Crear coleccion EQUIPOS mas adelante.
+equipoSchema.plugin(mongoosePaginate)  // insertamos el paginador como plugin
+     
 export const Equipomodel = mongoose.model('equipos', equipoSchema) 
 //le pasamos el nombre de la Colección. siempre en minúsculas!!.
 // Si usamos un nombre de colección ERRONEO nos CREARA una nueva colección y no funcionará la nuestra.

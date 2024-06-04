@@ -8,6 +8,7 @@
     "handlebars-helpers": "^0.9.8",
     "luxon": "^3.4.4",
     "mongoose": "^8.1.1",
+    "mongoose-paginate-v2": "^1.8.2",
     "morgan": "^1.10.0",
     "node": "^21.6.1",
     "nodemon": "^3.1.0",

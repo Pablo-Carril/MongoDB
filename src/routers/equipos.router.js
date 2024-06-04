@@ -17,11 +17,11 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
   const serie = req.params.serie      //obtenemos el serie pedido
   if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {     
-    const resultados = await Equipomodel.find(
-     // {serie: serie}
-       elegido === '' ? {serie: serie} : { $and: [ {equipo: elegido}, {serie: serie} ] }
-    )
-       .sort({ fecha: -1, _id: -1 })    // ordenamos de mayor a menor (nuevos a antiguos)
+    const consulta = await Equipomodel.paginate(    // find({serie: serie}) //paginate ahora reemplaza al find
+       elegido === '' ? {serie: serie} : { $and: [ {equipo: elegido}, {serie: serie} ] },
+      {page: 1, limit:20, sort: { fecha: -1, _id: -1}})  //con paginate el sort ahora va en las opciones
+      //.sort({ fecha: -1, _id: -1 }) // ordenamos de mayor a menor (nuevos a antiguos)
+    const resultados = consulta.docs  //con paginate los resultados ahora vienen dentro de docs
     if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
     const equipos = formateaFecha(resultados)
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
