@@ -13,25 +13,24 @@ const hoy = () => {
 //CONSULTAR por SERIE y mostrar HISTORIAL
 equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
   let elegido = req.equipoElegido   //variable global que viene de un middleware
-  let equipo = elegido  
-  const serie = req.params.serie      //obtenemos el serie pedido
-  const {limit, page} = req.query
+  let equipo = elegido
+  const serie = req.params.serie     //obtenemos el serie pedido
+  const { limit = 20, page = 1 } = req.query    // esto permite usar: /api/equipos/661?limit=3&page=2 y puse valores por defecto
   if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
-  try {     
-    const consulta = await Equipomodel.paginate(    // find({serie: serie}) //paginate ahora reemplaza al find
-       elegido === '' ? {serie: serie} : { $and: [ {equipo: elegido}, {serie: serie} ] },
-      {page: page, limit: limit, sort: { fecha: -1, _id: -1}})  //con paginate el sort ahora va en las opciones
-      //.sort({ fecha: -1, _id: -1 }) // ordenamos de mayor a menor (nuevos a antiguos)
+  try {
+    const filtros = elegido === '' ? { serie: serie } : { $and: [{ equipo: elegido }, { serie: serie }] }
+    const opciones = {
+      page: page,           //usar parseInt para pasar a entero
+      limit: limit,
+      sort: { fecha: -1, _id: -1 }
+    }
+    const consulta = await Equipomodel.paginate(filtros, opciones)                          // find({serie: serie}) //paginate ahora reemplaza al find      
+    //con paginate el sort ahora va en las opciones
+    //.sort({ fecha: -1, _id: -1 }) // ordenamos de mayor a menor (nuevos a antiguos)
     const resultados = consulta.docs  //con paginate los resultados ahora vienen dentro de docs
     if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
     const equipos = formateaFecha(resultados)
     console.log(consulta)
-    if (consulta.hasNextPage) {
-      console.log("hay otra pagina: ")
-      consulta.page = 2
-      console.log(consulta.docs)
-      
-    }
 
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla
@@ -43,14 +42,24 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
       resultadosDe: 'Historial: ',
       busqueda: serie,
       equipo,
-    })  
+      pagination: {
+        totalDocs: consulta.totalDocs,
+        limit: consulta.limit,
+        totalPages: consulta.totalPages,
+        page: consulta.page,
+        hasPrevPage: consulta.hasPrevPage,
+        hasNextPage: consulta.hasNextPage,
+        prevPage: consulta.prevPage,
+        nextPage: consulta.nextPage
+      }
+    })
     res.status(200)
   }
   catch (err) {
     console.log("Error en la búsqueda por número de serie:  ", err)
+    res.status(500).json({ mensaje: 'Error al realizar la consulta', err })
   }
 })
-
 
 //Los VALUE de los INPUTS también pueden ser modificados con {{variable}}
 //PERO NO PUEDEN SER LEÍDOS DESDE EL SERVIDOR, sólo desde el cliente con JS
