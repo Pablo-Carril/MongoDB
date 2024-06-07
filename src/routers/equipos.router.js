@@ -16,12 +16,13 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
   let equipo = elegido
   const serie = req.params.serie     //obtenemos el serie pedido
   const { limit = 20, page = 1 } = req.query    // esto permite usar: /api/equipos/661?limit=3&page=2 y puse valores por defecto
+  //
   if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
     const filtros = elegido === '' ? { serie: serie } : { $and: [{ equipo: elegido }, { serie: serie }] }
     const opciones = {
-      page: page,           //usar parseInt para pasar a entero
-      limit: limit,
+      page: parseInt(page),           //usamos parseInt para pasar a entero
+      limit: parseInt(limit),
       sort: { fecha: -1, _id: -1 }
     }
     const consulta = await Equipomodel.paginate(filtros, opciones)                          // find({serie: serie}) //paginate ahora reemplaza al find      
@@ -33,7 +34,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
     console.log(consulta)
 
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
-    //actualizamos la página y llenamos la tabla
+    //actualizamos la página y llenamos la tabla:
     res.render('index', {
       equipos,         //estas son variables de Handlebars para la TABLA
       serie,
@@ -53,11 +54,11 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
         nextPage: consulta.nextPage
       }
     })
-    res.status(200)
+    //res.status(200) no hace falta cuando ya respondemos con algo como render, redirect, o send
   }
   catch (err) {
     console.log("Error en la búsqueda por número de serie:  ", err)
-    res.status(500).json({ mensaje: 'Error al realizar la consulta', err })
+    res.status(500).json({ mensaje: 'Error al realizar la consulta: ', err })
   }
 })
 
@@ -73,13 +74,13 @@ equiposRouter.post('/', async (req, res) => {       //DE ALGUNA FORMA TENGO QUE 
     //console.log(nuevo)
     const serie = body.serie
     res.redirect('equipos/' + serie)     //redirigimos al serie recién agregado. no poner / al principio.
-    res.status(201)  //funciona ok. si no respondemos con 201 el navegador se queda pensando...y hay que responder con algo
+    //res.status(201)  //hay que responder con algo, pero con el redirect ya es suficiente.
   }
   catch (err) {
     console.log("Error creando equipo. faltan datos: ", err.message)
-    res.render('index', { serie })   // y si HAY UN ERROR hay que responder con algo. si no se queda PENSANDO.
     //res.json({Error: id, mensage: err.message}) CUIDADO PRIMERO EL STATUS. LUEGO EL JSON
-    res.status(400)       // NO ALCANZA con responder un status.
+    res.status(400).render('index', { serie, mensaje: 'Error al crear el equipo. Faltan datos.' })   // y si HAY UN ERROR hay que responder con algo. si no se queda PENSANDO.
+    // NO ALCANZA con responder un status.
   }
 })
 
