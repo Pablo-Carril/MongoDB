@@ -90,20 +90,23 @@
       </div>
       {{/if}}
 
-      <div class="pagination">
-        <a href="{{url}}{{serie}}?limit={{pagination.limit}}&page=1">Comienzo</a>
+      <div class="pagination" id="pagination">
+        <a href="{{pagination.url}}&page=1" class="btn btn-primary me-4">Inicio</a>
 
         {{#if pagination.hasPrevPage}}
-        <a href="{{url}}{{serie}}?limit={{pagination.limit}}&page={{pagination.prevPage}}"><--</a>
-        {{/if}}
+        <a href="{{pagination.url}}&page={{pagination.prevPage}}">⏪</a>
+            {{/if}}
 
-        Página {{pagination.page}} de {{pagination.totalPages}}
+            Página {{pagination.page}} de {{pagination.totalPages}}
 
-        {{#if pagination.hasNextPage}}
-        <a href="{{url}}{{serie}}?limit={{pagination.limit}}&page={{pagination.nextPage}}">--></a>
-        {{/if}}
+            {{#if pagination.hasNextPage}}
+            <a href="{{pagination.url}}&page={{pagination.nextPage}}">⏩</a>
+            {{/if}}
+
+        <div id="pagination-data" data-total-pages="{{pagination.totalPages}}" style="display: none;"></div>
       </div>
 
+    <div> <br> <br> </div>
 
     </div>
 
@@ -116,12 +119,12 @@
   .pagination a {
     margin: 0 5px;
     text-decoration: none;
-    padding: 5px 10px;
+    padding: 2px 6px;
     border: 1px solid #ccc;
   }
 
   .pagination a:hover {
-    background-color: #f0f0f0;
+    background-color: #888;
   }
 </style>
 
@@ -146,6 +149,7 @@
     })
       .then(response => {    //si el fetch fue correcto el servidor devuelve una respuesta (que no tiene que ver con el catch)
         if (response.ok) {   //el ok es parte de una Api Rest, así como el body.
+          spinnerContainer.classList.add('escondido')
           return response.json()   //esto TIENE QUE ESTAR para poder recibir luego el msg. lo pasa a json para poder ser leído por el siguiente .then{msg}
         }
         else {
@@ -204,4 +208,14 @@
       }
     }
   })
+
+  const pagination = document.getElementById("pagination");
+  const paginationData = document.getElementById("pagination-data");
+  const totalPages = parseInt(paginationData.getAttribute("data-total-pages"), 10);
+
+  if (totalPages <= 1) {
+    pagination.style.display = "none";
+  }
+
+
 </script>

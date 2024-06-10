@@ -36,7 +36,7 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
       equipo,          // envío equipo en vez de elegido para que no haya conflico al EDITAR que usa {{equipo}} en el select
       spinner: true,
       pagination: {
-        url: "ultimos",
+        url: `/ultimos?limit=${limit}`,
         totalDocs: consulta.totalDocs,
         limit: consulta.limit,
         totalPages: consulta.totalPages,
@@ -88,7 +88,7 @@ indexRouter.get('/sonda', sessionControl, async (req, res) => {
       mostrarUltimos: true,
       equipo,
       pagination: {
-        url: "/sonda",
+        url: `/sonda?limit=${limit}`,
         totalDocs: consulta.totalDocs,
         limit: consulta.limit,
         totalPages: consulta.totalPages,
@@ -136,7 +136,7 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
       mostrarUltimos: true,
       equipo,
       pagination: {
-        url: "/laplata",
+        url: `/laplata?limit=${limit}`,
         totalDocs: consulta.totalDocs,
         limit: consulta.limit,
         totalPages: consulta.totalPages,
@@ -156,8 +156,8 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
 })
 
 //BUSCAR
-indexRouter.post('/busqueda', sessionControl, async (req, res) => {
-  const busqueda = req.body.datosBuscar || 'nada'   //por body vienen datos de formulario sólamente cuando hacemos un post desde el cliente.
+indexRouter.get('/busqueda', sessionControl, async (req, res) => {
+  const busqueda = req.query.datosBuscar || 'nada'   //por body vienen datos de formulario sólamente cuando hacemos un post desde el cliente.
   const { limit = 13, page = 1 } = req.query
   //console.log('busqueda: ', busqueda)
   try {
@@ -196,7 +196,7 @@ indexRouter.post('/busqueda', sessionControl, async (req, res) => {
       mostrarHistorial: false,
       mostrarUltimos: true,
       pagination: {
-        url: "/busqueda" + busqueda,    // NO FUNCIONA,   QUE PODRÁ SERRRR ????   body tal vez ?????
+        url:`/busqueda?datosBuscar=${busqueda}&limit=${limit}`,  //"/busqueda?datosBuscar=" + busqueda
         totalDocs: consulta.totalDocs,
         limit: consulta.limit,
         totalPages: consulta.totalPages,

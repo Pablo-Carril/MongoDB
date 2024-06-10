@@ -44,7 +44,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
       busqueda: serie,
       equipo,
       pagination: {
-        url: "/api/equipos/",
+        url: `/api/equipos/${serie}?limit=${limit}`,
         totalDocs: consulta.totalDocs,
         limit: consulta.limit,
         totalPages: consulta.totalPages,
