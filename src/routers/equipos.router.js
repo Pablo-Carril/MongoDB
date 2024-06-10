@@ -15,13 +15,13 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
   let elegido = req.equipoElegido   //variable global que viene de un middleware
   let equipo = elegido
   const serie = req.params.serie     //obtenemos el serie pedido
-  const { limit = 20, page = 1 } = req.query    // esto permite usar: /api/equipos/661?limit=3&page=2 y puse valores por defecto
+  const { limit = 13, page = 1 } = req.query    // esto permite usar: /api/equipos/661?limit=3&page=2 y puse valores por defecto
   //
   if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
     const filtros = elegido === '' ? { serie: serie } : { $and: [{ equipo: elegido }, { serie: serie }] }
     const opciones = {
-      page: parseInt(page),           //usamos parseInt para pasar a entero
+      page: parseInt(page),   //usamos parseInt para pasar a entero
       limit: parseInt(limit),
       sort: { fecha: -1, _id: -1 }
     }
@@ -31,7 +31,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
     const resultados = consulta.docs  //con paginate los resultados ahora vienen dentro de docs
     if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
     const equipos = formateaFecha(resultados)
-    console.log(consulta)
+   // console.log(consulta)
 
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla:
@@ -44,6 +44,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
       busqueda: serie,
       equipo,
       pagination: {
+        url: "/api/equipos/",
         totalDocs: consulta.totalDocs,
         limit: consulta.limit,
         totalPages: consulta.totalPages,

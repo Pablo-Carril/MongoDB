@@ -91,14 +91,16 @@
       {{/if}}
 
       <div class="pagination">
+        <a href="{{url}}{{serie}}?limit={{pagination.limit}}&page=1">Comienzo</a>
+
         {{#if pagination.hasPrevPage}}
-        <a href="/api/equipos/{{serie}}?limit={{pagination.limit}}&page={{pagination.prevPage}}">Anterior</a>
+        <a href="{{url}}{{serie}}?limit={{pagination.limit}}&page={{pagination.prevPage}}"><--</a>
         {{/if}}
 
         Página {{pagination.page}} de {{pagination.totalPages}}
 
         {{#if pagination.hasNextPage}}
-        <a href="/api/equipos/{{serie}}?limit={{pagination.limit}}&page={{pagination.nextPage}}">Siguiente</a>
+        <a href="{{url}}{{serie}}?limit={{pagination.limit}}&page={{pagination.nextPage}}">--></a>
         {{/if}}
       </div>
 
@@ -112,15 +114,15 @@
 
 <style>
   .pagination a {
-  margin: 0 5px;
-  text-decoration: none;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-}
+    margin: 0 5px;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+  }
 
-.pagination a:hover {
-  background-color: #f0f0f0;
-}
+  .pagination a:hover {
+    background-color: #f0f0f0;
+  }
 </style>
 
 <script>
