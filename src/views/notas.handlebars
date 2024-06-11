@@ -1,24 +1,26 @@
-<div class="col-10 mx-auto" style="background-color: #ddd;">
+<div class="col-11 mx-auto border p-4" >
 
   <h4>Notas:</h4>
 
   <!-- Formulario para agregar una nueva nota -->
-  <form action="/notas" method="POST">
+  <form action="/notas" method="POST" class="me-3">
     <textarea name="contenido" rows="4" cols="50" placeholder="Escribe tu nota aquí..." required></textarea><br>
     <button type="submit" class="btn btn-primary ms-2 text-white">✔</button>
   </form>
 
   <!-- Lista de notas -->
   {{#each notas}}
-  <div class="contenedor-notas">
+  <div class="contenedor-notas me-3">
     <div class="nota">
       <p>{{this.contenido}}</p>
       <small>{{this.fecha}}</small>
     </div>
-    <button class="btn btn-primary ms-2 text-white hover-btn edit-btn" data-id="{{this._id}}">📝</button>
-    <!-- el id de la nota lo pasamos como atributo. buena técnica!! -->
-    <span class="tooltip">Editar</span>
-    <button class="btn btn-warning ms-2 text-white delete-btn" data-id="{{this._id}}">🗑</button>
+    <div class="botones">
+      <button class="btn btn-primary ms-2 text-white hover-btn edit-btn" data-id="{{this._id}}">📝</button>
+      <!-- el id de la nota lo pasamos como atributo. buena técnica!! -->
+      <span class="tooltip">Editar</span>
+      <button class="btn btn-warning ms-2 text-white delete-btn" data-id="{{this._id}}">🗑</button>
+    </div>
     <!-- usamos una clase nuestra (delete-btn) para escuchar todos los botones de todas las notas -->
   </div>
   {{/each}}
@@ -37,6 +39,7 @@
     padding: 10px;
     margin-top: 10px;
     width: 100%;
+    background-color: rgb(209, 247, 251); // rgb(127, 242, 255);
 
   }
 
@@ -45,6 +48,14 @@
     /* Preservar saltos de línea y espacios */
     word-wrap: break-word;
     /* Para romper palabras largas */
+  }
+
+  .botones {
+    display: flex;
+    flex-direction: column;
+    gap:0.5rem;
+    justify-content: space-between;
+   margin-top: 10px;
   }
 
   form {
@@ -60,8 +71,9 @@
     width: 100%;
   }
 
-  button {
-    max-height: 3rem;
+  .btn {
+    padding: 6px;
+   /* max-height: 3rem;*/
   }
 
   .hover-btn {
@@ -87,10 +99,11 @@
     left: 50%;
   }
 
-  .hover-btn:hover+.tooltip {
+ /* .hover-btn:hover+.tooltip {
     display: block;
     background-color: #ffc;
-  }
+  } */
+
 </style>
 
 <script>
@@ -124,7 +137,7 @@
         const contenedorNota = e.target.closest('.contenedor-notas');
         const nota = contenedorNota.querySelector(`.nota[data-id="${id}"]`);
         const contenido = nota.querySelector('p').textContent;
-   
+
         // Mostrar el formulario de edición
         const formularioEdicion = document.createElement('form');
         formularioEdicion.innerHTML = `
