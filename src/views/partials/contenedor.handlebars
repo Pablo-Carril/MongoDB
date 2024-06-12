@@ -59,7 +59,7 @@
       {{#if ocultar}}
       <div class="col-10 mx-auto">
         <br>
-        <b>Uso de la Aplicación:</b>
+        <b>Uso de la Aplicación:   ESTO YA NO SE USA en la ruta raíz * BORRAR * (redirigimos a /ultimos) </b>
         <p>👉Para grabar un equipo llenar el formulario de la derecha. primero hay que seleccionar el <b>Equipo</b>,
           luego colocar el número de <b>serie</b>, luego la <b>fecha</b> (que por defecto es la de hoy pero se puede
           elegir
@@ -213,7 +213,7 @@
   const paginationData = document.getElementById("pagination-data");
   const totalPages = parseInt(paginationData.getAttribute("data-total-pages"), 10);
 
-  if (totalPages <= 1) {
+  if (!totalPages ||totalPages <= 1) {  //si no hay páginas o no existen datos de paginación ocultar todo
     pagination.style.display = "none";
   }
 

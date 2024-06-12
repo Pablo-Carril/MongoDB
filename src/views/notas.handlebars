@@ -11,14 +11,14 @@
   <!-- Lista de notas -->
   {{#each notas}}
   <div class="contenedor-notas me-3">
-    <div class="nota">
+    <div class="nota" data-id="{{this._id}}">
       <p>{{this.contenido}}</p>
       <small>{{this.fecha}}</small>
     </div>
     <div class="botones">
       <button class="btn btn-primary ms-2 text-white hover-btn edit-btn" data-id="{{this._id}}">📝</button>
       <!-- el id de la nota lo pasamos como atributo. buena técnica!! -->
-      <span class="tooltip">Editar</span>
+     <!-- <span class="tooltip">Editar</span> -->
       <button class="btn btn-warning ms-2 text-white delete-btn" data-id="{{this._id}}">🗑</button>
     </div>
     <!-- usamos una clase nuestra (delete-btn) para escuchar todos los botones de todas las notas -->
@@ -134,17 +134,16 @@
     document.querySelectorAll('.edit-btn').forEach(button => {
       button.addEventListener('click', async (e) => {
         const id = e.target.getAttribute('data-id'); // Obtener el ID de la nota
-        const contenedorNota = e.target.closest('.contenedor-notas');
-        const nota = contenedorNota.querySelector(`.nota[data-id="${id}"]`);
-        const contenido = nota.querySelector('p').textContent;
+        const contenedorNota = e.target.closest('.contenedor-notas');  
+        const nota = contenedorNota.querySelector(`.nota[data-id="${id}"]`);  
+        const contenido = nota.querySelector('p').textContent;  
 
         // Mostrar el formulario de edición
         const formularioEdicion = document.createElement('form');
         formularioEdicion.innerHTML = `
         <textarea name="contenido" rows="4" cols="50">${contenido}</textarea><br>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary ms-2">Guardar</button>
       `;
-
         // Reemplazar la nota con el formulario de edición
         nota.innerHTML = '';
         nota.appendChild(formularioEdicion);

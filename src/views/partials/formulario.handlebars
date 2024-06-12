@@ -6,14 +6,13 @@
       style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo">
       <option value=""></option>
       <option value="validador">Validador</option>
-
       <option value="teclado">Teclado</option>
       <option value="mountinKit">MountinKit</option>
       <option value="concentrador">Concentrador</option>
       <option value="otros">Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
-    <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999"
+    <input type="number" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999" 
       title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">
     <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
     <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control"
@@ -22,10 +21,10 @@
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" title="Seleccione la línea" required="">
       <option value=""> </option>
-      <option value="85" {{isSelected linea '85' }}>85</option>
-      <option value="98" {{isSelected linea '98' }}>98</option>
-      <option value="307" {{isSelected linea '307' }}>307</option>
-      <option value="275" {{isSelected linea '275' }}>275</option>
+      <option value="85" >85</option>  
+      <option value="98" >98</option>   
+      <option value="307" >307</option> 
+      <option value="275" >275</option> 
     </select>
     <label for="coche">Interno:</label>
     <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">

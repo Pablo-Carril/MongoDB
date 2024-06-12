@@ -76,7 +76,7 @@ app.use(session({
   },
   rolling: true,       //renueva el tiempo de vida de la cookie en cada solicitud. sin esto se vence mientras la estás usando.
 }                      //aunque no la mantiene con la pestaña abierta.
-))   
+))
 //La única forma de mantener viva la sesión si la pestaña sigue abierta es enviando un keep alive cada cierto tiempo:
 app.post('/keep-alive', (req, res) => {    //ruta que recibe el keep-alive
   if (req.session) {
@@ -107,7 +107,7 @@ app.use(express.static(path.join(__dirname, './public')))  //definimos la carpet
 
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
   req.equipoElegido = elegido;  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
- // console.log('middle elegido: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
+  // console.log('middle elegido: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
   next();
 });
 
@@ -135,17 +135,7 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
       req.session.counter++
       console.log(`has visitado ${req.session.counter} veces`)
     }
-    res.render('index', {
-      // equipos,               // Podría poner las NOTAS al iniciar...  
-      fechaActual: hoy(),
-      ocultar: true,      //esto lo pongo para que no actualize la página, que es lo que hace el fetch de /equipoElegido en el Formulario
-      // resultadosDe: 'Ultimos anotados:',     //DEBEÍA MANEJAR esto de otra forma en vez de usar la variable ocultar.
-      // busqueda: '',
-      // mostrarHistorial: false,
-      // mostrarUltimos: true,
-      // mostrarLoading: true, //anulamos el loading. no hace falta en el deploy porque el servidor siempre está corriendo.
-      //entregado,
-    })  //estas son variables de Handlebars para la TABLA
+    res.redirect('/ultimos');  //desde la raíz redirigimos a la página últimos ya que ahora esa será donde comenzaremos a trabajar.
   }
   catch (err) {
     console.log("Error mostrando la pagina principal:  ", err)
@@ -156,7 +146,7 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
 app.post('/equipoElegido', (req, res) => {
   try {
     elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
-   // console.log("/equipoElegido(app):" + elegido)
+    // console.log("/equipoElegido(app):" + elegido)
     res.status(200).json({ msg: elegido })   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
     //console.log(msg)
   }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
