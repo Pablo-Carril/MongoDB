@@ -1,9 +1,12 @@
 import url from 'url'
 import path from 'path'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
+
+//Settings.defaultZone = 'America/New_York'; se puede usar: 'America/Argentina/Buenos_Aires' o 'UTC-3'
 
 export const hoy = () => {
   const ahora = DateTime.now()
+  console.log(DateTime.now().zoneName)
   return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 }
 
