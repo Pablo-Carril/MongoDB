@@ -6,7 +6,6 @@ import { DateTime, Settings, Settings } from 'luxon'
 Settings.defaultZone = 'UTC-3'; //se puede usar: 'America/Argentina/Buenos_Aires' o 'UTC-3'
 
 
-
 export const hoy = () => {
   const ahora = DateTime.now()
   console.log(DateTime.now().zoneName)
