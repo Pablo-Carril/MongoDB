@@ -2,8 +2,12 @@ import url from 'url'
 import path from 'path'
 import { DateTime, Settings } from 'luxon'
 
+<<<<<<< HEAD
 //zona horaria: esto es importante ya que toma la del deploy, que suele ser otro país.
 Settings.defaultZone = 'UTC-3'; //se puede usar: 'America/Argentina/Buenos_Aires' o 'UTC-3'
+=======
+//Settings.defaultZone = 'America/New_York'; se puede usar: 'America/Argentina/Buenos_Aires' o 'UTC-3'
+>>>>>>> eecee1a551db775208e9daf5de7a9c5481009308
 
 export const hoy = () => {
   const ahora = DateTime.now()
