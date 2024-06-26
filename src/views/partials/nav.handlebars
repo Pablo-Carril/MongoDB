@@ -1,5 +1,5 @@
 <header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mt-2 mb-3">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
     <div class="container-fluid d-flex justify-content-start">
 
       <div class="d-flex align-items-center"> <!--class="navbar-header col-3" style="flex-wrap: nowrap;"-->
@@ -38,7 +38,24 @@
   </nav>
 </header>
 
+<style>
+  .resaltado {
+    border-radius: 8px;
+    background-color: #5195fb; //#0056d6;  
+  }
+</style>
+
 <script>
+  // Agregar la clase 'active' al enlace actual
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentPath = window.location.pathname;
+      document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+          link.classList.add('resaltado');
+        }
+      });
+    });
   // const reset = document.querySelectorAll('.reset') my-2 my-sm-0
   // reset.forEach(link => {
   // link.addEventListener('click', (event) => {

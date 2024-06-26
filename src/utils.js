@@ -1,6 +1,6 @@
 import url from 'url' 
 import path from 'path'
-import { DateTime, Settings, Settings } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
 //zona horaria: esto es importante ya que toma la del deploy, que suele ser otro país
 Settings.defaultZone = 'UTC-3'; //se puede usar: 'America/Argentina/Buenos_Aires' o 'UTC-3'
@@ -8,7 +8,7 @@ Settings.defaultZone = 'UTC-3'; //se puede usar: 'America/Argentina/Buenos_Aires
 
 export const hoy = () => {
   const ahora = DateTime.now()
-  console.log(DateTime.now().zoneName)
+ // console.log(DateTime.now().zoneName)
   return ahora.toISODate()  //para formulario es .toISODate(). para tabla es: toFormat('dd/MM/yyyy').
 }
 
