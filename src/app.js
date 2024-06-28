@@ -94,16 +94,16 @@ app.use(express.json())   //permite usar JSON en el body de los req Http. si nec
 //app.use(bodyParser.json()); esta es otra forma pero hay que importarla
 app.use(express.urlencoded({ extended: true }))   //para que hacepte datos de FORMULARIOS y url extendidas, o sea símbolos &, :, #, etc
 // también los datos de los formularios los convierte a formato Json. si no no se podrían leer.
-app.use(express.static(path.join(__dirname, './public')))  //definimos la carpeta estática. usamos path para definir mejor una carpeta absoluta
+app.use(express.static(path.join(__dirname, 'public')))  //definimos la carpeta estática. usamos path para definir mejor una carpeta absoluta
 //Ahora /public es la carpeta raíz de todo el proyecto y no se podrá acceder a ninguna carpeta superior. los atajos para encontrar rutas en VSCode ya no sirven del lado del CLIENTE.
 //por DEFECTO el server envía el INDEX.HTML ubicado dentro de public. no es necesario especificarlo. sacar index.html para que funcione handlebars.
 //app.use('/public', sessionControl, express.static('public')); sólo si necesitamos proteger la carpeta publics
 
 
-//app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
-//  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-//  next()  
-//})          
+app.use((req, res, next) => {     //middleware para que el navegador no guarde en caché la página de la app.
+  res.setHeader('Cache-Control', 'no-cache', 'no-store', 'must-revalidate')
+  next()  
+})          
 
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
   req.equipoElegido = elegido;  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.

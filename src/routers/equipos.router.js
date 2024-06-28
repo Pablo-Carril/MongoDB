@@ -29,7 +29,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
     //con paginate el sort ahora va en las opciones
     //.sort({ fecha: -1, _id: -1 }) // ordenamos de mayor a menor (nuevos a antiguos)
     const resultados = consulta.docs  //con paginate los resultados ahora vienen dentro de docs
-    if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE") }
+    if (resultados.length == 0) { console.log("No se encontró ningún dato con ese SERIE ", serie ) }
     const equipos = formateaFecha(resultados)
    // console.log(consulta)
 

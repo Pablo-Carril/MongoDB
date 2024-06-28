@@ -1,15 +1,17 @@
 
-<div class="col-8">    <!-- con esto conseguí achicar la tabla -->
+<div class="col-12 mt-1">    <!-- con esto conseguí achicar la tabla -->
 
-<table id="historial" class="table table-bordered lh1" style="font-size: 0.95rem;">
+<table id="historial" class="table table-bordered lh1 col-12" style="font-size: 0.95rem;">
   <thead>
     <tr>
       <th class="col-1">Equipo</th>
+      <th class="col-1">Serie</th>
       <th class="col-1">Fecha</th>
       <th class="col-1">Linea</th>
       <th class="col-1">Coche</th>
-      <th class="col-4">Problema</th>
+      <th class="col-md-auto">Problema</th>
       <th class="col-1">Caso</th>
+      <th class="col-1">Vino</th>
       <th class="col-1 text-muted">Edit</th>
     </tr>
   </thead>
@@ -17,11 +19,26 @@
       {{#each equipos}}
         <tr>
           <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.equipo}}</td>
+          <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.serie}}</td>
           <td>{{this.fecha}}</td>
           <td>{{this.linea}}</td>
           <td>{{this.coche}}</td>     <!-- el nowrap impide que se achique,así que no actúa el hidden. text-overflow: ellipsis; PERO parece que el problema es que no hay forma de achicar esa columna -->
           <td class="problema tooltip-show" >{{this.problema}}</td>
           <td>{{this.caso}}</td>
+          <td>
+            <!-- <form action="entregado/_id" method="post">  -->
+            {{#if this.caso}}
+            <button class="entregado-btn" data-id="{{_id}}" style="border: none; background: none;">
+              <!-- HAY que usar CLASS si o si. no sirve id -->
+              {{#if this.entregado}}
+              <span class="ms-2">✅</span>
+              {{else}}
+              <span class="ms-2">⚪</span>
+              {{/if}}
+            </button>
+            {{/if}}
+
+          </td>
           <td>
            <a href="edit/{{_id}}" style="text-decoration: none; font-weight: bold;">🗁</a>        <!--  _id es el del documento FUNCIONA! -->
        <!--      <i class="fas fa-pencil"></i>         traté de poner un ícono pero falta FONT AWESOME -->
@@ -29,17 +46,7 @@
         </tr>
       {{/each}}
 
-  <!--  <div class="row bg-warning p-3">
-      {{#each validadores}}
-        <div class="col-md-3">
-          <div class="card">
-            <div class="card-body">
-              <h4>{{serie}}</h4>
-            </div>
-          </div>
-        </div>
-      {{/each}}
-    </div>      -->
+
 
   </tbody>
 </table>
@@ -49,10 +56,14 @@
 
  <style>
   .problema {
-    white-space: nowrap;     /* evita el salto de línea */
-    text-overflow: ellipsis;  /* agrega puntos suspensivos... no funciona sin el nowrap */
-    overflow-x: hidden;      /* oculta el texto que se desborda. con "auto" me agrega la barra de scroll */
-    max-width: 550px;
+    white-space: nowrap;
+    /* evita el salto de línea */
+    text-overflow: ellipsis;
+    /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;
+    /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
+    min-width: 200px;
+    max-width: 400px;
   }
   
  .problema:hover {
@@ -61,6 +72,8 @@
   z-index: 999; /* Asegura que el texto completo esté encima de otras filas */
   position: absolute; /* Permite que el texto completo se muestre sobre otras filas */
   background-color: white; /* Fondo blanco para mayor claridad */
-  border: 1px solid orange;
+  border: 1px solid #666;
 }
  </style>
+
+ <!-- <script src="scripts.js"> </script> -->

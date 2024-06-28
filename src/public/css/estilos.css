@@ -9,6 +9,9 @@
   padding: 0;
 }
 
+body {
+  padding-top: 68px; /* Altura del navbar para evitar que el contenido se superponga, al tener fixed-top */
+}
 
 .ancho-fijo {
   width: 30%;
