@@ -8,7 +8,7 @@
 
     <div class="col-9" style="min-width: 200px;"> <!-- CUIDADO: afecta a toda la tabla también -->
 
-      <div class="container" style="border: 1px solid #ccc; border-radius: 8px; background-color: #e3eeff;"> <!-- #8ab9ff background-color: rgb(209, 247, 251); #5195fb;"> -->
+      <div class="container" style="border: 1px solid #ccc; min-width: 660px; border-radius: 8px; background-color: #e3eeff;"> <!-- #8ab9ff background-color: rgb(209, 247, 251); #5195fb;"> -->
         <!-- box-shadow: 0px 0px 2px 2px #86b7fe"> -->
         <!-- style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" -->
 
@@ -26,14 +26,14 @@
           <div style="display: flex; align-items: center; white-space: nowrap;" class="ms-3">
             <label for="serieHisto">Buscar Serie:</label>
             <input autofocus type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold ms-2" min="1"
-              max="999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}};" required="">
+              max="999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}}; min-width: 90px;" required="">
             <button id="consultar" class="border btn ms-1" style="background-color: #fff;">📂</button>
           </div>
 
           <div style="display: flex; align-items: center; white-space: nowrap;">
             <label for="equiSel" class="ms-3">Filtrar por:</label>
             <select class="custom-select form-control fw-bold ms-2" name='equi' id="equiSel"
-              style="color: {{colorOpcion this.equipo}}; display: inline-block; appearance: auto;"
+              style="color: {{colorOpcion this.equipo}}; min-width: 90px; display: inline-block; appearance: auto;"
               title="Seleccione el equipo">
               <option value="">Todos</option>
               <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
@@ -201,4 +201,4 @@
 
 </script>
 
-<script src="scripts.js"> </script>
+<!-- <script src="scripts.js"> </script> -->

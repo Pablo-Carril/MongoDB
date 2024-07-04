@@ -1,7 +1,7 @@
 
-<div class="col-12 mt-1">    <!-- con esto conseguí achicar la tabla -->
+<div class="col-9 mt-1">    <!-- con esto conseguí achicar la tabla -->
 
-<table id="historial" class="table table-bordered lh1 col-12" style="font-size: 0.95rem;">
+<table id="historial" class="table table-bordered lh1" style="font-size: 0.95rem;">
   <thead>
     <tr>
       <th class="col-1">Equipo</th>
@@ -32,8 +32,8 @@
               <!-- HAY que usar CLASS si o si. no sirve id -->
               {{#if this.entregado}}
               <span class="ms-2">✅</span>
-              {{else}}
-              <span class="ms-2">⚪</span>
+            <!--  else   saqué llaves para que no interfiera
+              <span class="ms-2">⚪</span>  -->
               {{/if}}
             </button>
             {{/if}}
@@ -79,4 +79,5 @@ th {
   }
  </style>
 
- <!-- <script src="scripts.js"> </script> -->
+ <!-- <script src="scripts.js"> </script> NO FUNCIONA, no lo puedo reutilizar. TAMPOCO PEGANDO EL CÓDIGO AQUÍ muy raro -->
+
