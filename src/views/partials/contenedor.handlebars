@@ -2,22 +2,24 @@
   <div class="row" style="flex-wrap: nowrap;">
 
     <div class="col-1" style="min-width: 190px;"> <!-- este maneja el ancho del formulario. y también ancho mínimo-->
-      {{> formulario}} <!--todos los que se llamen de este modo deben encontrarse en partials-->
-      <!-- y para actualizarce debe actualizarce toda la página      text-danger  alert alert-primary   -->
+      {{> formulario}}
     </div>
 
     <div class="col-9" style="min-width: 200px;"> <!-- CUIDADO: afecta a toda la tabla también -->
 
-      <div class="container" style="border: 1px solid #ccc; min-width: 660px; border-radius: 8px; background-color: #e3eeff;"> <!-- #8ab9ff background-color: rgb(209, 247, 251); #5195fb;"> -->
+      <div class="container"
+        style="border: 1px solid #ccc; min-width: 660px; border-radius: 8px; background-color: #e3eeff;">
+        <!-- #8ab9ff background-color: rgb(209, 247, 251); #5195fb;"> -->
         <!-- box-shadow: 0px 0px 2px 2px #86b7fe"> -->
         <!-- style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" -->
 
         <div class="navbar-nav flex-row">
-          
+
           <div style="min-width: 150px;">
             <h5 class="mt-2 p-2">
               <span class="resultadode">{{resultadosDe}} </span>
-              <span class="me-2 fw-bold " style="font-size: 1.1rem; color: rgb(250, 87, 51) ;"> <!-- rgb(252, 75, 75) {{colorOpcion this.equipo}} -->
+              <span class="me-2 fw-bold " style="font-size: 1.1rem; color: rgb(250, 87, 51) ;">
+                <!-- rgb(252, 75, 75) {{colorOpcion this.equipo}} -->
                 {{busqueda}}
               </span>
             </h5>
@@ -26,7 +28,8 @@
           <div style="display: flex; align-items: center; white-space: nowrap;" class="ms-3">
             <label for="serieHisto">Buscar Serie:</label>
             <input autofocus type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold ms-2" min="1"
-              max="999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}}; min-width: 90px;" required="">
+              max="999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}}; min-width: 90px;"
+              required="">
             <button id="consultar" class="border btn ms-1" style="background-color: #fff;">📂</button>
           </div>
 
@@ -60,8 +63,7 @@
       {{#if ocultar}}
       <div class="col-10 mx-auto">
         <br>
-        <b>Uso de la Aplicación:   ESTO YA NO SE USA en la ruta raíz * BORRAR * (redirigimos a /ultimos) </b>
-      
+        <b>Uso de la Aplicación: ESTO YA NO SE USA en la ruta raíz * BORRAR * (redirigimos a /ultimos) </b>
       </div>
       {{/if}}
 
@@ -70,18 +72,20 @@
 
         {{#if pagination.hasPrevPage}}
         <a href="{{pagination.url}}&page={{pagination.prevPage}}">⏪</a>
-            {{/if}}
+        {{/if}}
 
-            Página {{pagination.page}} de {{pagination.totalPages}}
+        Página {{pagination.page}} de {{pagination.totalPages}}
 
-            {{#if pagination.hasNextPage}}
-            <a href="{{pagination.url}}&page={{pagination.nextPage}}">⏩</a>
-            {{/if}}
+        {{#if pagination.hasNextPage}}
+        <a href="{{pagination.url}}&page={{pagination.nextPage}}">⏩</a>
+        {{/if}}
 
         <div id="pagination-data" data-total-pages="{{pagination.totalPages}}" style="display: none;"></div>
       </div>
 
-    <div> <br> <br> </div>
+      <div> 
+        <br> <br> 
+      </div>
 
     </div>
 
@@ -94,19 +98,19 @@
     margin: 0 5px;
     text-decoration: none;
     padding: 2px 6px;
-   /* border: 1px solid #ccc;*/
+    /* border: 1px solid #ccc;*/
   }
 
   .pagination a:hover {
     background-color: #bbb;
   }
+
   .resultadode {
     padding: 7px;
     border-radius: 8px;
     font-weight: 500;
-   /* background-color: #5195fb; //#0056d6;  */
+    /* background-color: #5195fb; //#0056d6;  */
   }
-
 </style>
 
 <script>
@@ -194,7 +198,7 @@
   const paginationData = document.getElementById("pagination-data");
   const totalPages = parseInt(paginationData.getAttribute("data-total-pages"), 10);
 
-  if (!totalPages ||totalPages <= 1) {  //si no hay páginas o no existen datos de paginación ocultar todo
+  if (!totalPages || totalPages <= 1) {  //si no hay páginas o no existen datos de paginación ocultar todo
     pagination.style.display = "none";
   }
 

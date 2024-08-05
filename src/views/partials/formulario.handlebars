@@ -12,7 +12,7 @@
       <option value="otros">Otros</option>
     </select>
     <label for="serie">Numero de serie:</label>
-    <input type="number" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999" 
+    <input type="number" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999"
       title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">
     <label for="fecha">Fecha:</label> <!--Los label for = deben apuntar al id no al name  -->
     <input type="date" value='{{fechaActual}}' name="fecha" id="fecha" class="form-control"
@@ -21,10 +21,10 @@
     <label for="linea">Linea:</label>
     <select name="linea" class="custom-select form-control" id="linea" title="Seleccione la línea" required="">
       <option value=""> </option>
-      <option value="85" >85</option>  
-      <option value="98" >98</option>   
-      <option value="307" >307</option> 
-      <option value="275" >275</option> 
+      <option value="85">85</option>
+      <option value="98">98</option>
+      <option value="307">307</option>
+      <option value="275">275</option>
     </select>
     <label for="coche">Interno:</label>
     <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">
@@ -61,24 +61,8 @@
 </style>
 
 <script>
-
   let numSerie = ""
   const serieInput = document.getElementById("serie")
-  // serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
-  //   numSerie = serieInput.value
-  //console.log(numSerie)
-  // })
-  /* serieInput.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
-     if (e.key == "Enter") {    
-       if (numSerie) {
-         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({{serie}});
-       //  guardar()   //esto era para guardar en Storage. no creo que lo vuelva a usar
-         window.location.href = url
-       }
-       else { url = '#' }
-       
-     }  
-   }) */
 
   // al GUARDAR (submit) sacar ceros de la izquierda
   const formEntrada = document.getElementById('formEntrada')
@@ -93,9 +77,7 @@
     const valorSinCeros = valor.replace(/^0+/, "").slice(0)
     console.log(valorSinCeros)
     inputNumero.value = valorSinCeros;
-
-  }
-  )
+  })
 
   const equipoSelect = document.getElementById("equipoSelect")
   //Al cambiar de equipo cambiamos los colores
@@ -119,5 +101,23 @@
     serieInput.style.color = colores[equipoElegido]
 
   })
+</script>
 
+
+<script>
+  // serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
+  //   numSerie = serieInput.value
+  //console.log(numSerie)
+  // })
+  /* serieInput.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
+     if (e.key == "Enter") {    
+       if (numSerie) {
+         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({serie});
+       //  guardar()   //esto era para guardar en Storage. no creo que lo vuelva a usar
+         window.location.href = url
+       }
+       else { url = '#' }
+       
+     }  
+   }) */
 </script>

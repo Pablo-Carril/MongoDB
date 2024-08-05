@@ -9,7 +9,7 @@ const indexRouter = Router()
 //ULTIMOS:
 indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
-  console.log('equipo elegido: ', req.equipoElegido)  //no viene a travez de body.
+  console.log('equipo elegido: ', req.equipoElegido)  //no viene a travez de body, es una variable GLOBAL que se inserta en el req
   const { limit = 13, page = 1 } = req.query  // esto permite usar: /ultimos?limit=3&page=2 y puse valores por defecto. TRABAJA CON LOS BOTONES de PAGINACIÓN. no borrar!
   let elegido = req.equipoElegido
   let equipo = elegido  //envío equipo en vez de elegido para que lo acepte el formulario (se usa también para editar)
