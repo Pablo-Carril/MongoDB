@@ -18,7 +18,12 @@
         {{#each equipos}}
         <tr>
           <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.equipo}}</td>
-          <td class="fw-bold" style="color: {{colorOpcion this.equipo}};">{{this.serie}}</td>
+          <td>
+            <button class="series-btn fw-bold" data-id="{{this.serie}}"
+              style="border: none; background: none; color: {{colorOpcion this.equipo}};">
+              {{this.serie}}
+            </button>
+          </td>
           <td style="white-space: nowrap;">{{this.fecha}}</td>
           <td style="color: {{colorOpcion this.linea}};">{{this.linea}}</td>
           <td>{{this.coche}}</td>
@@ -83,46 +88,59 @@
 
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
-  const buttons = document.querySelectorAll('.entregado-btn');
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.entregado-btn');
 
-  // Selecciona todos los botones. tiene que ser con class ya que id aquí no serviría.
-  buttons.forEach(button => {
-    button.addEventListener('click', function () {    //no usamos función flecha para poder usar .this en cada botón. si lo usara con flecha se referiría al contexto 
-      const spinnerContainer = document.querySelector('.spinner-container');
-      spinnerContainer.classList.remove('escondido') // Muestra el Spinner
+    // Selecciona todos los botones. tiene que ser con class ya que id aquí no serviría.
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {    //no usamos función flecha para poder usar .this en cada botón. si lo usara con flecha se referiría al contexto 
+        const spinnerContainer = document.querySelector('.spinner-container');
+        spinnerContainer.classList.remove('escondido') // Muestra el Spinner
 
-      const id = this.dataset.id;
-      const url = `/entregado/${id}`;
+        const id = this.dataset.id;
+        const url = `/entregado/${id}`;
 
-      fetch(url, {
-        method: 'POST',
-        // headers: {
-        //   'Content-Type': 'application/json' //no hace falta ya que enviamos el dato por la url
-        // }
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Error en la solicitud');
-          }
-          return response.json();
+        fetch(url, {
+          method: 'POST',
+          // headers: {
+          //   'Content-Type': 'application/json' //no hace falta ya que enviamos el dato por la url
+          // }
         })
-        .then(data => {
-          //console.log('entregado:', data);
-          //location.reload()  //esto funcionaba bien, pero ahora lo puedo hacer sin recargar!!! podría hacerlo en las otras solicitudes!
-          // Actualizar el estado del botón según la respuesta:
-          if (data.entregado) {     //ahora el servidor contesta con el estado de entregado!
-            this.querySelector('span').textContent = '✅';
-          } else {
-            this.querySelector('span').textContent = '⚪';
-          }
-          spinnerContainer.classList.add('escondido'); // Ocultar el spinner
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          spinnerContainer.classList.add('escondido'); // Ocultar el spinner en caso de error
-        });
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error en la solicitud');
+            }
+            return response.json();
+          })
+          .then(data => {
+            //console.log('entregado:', data);
+            //location.reload()  //esto funcionaba bien, pero ahora lo puedo hacer sin recargar!!! podría hacerlo en las otras solicitudes!
+            // Actualizar el estado del botón según la respuesta:
+            if (data.entregado) {     //ahora el servidor contesta con el estado de entregado!
+              this.querySelector('span').textContent = '✅';
+            } else {
+              this.querySelector('span').textContent = '⚪';
+            }
+            spinnerContainer.classList.add('escondido'); // Ocultar el spinner
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            spinnerContainer.classList.add('escondido'); // Ocultar el spinner en caso de error
+          });
+      });
     });
+
+    const seriesBtn = document.querySelectorAll('.series-btn')
+    seriesBtn.forEach(button => {
+      button.addEventListener('click', function () {
+        const spinnerContainer = document.querySelector('.spinner-container');
+        spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
+        let series = this.dataset.id
+        var url = '/api/equipos/' + series
+        window.location.href = url
+      })
+    })
+
   });
-});
+
 </script>

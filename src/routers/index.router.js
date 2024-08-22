@@ -11,11 +11,11 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido)  //no viene a travez de body, es una variable GLOBAL que se inserta en el req
   const { limit = 13, page = 1 } = req.query  // esto permite usar: /ultimos?limit=3&page=2 y puse valores por defecto. TRABAJA CON LOS BOTONES de PAGINACIÓN. no borrar!
-  let elegido = req.equipoElegido
+  let elegido = req.equipoElegido || ''   //si es undefined o null le asigna una cadena vacía.
   let equipo = elegido  //envío equipo en vez de elegido para que lo acepte el formulario (se usa también para editar)
-  if (equipo == 'todos') { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
+  if (equipo == 'todos' || equipo == null) { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
-    const filtro = elegido === '' ? {} : { equipo: elegido } //filtramos por equipo ELEGIDO:       //si elegido esta vacío busca todos. si no, el equipo elegido.
+    const filtro = elegido === '' ? {} : { equipo: elegido } //filtramos por equipo ELEGIDO:  //si elegido esta vacío busca todos. si no, el equipo elegido.
     const opciones = {
       page: parseInt(page),
       limit: parseInt(limit),

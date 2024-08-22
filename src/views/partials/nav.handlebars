@@ -4,7 +4,8 @@
 
       <div class="d-flex align-items-center"> <!--class="navbar-header col-3" style="flex-wrap: nowrap;"-->
         <img src="/img/SaesSUBE2.png" alt="Logo" class="img-fluid" id="logo">
-        <a class="navbar-brand ms-2" href="/" id="titulo">Control de EQUIPOS</a>
+        <!--<a class="navbar-brand ms-2" href="/" id="titulo">Control de EQUIPOS</a> -->
+        <button id="inicioBtn" class="navbar-brand ms-2" style="border: none; background: none;">Control de EQUIPOS</button>
       </div>
 
       <ul class="navbar-nav flex-row ms-4">
@@ -61,21 +62,38 @@
         }
       });
     });
-  // const reset = document.querySelectorAll('.reset') my-2 my-sm-0
-  // reset.forEach(link => {
-  // link.addEventListener('click', (event) => {
-  //   document.getElementById("formEntrada").reset()
-  //  })
-  // })
-  /* document.addEventListener('DOMContentLoaded', () => {  //FUNCIONA! pero no si viene de otra página...tal vez en un nivel superior como main
-    const lastRouteLink = document.querySelector('.nav-link');
+
+  const inicioBtn = document.getElementById('inicioBtn')
+  let dato = ""  // Reseteamos el equipo a nada, que sería todos.
+  const equipo = JSON.stringify({ 'equipo': dato })
+  inicioBtn.addEventListener('click', ()=> {
     const spinnerContainer = document.querySelector('.spinner-container');
-    lastRouteLink.addEventListener('click', (event)=> {
-    event.preventDefault();
-    const route = event.target.href;
-    spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
-    window.location.href = route
+    spinnerContainer.classList.remove('escondido') 
+    fetch('/equipoElegido', {   
+      method: 'POST',            
+      headers: {
+        'Content-Type': 'application/json',   
+      },
+      body: equipo,
     })
-  }) */
+      .then(response => {   
+        if (response.ok) {  
+          spinnerContainer.classList.add('escondido')
+          return response.json()  
+        }
+        else {
+          throw new Error(`Error de red - ${response.status}`); //esto se hace para que lo capture el .catch siguiente. lanzamos un error adrede.
+        }
+      })
+      .then(msg => {         
+        console.log('Cambio a equipo: ', msg)
+        location.reload();  // recargamos la página
+      }) 
+      .catch((error) => {     
+        console.log('Ocurrió un error: ', error)
+      })
+  
+  })
+ 
 
 </script>
