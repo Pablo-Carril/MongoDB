@@ -13,7 +13,7 @@ import path from 'path'
 import morgan from 'morgan'    //morgan permite ver las solicitudes http por consola
 import { sessionControl } from './middlewares/sessions.js'
 
-const PORT = process.env.PORT
+const PORT = 8091 //para probar 8091. si no volver a:   process.env.PORT
 // session
 const SESSION_SECRET = process.env.SESSION_SECRET
 let elegido = 'todos'
