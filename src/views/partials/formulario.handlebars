@@ -2,7 +2,7 @@
   <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).  <option value="{{elegido}}" selected>{{elegido}} </option>  -->
   <div class="form-group">
     <label for="equipoSelect">Equipo</label>
-    <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
+    <select id="equipoSelect" class="custom-select form-control fw-bold" name='equipo' required=""
       style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo">
       <option value=""></option>
         {{#each inventario}} 
@@ -84,7 +84,21 @@
     // const spinnerContainer = document.querySelector('.spinner-container'); YA NO HACE FALTA SPINNER AQUI
     // spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
     //Al cambiar de equipo cambiamos los colores:
-    equipoElegido = equipoSelect.value
+  equipoElegido = equipoSelect.value
+
+    fetch(`/color/${equipoElegido}`) 
+    .then(response => response.json()) 
+    .then(data => { 
+      const color = data.color; 
+      equipoSelect.style.color = color;
+       equipoSelect.style.borderColor = color; 
+       equipoSelect.style.borderWidth = '3px'; 
+       serieInput.style.color = color; 
+    //console.log(equipoElegido, ' color: ', color); 
+    }) 
+    .catch(error => console.error('Error:', error));
+
+    /* equipoElegido = equipoSelect.value
     //console.log(equipoElegido)
     const colores = {
       'validador': '#0d6efd',    //validadores                  
@@ -94,10 +108,10 @@
       'NVR': '#555',             //otros
       '': '#333',                 //todos (que necesita estar vacío)
     };
-    equipoSelect.style.color = colores[equipoElegido]
+    equipoSelect.style.color =  colores[equipoElegido]
     equipoSelect.style.borderColor = colores[equipoElegido]
     equipoSelect.style.borderWidth = '3px'
-    serieInput.style.color = colores[equipoElegido]
+    serieInput.style.color =  colores[equipoElegido] */
 
   })
 </script>

@@ -162,6 +162,12 @@ app.use('/api/users', userRouter, sessionControl)     //agregamos todos los rout
 app.use('/api/equipos', equiposRouter, sessionControl)
 app.use('/', notasRouter, sessionControl)   //ejemplo de otras rutas sobre la raíz. el use no es para encerrar o limitar a una ruta en especial. sólo desde dónde se accede.
 
+app.get('/color/:equipo', (req, res) => { 
+  const equipo = req.params.equipo;
+  const color = helpers.handlebars.helpers.colorOpcion(equipo); 
+  res.json({ color });
+});
+
 app.use((req, res) => {  //middleware para cualquier otra ruta que no tenga router
   res.send('No se encontró la página')
   res.status(404)

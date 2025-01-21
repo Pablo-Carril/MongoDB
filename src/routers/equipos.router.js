@@ -104,12 +104,13 @@ equiposRouter.get('/edit/:id', async (req, res) => {
     const linea = datos.linea
     const coche = datos.coche
     const problema = datos.problema
+    const reparacion = datos.reparacion
     const caso = datos.caso
 
     // aquí renderizamos un VIEW con formulario de EDICION:
     res.render('formEdit', {
       inventario, equipo, serie, id, fechaActual,
-      linea, coche, caso, problema,
+      linea, coche, caso, problema, reparacion,
     })
     res.status(200)  //303 para que no permita volver una página atrás.
   }

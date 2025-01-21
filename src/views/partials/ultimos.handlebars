@@ -1,15 +1,16 @@
-<div class="row mt-1">
+<div class="col-9 mt-1">
 
-  <div id="ultimos" class="col-12">
-    <table class="table table-bordered lh-1 col-12" style="font-size: 0.95rem;">
+  <div id="ultimos" >  <!-- class="col-12"  -->
+    <table class="table table-bordered lh-1 col-12" style="font-size: 0.85rem;">
       <thead>
         <tr>
-          <th class="col-1">Equipo</th>
-          <th class="col-1">Serie</th>
+          <th class="col-1 w-1">Equipo</th>
+          <th class="col-1 w-1">Serie</th>
           <th class="col-1">Fecha</th>
           <th class="col-1">Linea</th>
           <th class="col-1">Coche</th>
-          <th class="col-md-auto">Problema</th>
+          <th class="col-1">Problema</th>  <!-- "col-md-auto"  -->
+          <th class="col-1">Reparacion</th>
           <th class="col-1">Caso</th>
           <th class="col-1">Entregado</th>
         </tr>
@@ -28,6 +29,7 @@
           <td style="color: {{colorOpcion this.linea}};">{{this.linea}}</td>
           <td>{{this.coche}}</td>
           <td class="problema">{{this.problema}}</td>
+          <td class="reparacion">{{this.reparacion}}</td>
           <td>{{this.caso}}</td>
           <td>
             <!-- <form action="entregado/_id" method="post">  -->
@@ -60,12 +62,12 @@
     /* agrega puntos suspensivos... no funciona sin el nowrap */
     overflow-x: hidden;
     /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
-    min-width: 200px;
-    max-width: 400px;
+    min-width: 50px;  /* no afecta no se porque */
+    max-width: 250px;
     /* background-color: #1f55b4; */
   }
 
-  .problema:hover {
+  .problema:hover, .reparacion:hover {
     white-space: normal;
     /* Permite que el texto se muestre completo */
     overflow: visible;
@@ -77,6 +79,17 @@
     background-color: white;
     /* Fondo blanco para mayor claridad */
     border: 1px solid #666;
+  }
+
+  .reparacion {
+    white-space: nowrap;
+    /* evita el salto de línea */
+    text-overflow: ellipsis;
+    /* agrega puntos suspensivos... no funciona sin el nowrap */
+    overflow-x: hidden;
+    /* oculta el texto que se desborda. con auto me agrega la barra de scroll */
+    min-width: 100px;
+    max-width: 250px;
   }
 
   th {

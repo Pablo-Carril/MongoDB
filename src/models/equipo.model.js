@@ -7,7 +7,8 @@ const equipoSchema = new mongoose.Schema({
   fecha: {type: String, required: true},                //podría ser tipo fecha
   linea: {type: String, required: true}, 
   coche: {type: String, default: ""},
-  problema: {type: String, required: true}, 
+  problema: {type: String, required: true},
+  reparacion: {type: String, default: ""},
   caso: {type: String, unique: true,},
   entregado: {type: Boolean, default: false},        
 }, {timestamps: true})    //para que guarde la fecha actual de creación.
