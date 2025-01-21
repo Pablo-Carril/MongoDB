@@ -13,12 +13,10 @@
           style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo" autofocus>
           <option value="">Todos</option>
           <!--al elegir todos el value queda vacío, entonces nos pide que eligamos otro  -->
-          <option value="validador" {{isSelected equipo 'validador' }}>Validador</option>
           <!-- al EDITAR necesito isSelected equipo 'Validador' y al elegir uno necesito isSelected elegido 'Validador' DEJO EQUIPO Y MODIFICO EQUIPO POR EL VALOR DE ELEGIDO EN EL SERVER? -->
-          <option value="teclado" {{isSelected equipo 'teclado' selected }}>Teclado</option>
-          <option value="mountinKit" {{isSelected equipo 'mountinKit' }}>MountinKit</option>
-          <option value="concentrador" {{isSelected equipo 'concentrador' }}>Concentrador</option>
-          <option value="NVR" {{isSelected equipo 'NVR' }}>NVR</option>
+          {{#each inventario}} 
+                <option value="{{this}}" {{isSelected ../equipo this}}>{{this}}</option> 
+          {{/each}}
         </select>
         <label for="serie">Numero de serie:</label>
         <input type="number" value="{{serie}}" name="serie" id="serie" class="form-control fw-bold" min="1"

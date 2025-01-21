@@ -106,7 +106,7 @@ app.use((req, res, next) => {     //middleware para que el navegador no guarde e
 })          
 
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
-  req.equipoElegido = elegido;  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
+  req.equipoElegido = elegido  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
   // console.log('middle elegido: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
   next();
 });

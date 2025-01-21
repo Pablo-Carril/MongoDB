@@ -3,6 +3,7 @@ import { Router } from 'express'
 import { Equipomodel } from '../models/equipo.model.js'
 import { DateTime } from 'luxon'
 import formateaFecha from '../utils.js'
+import { inventario } from '../utils.js'
 const equiposRouter = Router()
 
 const hoy = () => {
@@ -36,6 +37,7 @@ equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
     //NO se pueden llamar a partials desde aquí. siempre a los views. los renders siempre manejan páginas completas.
     //actualizamos la página y llenamos la tabla:
     res.render('index', {
+      inventario,
       equipos,         //estas son variables de Handlebars para la TABLA
       serie,
       fechaActual: hoy(),
@@ -106,7 +108,7 @@ equiposRouter.get('/edit/:id', async (req, res) => {
 
     // aquí renderizamos un VIEW con formulario de EDICION:
     res.render('formEdit', {
-      equipo, serie, id, fechaActual,
+      inventario, equipo, serie, id, fechaActual,
       linea, coche, caso, problema,
     })
     res.status(200)  //303 para que no permita volver una página atrás.

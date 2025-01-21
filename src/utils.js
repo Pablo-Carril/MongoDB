@@ -5,6 +5,7 @@ import { DateTime, Settings } from 'luxon'
 //zona horaria: esto es importante ya que toma la del deploy, que suele ser otro país
 Settings.defaultZone = 'UTC-3'; //se puede usar: 'America/Argentina/Buenos_Aires' o 'UTC-3'
 
+export const inventario = ["validador", "teclado", "mountinkit", "concentrador", "NVR", "monitor", "coche"]
 
 export const hoy = () => {
   const ahora = DateTime.now()

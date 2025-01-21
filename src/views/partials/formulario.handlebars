@@ -5,14 +5,11 @@
     <select class="custom-select form-control fw-bold" name='equipo' id="equipoSelect" required=""
       style="color: {{colorOpcion this.equipo}};" title="Seleccione el equipo">
       <option value=""></option>
-      <option value="validador">Validador</option>
-      <option value="teclado">Teclado</option>
-      <option value="mountinKit">MountinKit</option>
-      <option value="concentrador">Concentrador</option>
-      <option value="NVR">NVR</option>
-      <option value="monitor">Monitor</option>
-
+        {{#each inventario}} 
+         <option value="{{this}}" {{isSelected ../equipo this}}>{{this}}</option> 
+        {{/each}}
     </select>
+
     <label for="serie">Numero de serie:</label>
     <input type="number" name="serie" id="serie" class="form-control fw-bold" min="1" max="999999"
       title="Numero de serie" style="color: {{colorOpcion this.equipo}};" required="">

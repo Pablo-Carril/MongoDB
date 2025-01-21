@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { Equipomodel } from '../models/equipo.model.js'
 //import { DateTime } from 'luxon'
 import { formateaFecha, hoy } from '../utils.js'
+import { inventario } from '../utils.js'
 import { sessionControl } from '../middlewares/sessions.js'
 
 const indexRouter = Router()
@@ -27,6 +28,7 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars. así que no hace falta poner un let, pero SI hace falta el let en otras ocaciones.
+      inventario,
       equipos,                  // cuidado: puede haber otro router llamando al mismo handlebars.
       fechaActual: hoy(),
       resultadosDe: 'Ultimos',
@@ -80,6 +82,7 @@ indexRouter.get('/sonda', sessionControl, async (req, res) => {
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
     res.render('index', {
+      inventario,
       equipos,
       fechaActual: hoy(),
       resultadosDe: 'Sonda',
@@ -128,6 +131,7 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
+      inventario,
       equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
       fechaActual: hoy(),
       resultadosDe: 'La Plata',
@@ -189,6 +193,7 @@ indexRouter.get('/busqueda', sessionControl, async (req, res) => {
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
     res.render('index', {
+      inventario,
       equipos,
       fechaActual: hoy(),
       resultadosDe: 'Buscar:',
