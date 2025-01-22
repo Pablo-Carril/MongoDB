@@ -11,7 +11,7 @@ const indexRouter = Router()
 indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
   console.log('equipo elegido: ', req.equipoElegido)  //no viene a travez de body, es una variable GLOBAL que se inserta en el req
-  const { limit = 13, page = 1 } = req.query  // esto permite usar: /ultimos?limit=3&page=2 y puse valores por defecto. TRABAJA CON LOS BOTONES de PAGINACIÓN. no borrar!
+  const { limit = 20, page = 1 } = req.query  // esto permite usar: /ultimos?limit=3&page=2 y puse valores por defecto. TRABAJA CON LOS BOTONES de PAGINACIÓN. no borrar!
   let elegido = req.equipoElegido || ''   //si es undefined o null le asigna una cadena vacía.
   let equipo = elegido  //envío equipo en vez de elegido para que lo acepte el formulario (se usa también para editar)
   if (equipo == 'todos' || equipo == null) { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
@@ -68,7 +68,7 @@ indexRouter.get('/sonda', sessionControl, async (req, res) => {
   let equipo = elegido  //envío equipo en vez de elegido  
   if (equipo == 'todos') { elegido = '' }
   //console.log('Sonda')
-  const { limit = 13, page = 1 } = req.query
+  const { limit = 20, page = 1 } = req.query
   try {
     const filtro = elegido === '' ? { linea: { $in: ["85", "98"] } }
     : { $and: [{ equipo: elegido }, { linea: { $in: ["85", "98"] } }] }       //si elegido esta vacío busca todos. si no, el equipo elegido.
@@ -116,7 +116,7 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
   let equipo = elegido  //envío equipo en vez de elegido
   if (equipo == 'todos') { elegido = '' }
   //console.log('laplata')
-  const { limit = 13, page = 1 } = req.query
+  const { limit = 20, page = 1 } = req.query
   try {
     const filtro = elegido === '' ? { linea: { $in: ["275", "307"] } }
     : { $and: [{ equipo: elegido }, { linea: { $in: ["275", "307"] } }] }     
@@ -162,7 +162,7 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
 //BUSCAR
 indexRouter.get('/busqueda', sessionControl, async (req, res) => {
   const busqueda = req.query.datosBuscar || 'nada'   //por body vienen datos de formulario sólamente cuando hacemos un post desde el cliente.
-  const { limit = 13, page = 1 } = req.query
+  const { limit = 20, page = 1 } = req.query
   //console.log('busqueda: ', busqueda)
   try {
     const filtro = {
