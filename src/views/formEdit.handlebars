@@ -5,7 +5,7 @@
     {{!-- {{>formularioanterior ocultar=true}} PRUEBO FORMULARIO APARTE DEL PRINCIPAL --}}
     <!--podemos enviar variables (nuevas) al llamar a parciales (ocultar es para ocultar el boton guardar y consultar)-->
 
-    <form id="formEdit" action="/api/equipos" method="post">
+    <form id="formEdit" action="/api/equipos" method="post" >
       <!-- manejamos todo desde el Server. ahora usamos el action y Solicitudes HHTP (POST,get,put,delete).  <option value="{{elegido}}" selected>{{elegido}} </option>  -->
       <div class="form-group">
         <label for="equipoSelect">Equipo</label>
@@ -80,7 +80,8 @@
   <div class="botones">
     <button id="borrar" class="btn btn-danger text-white ms-4">Borrar</button>
     <button id="actualizar" class="btn btn-info text-white ms-4">Actualizar</button>
-    <a href="/api/equipos/{{serie}}" class="btn btn-primary text-white ms-4">Cancelar</a>
+   {{!--  <a href="/api/equipos/{{serie}}" class="btn btn-primary text-white ms-4">Cancelar</a> --}}
+    <a href="javascript:window.history.back();" class="btn btn-primary text-white ms-4">Cancelar</a>
   </div>
 
   {{>popup}}
@@ -115,7 +116,8 @@
       })
     .then(msg => {
       console.log('Se eliminó el ID: {{id}}', msg)
-      window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
+      window.history.back()
+      //window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
       history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
     })  //muestro el mensaje en la consola del cliente
     .catch((error) => { console.log('Ocurrió un error: ', error) })
@@ -145,7 +147,8 @@
       })
       .then(msg => {
         console.log('Se actualizó el ID: {{id}}', msg)
-        window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
+        window.history.back()
+        //window.location.href =  `/api/equipos/{{serie}}`;    // volvemos a ese serie
         // while (history.length > 1) {  //NO FUNCIONA SE QUEDA PENSANDO...
         //   history.back();  //borramos todo el historial anterior de la pestaña.
         // }
@@ -161,6 +164,11 @@
 </script>
 
 <style>
+
+  label {
+    margin-top: 10px;
+  }
+
   .Editor {
     height: 100vh;
     display: flex;

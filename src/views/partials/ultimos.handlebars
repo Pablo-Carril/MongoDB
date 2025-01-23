@@ -12,7 +12,7 @@
           <th class="col">Problema</th>  <!-- "col-md-auto"  -->
           <th class="col">Reparacion</th>
           <th class="col-1">Caso</th>
-          <th class="col-1">Entregado</th>
+          <th class="col-1">vino</th>
         </tr>
       </thead>
       <tbody>
@@ -43,8 +43,12 @@
               {{/if}}
             </button>
             {{/if}}
-
           </td>
+
+          <td>
+          <a href="/api/equipos/edit/{{_id}}" style="text-decoration: none; font-weight: bold;">🗁</a>
+        </td>
+
         </tr>
         {{/each}}
       </tbody>
