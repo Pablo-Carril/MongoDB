@@ -150,7 +150,7 @@
         window.history.back()
         //window.location.href =  `/api/equipos/{{serie}}`;    // volvemos a ese serie
         // while (history.length > 1) {  //NO FUNCIONA SE QUEDA PENSANDO...
-        //   history.back();  //borramos todo el historial anterior de la pestaña.
+        //   history.back();  //volvemos a tras hasta que no quede historial.
         // }
         history.replaceState({}, '', `/api/equipos/{{serie}}`);
       })  //muestro el mensaje en la consola del cliente

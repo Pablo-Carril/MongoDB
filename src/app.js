@@ -17,6 +17,7 @@ const PORT = 8091 //para probar 8091. si no volver a:   process.env.PORT
 // session
 const SESSION_SECRET = process.env.SESSION_SECRET
 let elegido = 'todos'
+let reparado = 'todos'   //cambia a 'si', 'no', 'todos'
 
 const helpers = handlebars.create()
 // Definir un helper llamado "isSelected"
@@ -105,8 +106,10 @@ app.use((req, res, next) => {     //middleware para que el navegador no guarde e
   next()  
 })          
 
+// ENVIAR variables GLOBALES
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
   req.equipoElegido = elegido  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
+  req.equipoReparado = reparado
   // console.log('middle elegido: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
   next();
 });
@@ -143,12 +146,15 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
   }
 })
 
+// ACTUALIZAR variables GLOBALES
 app.post('/equipoElegido', (req, res) => {
   try {
-    elegido = req.body.equipo     //variable Global, equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
+    elegido = req.body.equipo     //variable GLOBAL equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
     // console.log("/equipoElegido(app):" + elegido)
-    res.status(200).json({ msg: elegido })   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
-    //console.log(msg)
+    reparado = req.body.reparado
+    console.log(reparado)
+    res.status(200).json({ msg: elegido, reparado })   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
+    
   }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
   catch (error) {
     // console.error(error);

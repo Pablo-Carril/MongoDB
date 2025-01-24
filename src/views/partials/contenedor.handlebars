@@ -8,7 +8,7 @@
     <div class="col-9" style="min-width: 200px;"> <!-- CUIDADO: afecta a toda la tabla también -->
 
       <div class="container"
-        style="border: 1px solid #ccc; min-width: 660px; border-radius: 8px; background-color: #e3eeff;">
+        style="border: 1px solid #ccc; min-width: 860px; border-radius: 8px; background-color: #e3eeff;">
         <!-- #8ab9ff background-color: rgb(209, 247, 251); #5195fb;"> -->
         <!-- box-shadow: 0px 0px 2px 2px #86b7fe"> -->
         <!-- style="border: 1px solid #86b7fe; border-radius: 8px; box-shadow: 0px 0px 2px 2px #86b7fe" -->
@@ -16,17 +16,18 @@
         <div class="navbar-nav flex-row">
 
           <div style="min-width: 150px;">
-            <h5 class="mt-2 p-2">
-              <span class="resultadode">{{resultadosDe}} </span>
+            <h6 class="mt-2 p-2">
+              <span class="resultadode" style="font-size: 1.1rem;">{{resultadosDe}} </span>
               <span class="me-2 fw-bold " style="font-size: 1.1rem; color: rgb(250, 87, 51) ;">
                 <!-- rgb(252, 75, 75) {{colorOpcion this.equipo}} -->
                 {{busqueda}}
               </span>
-            </h5>
+            </h6>
           </div>
 
           <div style="display: flex; align-items: center; white-space: nowrap;" class="ms-3">
             <label for="serieHisto">Buscar Serie:</label>
+
             <input autofocus type="number" name="serieHisto" id="serieHisto" class="form-control fw-bold ms-2" min="1"
               max="999999" title="Ingrese serie" style="color: {{colorOpcion this.equipo}}; min-width: 90px;"
               required="" value = "{{busqueda}}">
@@ -34,6 +35,7 @@
           </div>
 
           <div style="display: flex; align-items: center; white-space: nowrap;">
+
             <label for="equiSel" class="ms-3">Filtrar por:</label>
             <select class="custom-select form-control fw-bold ms-2" name='equi' id="equiSel"
               style="color: {{colorOpcion this.equipo}}; min-width: 90px; display: inline-block; appearance: auto;"
@@ -43,6 +45,13 @@
                {{#each inventario}} 
                 <option value="{{this}}" {{isSelected ../equipo this}}>{{this}}</option> 
                {{/each}}
+            </select>
+
+            <label for="reparados" class="ms-4">Reparados:</label>
+            <select name="reparados" id="reparados"class="ms-2 custom-select form-control ">
+              <option value="todos">Ambos</option>
+              <option value="si">Si</option>
+              <option value="no">No</option>
             </select>
 
           </div>
@@ -200,6 +209,43 @@
   if (!totalPages || totalPages <= 1) {  //si no hay páginas o no existen datos de paginación ocultar todo
     pagination.style.display = "none";
   }
+
+
+const reparados = document.getElementById("reparados")
+reparados.addEventListener('change', ()=> {
+   let reparado = reparados.value
+   let equipoElegido = equiSel.value   //también tengo que enviarlo, si no se me cambia a todos
+   const dato = JSON.stringify({ 'reparado': reparado, 'equipo': equipoElegido })
+
+   fetch('/equipoElegido', {   
+      method: 'POST',            
+      headers: {
+        'Content-Type': 'application/json',  
+      },
+      body: dato,
+    })
+      .then(response => {   
+        if (response.ok) {  
+          //spinnerContainer.classList.add('escondido')
+          return response.json()   
+        }
+        else {
+          throw new Error(`Error de red - ${response.status}`);
+        }
+      })
+      .then(msg => {        
+        console.log('equipo reparado: ', msg)
+        //ANDA TODO perfecto, falta que ULTIMOS y los demás se actualizen con el nuevo filtro
+        
+        if (!'{{ocultar}}') {
+          location.reload(); // Actualizamos la página para que lo tome
+        }
+      }) 
+      .catch((error) => {      
+        console.log('Ocurrió un error: ', error)
+      })
+      
+  })
 
 
 </script>
