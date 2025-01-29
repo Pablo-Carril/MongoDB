@@ -10,13 +10,31 @@ const indexRouter = Router()
 //ULTIMOS:
 indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); //para que el navegador no guarde la página en cache. si no, sigue andando aunque el server no lo esté.
-  console.log('equipo elegido: ', req.equipoElegido)  //no viene a travez de body, es una variable GLOBAL que se inserta en el req
+  console.log('Ultimos-elegido: ', req.session.equipoElegido)  //no viene a travez de body, es una variable GLOBAL que se inserta en el req
+  console.log('Ultimos-reparado: ', req.session.reparado)
+
   const { limit = 20, page = 1 } = req.query  // esto permite usar: /ultimos?limit=3&page=2 y puse valores por defecto. TRABAJA CON LOS BOTONES de PAGINACIÓN. no borrar!
-  let elegido = req.equipoElegido || ''   //si es undefined o null le asigna una cadena vacía.
+  let elegido = req.session.equipoElegido || ''   //si es undefined o null le asigna una cadena vacía.
   let equipo = elegido  //envío equipo en vez de elegido para que lo acepte el formulario (se usa también para editar)
+  let reparacion = req.session.reparado || 'todos'
+
   if (equipo == 'todos' || equipo == null) { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
   try {
-    const filtro = elegido === '' ? {} : { equipo: elegido } //filtramos por equipo ELEGIDO:  //si elegido esta vacío busca todos. si no, el equipo elegido.
+    let filtroReparado;
+    if (reparacion === 'si') {   //HAY ALGO MAL, cuando elijo TODOS y elijo NO, no me trae todos 
+     filtroReparado = { reparacion: { $exists: true, $ne: '' } }; // Buscamos documentos donde reparados no es null
+      } else if (reparacion === 'no') {
+     filtroReparado ={ $or: [
+      { reparacion: { $exists: false } },    // No existe el campo reparados
+      { reparacion: '' },                   // Cadena vacía
+      { reparacion: ' ' },                  // Un espacio en blanco
+    ]}; 
+      } else {
+      filtroReparado = {}; // Buscamos todos los documentos, sin filtrar por reparados
+    }
+  const filtroEquipo = elegido === '' ? {} : { equipo: elegido };   //filtramos por equipo ELEGIDO:  //si elegido esta vacío busca todos. si no, el equipo elegido.
+  const filtro =  { ...filtroEquipo, ...filtroReparado }   // combinamos filtros
+
     const opciones = {
       page: parseInt(page),
       limit: parseInt(limit),
@@ -29,6 +47,7 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
     const equipos = formateaFecha(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars. así que no hace falta poner un let, pero SI hace falta el let en otras ocaciones.
       inventario,
+      reparacion,
       equipos,                  // cuidado: puede haber otro router llamando al mismo handlebars.
       fechaActual: hoy(),
       resultadosDe: 'Ultimos',
@@ -64,7 +83,7 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
 
 // SONDA
 indexRouter.get('/sonda', sessionControl, async (req, res) => {
-  let elegido = req.equipoElegido
+  let elegido = req.session.equipoElegido
   let equipo = elegido  //envío equipo en vez de elegido  
   if (equipo == 'todos') { elegido = '' }
   //console.log('Sonda')
@@ -112,7 +131,7 @@ indexRouter.get('/sonda', sessionControl, async (req, res) => {
 
 //LA PLATA
 indexRouter.get('/laplata', sessionControl, async (req, res) => {
-  let elegido = req.equipoElegido
+  let elegido = req.session.equipoElegido
   let equipo = elegido  //envío equipo en vez de elegido
   if (equipo == 'todos') { elegido = '' }
   //console.log('laplata')

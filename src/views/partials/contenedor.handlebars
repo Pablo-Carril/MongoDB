@@ -48,10 +48,10 @@
             </select>
 
             <label for="reparados" class="ms-4">Reparados:</label>
-            <select name="reparados" id="reparados"class="ms-2 custom-select form-control ">
-              <option value="todos">Ambos</option>
-              <option value="si">Si</option>
-              <option value="no">No</option>
+            <select name="reparados" id="reparados" class="ms-2 custom-select form-control ">
+              <option value="todos" {{isSelected reparacion 'todos' }}>Todos</option>
+              <option value="si" {{isSelected reparacion 'si' }}>Si</option>
+              <option value="no" {{isSelected reparacion 'no' }}>No</option>
             </select>
 
           </div>
@@ -132,7 +132,7 @@
     equipoElegido = equiSel.value
     //ENVIAMOS el equipoElegido al servidor:
     const dato = JSON.stringify({ 'equipo': equipoElegido })
-    console.log(dato)
+    //console.log(dato)
     fetch('/equipoElegido', {   // + equipoElegido, { no hace falta mandarlo por la ruta. va por el body.
       method: 'POST',             //PORQUE si la ruta está mal el server me devuelve status 200 ????????
       headers: {
@@ -214,10 +214,10 @@
 const reparados = document.getElementById("reparados")
 reparados.addEventListener('change', ()=> {
    let reparado = reparados.value
-   let equipoElegido = equiSel.value   //también tengo que enviarlo, si no se me cambia a todos
-   const dato = JSON.stringify({ 'reparado': reparado, 'equipo': equipoElegido })
+   //let equipoElegido = equiSel.value   //VOY A TRATAR DE NO! - también tengo que enviarlo, si no se me cambia a todos
+   const dato = JSON.stringify({ 'reparado': reparado }) //, 'equipo': equipoElegido })
 
-   fetch('/equipoElegido', {   
+   fetch('/reparado', {   
       method: 'POST',            
       headers: {
         'Content-Type': 'application/json',  

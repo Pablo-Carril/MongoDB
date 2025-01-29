@@ -64,7 +64,7 @@
     });
 
   const inicioBtn = document.getElementById('inicioBtn')
-  let dato = ""  // Reseteamos el equipo a nada, que sería todos.
+  let dato = "todos"  
   const equipo = JSON.stringify({ 'equipo': dato })
   inicioBtn.addEventListener('click', ()=> {
     const spinnerContainer = document.querySelector('.spinner-container');
@@ -87,7 +87,26 @@
       })
       .then(msg => {         
         console.log('Cambio a equipo: ', msg)
+
+        return fetch('/reparado', {   //hacemos OTRO FETCH para resetear reparados todos
+           method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          },
+            body: JSON.stringify({ 'reparado': 'todos' }),
+          });
+      })
+.then(response => {
+  if (!response.ok) {
+    throw new Error(`Error de red - ${response.status}`);
+  }
+  return response.json();
+})
+.then(msg => {
+  console.log('Estado de reparado actualizado: ', msg);
+
         location.reload();  // recargamos la página
+
       }) 
       .catch((error) => {     
         console.log('Ocurrió un error: ', error)

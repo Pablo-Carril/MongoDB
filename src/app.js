@@ -16,8 +16,8 @@ import { sessionControl } from './middlewares/sessions.js'
 const PORT = 8091 //para probar 8091. si no volver a:   process.env.PORT
 // session
 const SESSION_SECRET = process.env.SESSION_SECRET
-let elegido = 'todos'
-let reparado = 'todos'   //cambia a 'si', 'no', 'todos'
+//let elegido = 'todos' AHORA las variables globales se manejan por Session
+//let reparado = 'todos'   //cambia a 'si', 'no', 'todos'
 
 const helpers = handlebars.create()
 // Definir un helper llamado "isSelected"
@@ -106,12 +106,22 @@ app.use((req, res, next) => {     //middleware para que el navegador no guarde e
   next()  
 })          
 
-// ENVIAR variables GLOBALES
+// Creamos variables GLOBALES
 app.use((req, res, next) => {   //para enviar equipo ELEGIDO a TODOS los routers. tiene que estar antes de ellos.
-  req.equipoElegido = elegido  //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
-  req.equipoReparado = reparado
+  req.session.equipoElegido = req.session.equipoElegido || 'todos';
+  req.session.reparado = req.session.reparado || 'todos';
+  //req.session.equipoElegido = req.session.equipoElegido //|| 'todos'; //Muy BUENA manera de enviar VARIABLES GLOBALES a TODAS las solicitudes HTTP.
+  //req.session.reparado = req.session.reparado //|| 'todos';
   // console.log('middle elegido: ', elegido)   //de esta manera todos pueden leerlas y ser más dinámicos ANTES de renderizar.
   next();
+});
+
+//CONSULTAR variables globales. no lo uso aún pero si desde el cliente necesito saberlas sólo hago un Fetch a '/estado'
+app.get('/estado', (req, res) => {
+  res.json({
+    equipoElegido: req.session.equipoElegido,
+    reparado: req.session.reparado
+  });
 });
 
 app.use((error, req, res, next) => {     //nuestro propio middleware de error cuando todos los anteriores fallan.
@@ -132,7 +142,7 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
       req.session.counter = 1
       req.session.logeado = true;       //registramos el nuevo logueo 
       console.log('Bienvenido. nueva sesión iniciada')
-      elegido = 'todos'
+      req.session.equipoElegido = 'todos'
     }
     else {
       req.session.counter++
@@ -146,14 +156,15 @@ app.get('/', async (req, res) => {   //router del raíz. aquí especificamos el 
   }
 })
 
-// ACTUALIZAR variables GLOBALES
+// ACTUALIZAR equipo Elegido
 app.post('/equipoElegido', (req, res) => {
   try {
-    elegido = req.body.equipo     //variable GLOBAL equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
+    let elegido = req.body.equipo     //variable GLOBAL equipo ELEGIDO. la necesito para que cada filtro ultimos, sonda, la plata, etc me muestre sólo el elegido.
+    req.session.equipoElegido = elegido
     // console.log("/equipoElegido(app):" + elegido)
-    reparado = req.body.reparado
-    console.log(reparado)
-    res.status(200).json({ msg: elegido, reparado })   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
+    //reparado = req.body.reparado
+    console.log(elegido)
+    res.status(200).json({ msg: elegido })   //las respuestas van DESPUES del STATUS siempre!, si no no llegan o producen problemas!!
     
   }          // SE PODRÁ HACER UN res.redirect(req.get('referer')) para FILTRAR por EQUIPO AQUí ?????????
   catch (error) {
@@ -161,6 +172,13 @@ app.post('/equipoElegido', (req, res) => {
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.' });
   }
 })
+
+//ACTUALIZAR si mostar reparados
+app.post('/reparado', (req, res) => {
+  const { reparado } = req.body;
+  req.session.reparado = reparado;
+  res.json({ message: `Reparado ${reparado}` });
+});
 
 //Los routers tienen que estar DESPUES de los middlewares que LE AFECTAN. los otros middlewares DESPUÉS!
 app.use('/', indexRouter, sessionControl)    //router del raíz. aquí especificamos el de handlebars, pero si existe index.html en public toma ese primero.
