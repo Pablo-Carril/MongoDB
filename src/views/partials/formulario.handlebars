@@ -65,7 +65,8 @@
 
   // al GUARDAR (submit) sacar ceros de la izquierda
   const formEntrada = document.getElementById('formEntrada')
-  formEntrada.addEventListener('submit', () => {
+  formEntrada.addEventListener('click', () => {
+    
     const spinnerContainer = document.querySelector('.spinner-container');
     spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
 
@@ -75,7 +76,32 @@
     // Usando el método slice()
     const valorSinCeros = valor.replace(/^0+/, "").slice(0)
     console.log(valorSinCeros)
-    inputNumero.value = valorSinCeros;
+    //inputNumero.value = valorSinCeros;
+
+    console.log("ejecuto fetch ")
+    fetch('/api/equipos/', {    //Manejamos ahora el SUBMIT desde aquí
+      method: 'POST',                        
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ serie: {{ serie }} }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Error de red - ${response.status}`);
+        }
+        return response.json();  
+      })
+    .then(msg => {
+      console.log('Se grabó: {{id}}', msg)
+      window.history.back()
+      //window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
+      history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
+    })  //muestro el mensaje en la consola del cliente
+    .catch((error) => { console.log('Ocurrió un error: ', error) })
+    }
+
+
   })
 
   const equipoSelect = document.getElementById("equipoSelect")

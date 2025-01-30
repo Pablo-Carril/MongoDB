@@ -76,8 +76,9 @@ equiposRouter.post('/', async (req, res) => {       //DE ALGUNA FORMA TENGO QUE 
     const nuevo = await Equipomodel.create(body)      //creamos un nuevo registro. sólo si cumple los requerimientos del esquema.   
     //console.log(nuevo)
     const serie = body.serie
-    res.redirect('equipos/' + serie)     //redirigimos al serie recién agregado. no poner / al principio.
-    //res.status(201)  //hay que responder con algo, pero con el redirect ya es suficiente.
+    //res.redirect('equipos/' + serie)     //redirigimos al serie recién agregado. no poner / al principio. 
+    res.status(200)  //hay que responder con algo, con status NO es suficiente. salvo un redirect.
+    res.json({ msg: 'se grabó :', serie })  // el Json va despues siempre
   }
   catch (err) {
     console.log("Error creando equipo. faltan datos: ", err.message)
