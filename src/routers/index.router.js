@@ -16,25 +16,25 @@ indexRouter.get('/ultimos', sessionControl, async (req, res) => {   //router del
   const { limit = 20, page = 1 } = req.query  // esto permite usar: /ultimos?limit=3&page=2 y puse valores por defecto. TRABAJA CON LOS BOTONES de PAGINACIÓN. no borrar!
   let elegido = req.session.equipoElegido || ''   //si es undefined o null le asigna una cadena vacía.
   let equipo = elegido  //envío equipo en vez de elegido para que lo acepte el formulario (se usa también para editar)
-  let reparacion = req.session.reparado || 'todos'
-
   if (equipo == 'todos' || equipo == null) { elegido = '' }   //a veces viene como todos y a veces vacío, por el select. ok.
-  try {
-    let filtroReparado;
-    if (reparacion === 'si') {   //HAY ALGO MAL, cuando elijo TODOS y elijo NO, no me trae todos 
-     filtroReparado = { reparacion: { $exists: true, $ne: '' } }; // Buscamos documentos donde reparados no es null
-      } else if (reparacion === 'no') {
-     filtroReparado ={ $or: [
-      { reparacion: { $exists: false } },    // No existe el campo reparados
-      { reparacion: '' },                   // Cadena vacía
-      { reparacion: ' ' },                  // Un espacio en blanco
+  
+  let reparacion = req.session.reparado || 'todos'
+  let filtroReparado;
+  if (reparacion === 'si') {   
+    filtroReparado = { reparacion: { $exists: true, $ne: '' } }; 
+  } else if (reparacion === 'no') {
+    filtroReparado ={ $or: [
+      { reparacion: { $exists: false } },    // si no existe el campo reparados
+      { reparacion: '' },                   // o Cadena vacía
+      { reparacion: ' ' },                  // o Un espacio en blanco
     ]}; 
-      } else {
-      filtroReparado = {}; // Buscamos todos los documentos, sin filtrar por reparados
-    }
+  } else {
+    filtroReparado = {}; // Buscamos todos los documentos, sin filtrar por reparados
+  }
   const filtroEquipo = elegido === '' ? {} : { equipo: elegido };   //filtramos por equipo ELEGIDO:  //si elegido esta vacío busca todos. si no, el equipo elegido.
   const filtro =  { ...filtroEquipo, ...filtroReparado }   // combinamos filtros
-
+  
+  try {
     const opciones = {
       page: parseInt(page),
       limit: parseInt(limit),
@@ -86,22 +86,42 @@ indexRouter.get('/sonda', sessionControl, async (req, res) => {
   let elegido = req.session.equipoElegido
   let equipo = elegido  //envío equipo en vez de elegido  
   if (equipo == 'todos') { elegido = '' }
+
+  let reparacion = req.session.reparado || 'todos'
+
+    let filtroReparado;
+    if (reparacion === 'si') {   
+     filtroReparado = { reparacion: { $exists: true, $ne: '' } }; 
+      } else if (reparacion === 'no') {
+     filtroReparado ={ $or: [
+      { reparacion: { $exists: false } },    // si no existe el campo reparados
+      { reparacion: '' },                   // o Cadena vacía
+      { reparacion: ' ' },                  // o Un espacio en blanco
+    ]}; 
+      } else {
+      filtroReparado = {}; // Buscamos todos los documentos, sin filtrar por reparados
+    }
+  
   //console.log('Sonda')
   const { limit = 20, page = 1 } = req.query
+  const filtroEquipo = elegido === '' ? { linea: { $in: ["85", "98"] } }
+  : { $and: [{ equipo: elegido }, { linea: { $in: ["85", "98"] } }] }       //si elegido esta vacío busca todos. si no, el equipo elegido.
+  const opciones = {
+    page: parseInt(page),
+    limit: parseInt(limit),
+    sort: { fecha: -1, _id: -1 },   //Primero se ordena por fecha, y si hay varios con la misma fecha los ordena por id. GENIAL.    
+  }
+  
+  const filtro =  { ...filtroEquipo, ...filtroReparado }   // combinamos filtros
+  
   try {
-    const filtro = elegido === '' ? { linea: { $in: ["85", "98"] } }
-    : { $and: [{ equipo: elegido }, { linea: { $in: ["85", "98"] } }] }       //si elegido esta vacío busca todos. si no, el equipo elegido.
-    const opciones = {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      sort: { fecha: -1, _id: -1 },   //Primero se ordena por fecha, y si hay varios con la misma fecha los ordena por id. GENIAL.    
-    }
     const consulta = await Equipomodel.paginate(filtro, opciones)
     const resultados = consulta.docs
     if (resultados.length == 0) { console.log("No se encontró ningún dato") }
     const equipos = formateaFecha(resultados)
     res.render('index', {
       inventario,
+      reparacion,
       equipos,
       fechaActual: hoy(),
       resultadosDe: 'Sonda',
@@ -135,15 +155,34 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
   let equipo = elegido  //envío equipo en vez de elegido
   if (equipo == 'todos') { elegido = '' }
   //console.log('laplata')
+
+  let reparacion = req.session.reparado || 'todos'
+  let filtroReparado;
+  if (reparacion === 'si') {   
+    filtroReparado = { reparacion: { $exists: true, $ne: '' } }; 
+  } else if (reparacion === 'no') {
+    filtroReparado ={ $or: [
+      { reparacion: { $exists: false } },    // si no existe el campo reparados
+      { reparacion: '' },                   // o Cadena vacía
+      { reparacion: ' ' },                  // o Un espacio en blanco
+    ]}; 
+  } else {
+    filtroReparado = {}; // Buscamos todos los documentos, sin filtrar por reparados
+  }
+  
   const { limit = 20, page = 1 } = req.query
+
+  const filtroEquipo = elegido === '' ? { linea: { $in: ["275", "307"] } }
+  : { $and: [{ equipo: elegido }, { linea: { $in: ["275", "307"] } }] }     
+  const opciones = {
+    page: parseInt(page),
+    limit: parseInt(limit),
+    sort: { fecha: -1, _id: -1 },      
+  }
+  
+  const filtro =  { ...filtroEquipo, ...filtroReparado }   // combinamos filtros
+  
   try {
-    const filtro = elegido === '' ? { linea: { $in: ["275", "307"] } }
-    : { $and: [{ equipo: elegido }, { linea: { $in: ["275", "307"] } }] }     
-    const opciones = {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      sort: { fecha: -1, _id: -1 },      
-    }
     const consulta = await Equipomodel.paginate(filtro, opciones)
     const resultados = consulta.docs
     // tembién se podría con find().sort({ timestamp: -1 }).limit(10)  pero puede traer problemas en el orden de los resultados. 
@@ -151,6 +190,7 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
     const equipos = formateaFecha(resultados)
     res.render('index', {       // aquí es donde NACEN los nombres de VARIABLES usadas en Handlebars
       inventario,
+      reparacion,
       equipos,                  // cuidado: puede haber otro router llamando a lo mismo.
       fechaActual: hoy(),
       resultadosDe: 'La Plata',
@@ -182,11 +222,14 @@ indexRouter.get('/laplata', sessionControl, async (req, res) => {
 indexRouter.get('/busqueda', sessionControl, async (req, res) => {
   const busqueda = req.query.datosBuscar || 'nada'   //por body vienen datos de formulario sólamente cuando hacemos un post desde el cliente.
   const { limit = 20, page = 1 } = req.query
+  let reparacion = req.session.reparado || 'todos'
   //console.log('busqueda: ', busqueda)
   try {
     const filtro = {
       $or: [     //buscamos en varios campos. traemos todos los que cumplan (operación OR)
         { problema: { $regex: busqueda, $options: "i" } },
+        { reparacion: { $regex: busqueda, $options: "i" } },
+        { serie: { $regex: busqueda, $options: "i" } },
         { caso: { $regex: busqueda, $options: "i" } },
         { coche: { $regex: busqueda, $options: "i" } },
         { equipo: { $regex: busqueda, $options: "i" } },
@@ -213,6 +256,7 @@ indexRouter.get('/busqueda', sessionControl, async (req, res) => {
     const equipos = formateaFecha(resultados)
     res.render('index', {
       inventario,
+      reparacion,
       equipos,
       fechaActual: hoy(),
       resultadosDe: 'Buscar:',

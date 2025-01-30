@@ -214,8 +214,7 @@
 const reparados = document.getElementById("reparados")
 reparados.addEventListener('change', ()=> {
    let reparado = reparados.value
-   //let equipoElegido = equiSel.value   //VOY A TRATAR DE NO! - también tengo que enviarlo, si no se me cambia a todos
-   const dato = JSON.stringify({ 'reparado': reparado }) //, 'equipo': equipoElegido })
+   const dato = JSON.stringify({ 'reparado': reparado }) 
 
    fetch('/reparado', {   
       method: 'POST',            
@@ -235,7 +234,6 @@ reparados.addEventListener('change', ()=> {
       })
       .then(msg => {        
         console.log('equipo reparado: ', msg)
-        //ANDA TODO perfecto, falta que ULTIMOS y los demás se actualizen con el nuevo filtro
         
         if (!'{{ocultar}}') {
           location.reload(); // Actualizamos la página para que lo tome
