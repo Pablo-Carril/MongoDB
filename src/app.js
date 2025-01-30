@@ -66,7 +66,7 @@ app.set('view engine', 'handlebars')              //establecemos la extensión. 
 //  next()          //pasamos al siguiente middleware
 //})
 
-const SESSION_LIFETIME = 1000 * 60 * 90   //noventa minutos de sesión. luego expira
+const SESSION_LIFETIME = 1000 * 60 * 180   //3 horas de sesión. luego expira
 
 app.use(session({
   secret: SESSION_SECRET,      //hash para firmar los cookies que genera session

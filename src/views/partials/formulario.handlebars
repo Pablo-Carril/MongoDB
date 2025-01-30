@@ -63,10 +63,11 @@
   let numSerie = ""
   const serieInput = document.getElementById("serie")
 
-  // al GUARDAR (submit) sacar ceros de la izquierda
+  // al GUARDAR (submit): 
   const formEntrada = document.getElementById('formEntrada')
-  formEntrada.addEventListener('click', () => {
-    
+  formEntrada.addEventListener('submit', () => {
+    event.preventDefault()  //prevenir el envío del formulario. ahora lo manejamos todo desde aquí
+
     const spinnerContainer = document.querySelector('.spinner-container');
     spinnerContainer.classList.remove('escondido') // Muestra el Spinner. cuando se actualize la página se oculta solo.
 
@@ -74,33 +75,33 @@
     const valor = inputNumero.value;
     console.log(valor)
     // Usando el método slice()
-    const valorSinCeros = valor.replace(/^0+/, "").slice(0)
+    const valorSinCeros = valor.replace(/^0+/, "").slice(0)  //sacar ceros de la izquierda
     console.log(valorSinCeros)
-    //inputNumero.value = valorSinCeros;
+    inputNumero.value = valorSinCeros;  //esto es necesario para que lo envíe por FormData
+
+    const formDatos = new FormData(formEntrada)
+    const datosJSON = JSON.stringify(Object.fromEntries(formDatos.entries())); 
 
     console.log("ejecuto fetch ")
-    fetch('/api/equipos/', {    //Manejamos ahora el SUBMIT desde aquí
-      method: 'POST',                        
+    fetch('/api/equipos/', {       //Manejamos ahora el SUBMIT desde aquí
+      method: 'POST',                            
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ serie: {{ serie }} }),
+      body: datosJSON,
       })
       .then(response => {
         if (!response.ok) {
           throw new Error(`Error de red - ${response.status}`);
         }
-        return response.json();  
+        return response.json(); 
       })
     .then(msg => {
-      console.log('Se grabó: {{id}}', msg)
-      window.history.back()
-      //window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
-      history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
-    })  //muestro el mensaje en la consola del cliente
+      console.log('Se grabó:', msg)
+      window.location.href =  '/ultimos'
+      history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.    
+      }) 
     .catch((error) => { console.log('Ocurrió un error: ', error) })
-    }
-
 
   })
 
@@ -124,39 +125,9 @@
     }) 
     .catch(error => console.error('Error:', error));
 
-    /* equipoElegido = equipoSelect.value
-    //console.log(equipoElegido)
-    const colores = {
-      'validador': '#0d6efd',    //validadores                  
-      'teclado': '#198754',      //teclados                     
-      'mountinKit': '#BB0',      //MK
-      'concentrador': '#fd7e14',   //concentradores
-      'NVR': '#555',             //otros
-      '': '#333',                 //todos (que necesita estar vacío)
-    };
-    equipoSelect.style.color =  colores[equipoElegido]
-    equipoSelect.style.borderColor = colores[equipoElegido]
-    equipoSelect.style.borderWidth = '3px'
-    serieInput.style.color =  colores[equipoElegido] */
 
   })
-</script>
 
 
-<script>
-  // serieInput.addEventListener('input', () => {       //cada vez que se presione una tecla captura lo escrito.
-  //   numSerie = serieInput.value
-  //console.log(numSerie)
-  // })
-  /* serieInput.addEventListener('keypress', e => {     //al apretar ENTER consultamos mediante redirección url a ese serie.
-     if (e.key == "Enter") {    
-       if (numSerie) {
-         var url = '/api/equipos/' + numSerie    //+ encodeURIComponent({serie});
-       //  guardar()   //esto era para guardar en Storage. no creo que lo vuelva a usar
-         window.location.href = url
-       }
-       else { url = '#' }
-       
-     }  
-   }) */
+
 </script>

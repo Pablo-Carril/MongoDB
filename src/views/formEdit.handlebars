@@ -91,6 +91,7 @@
 <script>
   const formulario = document.getElementById('formEdit')
   borrar = document.getElementById('borrar')
+  localStorage.setItem('paginaAnterior', document.referrer)
 
   borrar.addEventListener('click', () => {
     mostrarPopup()    //pedimos confirmación para borrar
@@ -116,9 +117,11 @@
       })
     .then(msg => {
       console.log('Se eliminó el ID: {{id}}', msg)
-      window.history.back()
+      //window.history.back()
       //window.location.href = `/api/equipos/{{serie}}`;    // volvemos a ese serie
-      history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
+      //history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.
+      const paginaAnterior = localStorage.getItem('paginaAnterior');
+      window.location.href = paginaAnterior       //Esto es lo mejor. funciona perfecto
     })  //muestro el mensaje en la consola del cliente
     .catch((error) => { console.log('Ocurrió un error: ', error) })
     }
@@ -147,12 +150,16 @@
       })
       .then(msg => {
         console.log('Se actualizó el ID: {{id}}', msg)
-        window.history.back()
-        //window.location.href =  `/api/equipos/{{serie}}`;    // volvemos a ese serie
+        
+        const paginaAnterior = localStorage.getItem('paginaAnterior');   //Esto es lo mejor. funciona perfecto
+        window.location.href = paginaAnterior
+        //window.history.back() //FUNCIONA pero no puedo volver atrás, muestra los DATOS VIEJOS !
+        //location.reload()  //tampoco no necesito actualizar al editar. tengo que voler y actualizar
+        //window.location.href =  '/ultimos'     // `/api/equipos/{{serie}}`;    // volvemos a ese serie
         // while (history.length > 1) {  //NO FUNCIONA SE QUEDA PENSANDO...
         //   history.back();  //volvemos a tras hasta que no quede historial.
         // }
-        history.replaceState({}, '', `/api/equipos/{{serie}}`);
+        //history.replaceState({}, '', `/api/equipos/{{serie}}`);
       })  //muestro el mensaje en la consola del cliente
 
       .catch(err => { console.log('Ocurrió un error: ', err) })

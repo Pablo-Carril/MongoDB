@@ -13,7 +13,7 @@ const hoy = () => {
 
 //CONSULTAR por SERIE y mostrar HISTORIAL
 equiposRouter.get('/:serie', async (req, res) => {     //api/equipos/serie
-  let elegido = req.equipoElegido   //variable global que viene de un middleware
+  let elegido = req.session.equipoElegido   //variable global que viene de un middleware
   let equipo = elegido
   const serie = req.params.serie     //obtenemos el serie pedido
   const { limit = 13, page = 1 } = req.query    // esto permite usar: /api/equipos/661?limit=3&page=2 y puse valores por defecto
@@ -135,9 +135,11 @@ equiposRouter.put('/actualizar/:id', async (req, res) => {
       console.log('No se encontró el ID')
       return res.status(404).json({ msg: 'No se encontró el equipo para actualizar.' });
     }
-    res.json({ msg: 'se actualizó :', id: id })
     //res.redirect('validadores/' + serie) 
     res.status(200)
+    res.json({ msg: 'se actualizó :', id: id })
+    //res.redirect(req.get('referer')) // Por algun motivo NO FUNCIONA. lo hago desde el cliente
+
   }
   catch (error) {
     console.log('Error al actualizar el equipo: ', error);
