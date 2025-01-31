@@ -29,10 +29,15 @@
     <input type="number" value="{{coche}}" name="coche" id="coche" class="form-control" title="Numero de Interno">
     <label for="problema">Problema:</label>
     <div class="form-group">
-      <textarea type="number" name="problema" id="problema" cols="30" rows="1" minlength="3" maxlength="150" required=""
+      <textarea type="number" name="problema" id="problema" cols="30" rows="1" minlength="3" maxlength="200" required=""
         class="form-control" title="Ingrese el problema que presenta">{{problema}}</textarea>
     </div>
-    <label for="caso">Caso:</label>
+    <label for="reparacion">Reparacion:</label>
+    <div class="form-group">
+      <textarea type="number" name="reparacion" id="reparacion" cols="30" rows="1" minlength="3" maxlength="200"
+        class="form-control" title="Ingrese reparacion">{{problema}}</textarea>
+    </div>
+    <label for="caso" class="mt-2">Caso:</label>
     <div class="form-group">
       <textarea name="caso" id="caso" cols="20" rows="1" minlength="6" maxlength="8"
         class="form-control mb-3">{{caso}}</textarea>
@@ -62,6 +67,7 @@
 <script>
   let numSerie = ""
   const serieInput = document.getElementById("serie")
+  localStorage.setItem('paginaAnterior', document.referrer)
 
   // al GUARDAR (submit): 
   const formEntrada = document.getElementById('formEntrada')
@@ -98,8 +104,12 @@
       })
     .then(msg => {
       console.log('Se grabó:', msg)
+      //location.reload  //PORQUE no anda ?????
+      //spinnerContainer.classList.add('escondido') 
+      //const paginaAnterior = localStorage.getItem('paginaAnterior');   
+      //window.location.href = paginaAnterior
       window.location.href =  '/ultimos'
-      history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. tienen que estar las dos líneas.    
+      //history.replaceState({}, '', `/api/equipos/{{serie}}`);  //evitamos que vuelva al formulario al retroceder la página. NO HACE FALTA con localStorage!!
       }) 
     .catch((error) => { console.log('Ocurrió un error: ', error) })
 
